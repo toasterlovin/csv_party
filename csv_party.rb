@@ -1,7 +1,7 @@
 require 'csv'
 require 'bigdecimal'
 
-class BetterCsv
+class CSVParty
   # The point of this gem is to make it possible to focus on the logic
   # of your CSV imports, rather than on the housekeeping. The general
   # idea is that you first define which columns you will be importing,

@@ -1,7 +1,7 @@
 require "minitest/autorun"
 require "./test_importer"
 
-class BetterCsvTest < Minitest::Test
+class CSVPartTest < Minitest::Test
   def setup
     @importer = TestImporter.new("test.csv")
   end

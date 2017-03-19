@@ -1,6 +1,6 @@
-require "./better_csv"
+require "./csv_party"
 
-class TestImporter < BetterCsv
+class TestImporter < CSVParty
   column :product, header: "Product" do |value|
     "#{value} - parsed"
   end
