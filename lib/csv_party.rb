@@ -97,7 +97,7 @@ class CSVParty
   private
 
   def boolean_parser(value)
-    [true, 1, 'true'].include? value.to_s.strip.downcase
+    ['1', 't', 'true'].include? value.to_s.strip.downcase
   end
 
   def integer_parser(value)
