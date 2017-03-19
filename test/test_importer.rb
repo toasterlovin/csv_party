@@ -1,4 +1,4 @@
-require "./csv_party"
+require "csv_party"
 
 class TestImporter < CSVParty
   column :product, header: "Product" do |value|

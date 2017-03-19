@@ -39,7 +39,7 @@ class CSVParty
   PARSERS = [:boolean, :integer, :decimal, :string, :raw]
 
   @@columns = {}
-  @@importer
+  @@importer = nil
 
   def self.column(name, options, &block)
     header = options[:header]
