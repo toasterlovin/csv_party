@@ -12,8 +12,7 @@ class CSVParty
     if block_given?
       parser = block
     else
-      parser_name = options[:as]
-      parser = Proc.new { |value, context| context.send(:"#{parser_name}_parser", value) }
+      parser = Proc.new { |value| send("#{options[:as]}_parser", value) }
     end
 
     @@columns[name] = { header: header, parser: parser }
@@ -47,7 +46,7 @@ class CSVParty
     @@columns.each do |name, options|
       header = options[:header]
       parser = options[:parser]
-      parsed_row[name] = parser.call(row[header], self)
+      parsed_row[name] = instance_exec(row[header], &parser)
     end
     parsed_row
   end
