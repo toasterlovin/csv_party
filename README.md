@@ -24,7 +24,7 @@ The available built-in parsers are:
   - `:string` strips whitespace and returns the resulting string
   - `:integer` strips whitespace, then calls `to_i` on the resulting string
   - `:decimal` strips all characters except `0-9` and `.`, then passes the resulting string to `BigDecimal.new`
-  - `:boolean` strips whitespace, downcases, then returns `true` if the resulting string is `'1'`, `'t'`, or `'true'`, returns `false` otherwise
+  - `:boolean` strips whitespace, downcases, then returns `true` if the resulting string is `'1'`, `'t'`, or `'true'`, otherwise it returns `false`
 
 When defining a column, you can also pass a block if you need custom
 parsing logic:
