@@ -1,4 +1,4 @@
-# Make your CSV imports a party
+# Make importing CSV files a party
 
 The point of this gem is to make it easier to focus on the business
 logic of your CSV imports. You start by defining which columns you
@@ -61,6 +61,7 @@ Once you've defined all of your columns, you define your import logic:
 
 # TODO
 
+- Investigate better ways to pass parsers around
 - Make values available as `row.value`, rather than `row[:value]`
 - Implement raw value access from import block (`row.values.value`)
 - Add tests
