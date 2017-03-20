@@ -2,40 +2,6 @@ require 'csv'
 require 'bigdecimal'
 
 class CSVParty
-  # The point of this gem is to make it possible to focus on the logic
-  # of your CSV imports, rather than on the housekeeping. The general
-  # idea is that you first define which columns you will be importing,
-  # as well as how they will be parsed. Then, you specify what you want
-  # to do with each row after the values for that row have been parsed.
-  #
-  # This is what defining your import columns look like:
-  #
-  #   column :price, header: "Krazy Price Column", as: :decimal
-  #
-  # This will take the value in the "Krazy Price Column" column,
-  # parse it as a decimal, then make it available to your import logic
-  # as a nice, sane variable named `price`.
-  #
-  # You can also pass a block when defining a column if your parsing
-  # logic needs to be a little more sophisticated than the built-in
-  # methods:
-  #
-  #   class MyImporter < BetterCsv
-  #     class :product, header: "Product" do |value|
-  #       Product.find_by(name: value.strip)
-  #     end
-  #   end
-  #
-  # Once you've defined all of your columns, you define your import logic.
-  # Here's what that looks like:
-  #
-  #   class MyImporter < BetterCsv
-  #     import do |row|
-  #       row.price           # access parsed values
-  #       row.values.price    # access raw values
-  #     end
-  #   end
-
   PARSERS = [:boolean, :integer, :decimal, :string, :raw]
 
   @@columns = {}
