@@ -61,7 +61,6 @@ Once you've defined all of your columns, you define your import logic:
 
 # TODO
 
-- Investigate better ways to pass parsers around
 - Make values available as `row.value`, rather than `row[:value]`
 - Implement raw value access from import block (`row.values.value`)
 - Add tests
