@@ -59,6 +59,13 @@ Once you've defined all of your columns, you define your import logic:
       end
     end
 
+## Importing
+
+Once your importer class is defined, you use it like this:
+
+    importer = MyImporterClass.new("path/to/file.csv")
+    importer.import!
+
 # TODO
 
 - Make values available as `row.value`, rather than `row[:value]`
