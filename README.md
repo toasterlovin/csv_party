@@ -65,3 +65,4 @@ Once you've defined all of your columns, you define your import logic:
 - Make values available as `row.value`, rather than `row[:value]`
 - Add tests
 - Add error handling
+- Allow runtime configuration
