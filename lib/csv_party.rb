@@ -13,7 +13,6 @@ class CSVParty
       parser = block
     else
       parser_name = options[:as]
-      raise ArgumentError, "The parser for #{name} must be one of #{PARSERS.join(", ")}" unless PARSERS.include? parser_name
       parser = Proc.new { |value, context| context.send(:"#{parser_name}_parser", value) }
     end
 
