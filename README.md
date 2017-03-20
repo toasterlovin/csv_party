@@ -4,8 +4,7 @@ The point of this gem is to make it easier to focus on the business
 logic of your CSV imports. You start by defining which columns you
 will be importing, as well as how they will be parsed. Then, you
 specify what you want to do with each row after it has been parsed.
-CSVParty takes care of the housekeeping of actually iterating over
-a CSV file for you.
+That's it; CSVParty takes care of all the tedious stuff for you.
 
 ## Defining Columns
 
