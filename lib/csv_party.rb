@@ -2,8 +2,6 @@ require 'csv'
 require 'bigdecimal'
 
 class CSVParty
-  PARSERS = [:boolean, :integer, :decimal, :string, :raw]
-
   @@columns = {}
   @@importer = nil
 
