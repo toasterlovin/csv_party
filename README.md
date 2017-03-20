@@ -1,12 +1,13 @@
-# CSVParty, a gem for importing CSV files
+# Make your CSV imports a party
 
-The point of this gem is to make it possible to focus on the logic
-of your CSV imports, rather than on the housekeeping.
+The point of this gem is to make it easier to focus on the business
+logic of your CSV imports. You start by defining which columns you
+will be importing, as well as how they will be parsed. Then, you
+specify what you want to do with each row after it has been parsed.
+CSVParty takes care of the housekeeping of actually iterating over
+a CSV file for you.
 
-The general idea is that you first define which columns you will be
-importing, as well as how they will be parsed. Then, you specify what
-you want to do with each row after the values for that row have been
-parsed.
+## Defining Columns
 
 This is what defining your import columns look like:
 
@@ -24,7 +25,7 @@ The available built-in parsers are:
   - `:string`   # strips whitespace and returns the resulting string
   - `:integer`  # strips whitespace, then calls `to_i` on the resulting string
   - `:decimal`  # strips all characters except `0-9` and `.`, then passes the resulting string to `BigDecimal.new`
-  - `:boolean`  # strips whitespace, downcases, then returns `true` if the resulting string is '1', 't', or 'true', returns `false` otherwise
+  - `:boolean`  # strips whitespace, downcases, then returns `true` if the resulting string is `'1'`, `'t'`, or `'true'`, returns `false` otherwise
 
 When defining a column, you can also pass a block if you need custom
 parsing logic:
@@ -47,6 +48,8 @@ you can use it the same way you use the built-in parsers:
       column :price_in_cents, header: "Price in $", as: :dollars_to_cents
       column :cost_in_cents, header: "Cost in $", as: :dollars_to_cents
     end
+
+## Defining Import Logic
 
 Once you've defined all of your columns, you define your import logic:
 
