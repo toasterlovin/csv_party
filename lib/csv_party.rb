@@ -2,26 +2,6 @@ require 'csv'
 require 'bigdecimal'
 
 class CSVParty
-  @@columns = {}
-  @@importer = nil
-
-  def self.column(name, options, &block)
-    header = options[:header]
-    raise ArgumentError, "A header must be specified for #{name}" unless header
-
-    if block_given?
-      parser = block
-    else
-      parser = Proc.new { |value| send("#{options[:as]}_parser", value) }
-    end
-
-    @@columns[name] = { header: header, parser: parser }
-  end
-
-  def self.import(&block)
-    @@importer = block
-  end
-
   def initialize(csv_path)
     @csv_path = csv_path
   end
@@ -55,8 +35,27 @@ class CSVParty
     @@importer.call(parsed_row)
   end
 
+  @@columns = {}
+
+  def self.column(name, options, &block)
+    header = options[:header]
+    raise ArgumentError, "A header must be specified for #{name}" unless header
+
+    if block_given?
+      parser = block
+    else
+      parser = Proc.new { |value| send("#{options[:as]}_parser", value) }
+    end
+
+    @@columns[name] = { header: header, parser: parser }
+  end
+
+  def self.import(&block)
+    @@importer = block
+  end
 
   private
+
 
   def boolean_parser(value)
     ['1', 't', 'true'].include? value.to_s.strip.downcase
