@@ -36,7 +36,9 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_integer_parser
-    flunk
+    IntegerParserImporter.new("test/csv/integer_parser.csv").import!
+    assert_equal 42,    $result[:integer]
+    assert_equal 42.00, $result[:decimal_as_integer]
   end
 
   def test_decimal_parser
