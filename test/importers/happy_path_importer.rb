@@ -1,6 +1,6 @@
 require "csv_party"
 
-class TestImporter < CSVParty
+class HappyPathImporter < CSVParty
   column :product, header: "Product" do |value|
     "#{value} - parsed"
   end

@@ -1,13 +1,10 @@
 require "minitest/autorun"
-require "test_importer"
+Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 
 class CSVPartTest < Minitest::Test
-  def setup
-    @importer = TestImporter.new("test/test.csv")
-  end
-
   def test_importing
-    result = @importer.parsed_values.first
+    importer = HappyPathImporter.new("test/test.csv")
+    result = importer.parsed_values.first
     assert_equal "Cat 5e - parsed", result[:product]
     assert_equal true,              result[:import]
     assert_equal 10.99,             result[:price]
