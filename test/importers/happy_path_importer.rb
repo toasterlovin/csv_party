@@ -9,5 +9,6 @@ class HappyPathImporter < CSVParty
   column :inventory, header: "Inventory", as: :integer
 
   import do |row|
+    $result = row
   end
 end

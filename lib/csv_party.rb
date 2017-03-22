@@ -13,14 +13,6 @@ class CSVParty
     end
   end
 
-  def parsed_values
-    parsed_values = []
-    CSV.foreach(@csv_path, headers: true) do |row|
-      parsed_values << parse_row(row)
-    end
-    parsed_values
-  end
-
   def parse_row(row)
     parsed_row = {}
     @@columns.each do |name, options|

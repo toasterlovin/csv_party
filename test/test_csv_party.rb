@@ -3,12 +3,11 @@ Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 
 class CSVPartTest < Minitest::Test
   def test_importing
-    importer = HappyPathImporter.new("test/csv/happy_path.csv")
-    result = importer.parsed_values.first
-    assert_equal "Cat 5e - parsed", result[:product]
-    assert_equal true,              result[:import]
-    assert_equal 10.99,             result[:price]
-    assert_equal 26,                result[:inventory]
+    importer = HappyPathImporter.new("test/csv/happy_path.csv").import!
+    assert_equal "Cat 5e - parsed", $result[:product]
+    assert_equal true,              $result[:import]
+    assert_equal 10.99,             $result[:price]
+    assert_equal 26,                $result[:inventory]
   end
 
   # def test_requires_valid_built_in_parser
