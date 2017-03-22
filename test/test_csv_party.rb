@@ -13,6 +13,30 @@ class CSVPartTest < Minitest::Test
     assert_equal " has whitespace ", $result[:raw]
   end
 
+  def test_string_parser
+    flunk
+  end
+
+  def test_boolean_parser
+    flunk
+  end
+
+  def test_integer_parser
+    flunk
+  end
+
+  def test_decimal_parser
+    flunk
+  end
+
+  def test_custom_parser
+    flunk
+  end
+
+  def test_named_custom_parser
+    flunk
+  end
+
   # def test_requires_valid_built_in_parser
   #   flunk
   # end
@@ -30,30 +54,6 @@ class CSVPartTest < Minitest::Test
   # end
 
   # def test_strips_whitespace_from_a_column_by_default
-  #   flunk
-  # end
-
-  # def test_casts_column_to_the_raw_value
-  #   flunk
-  # end
-
-  # def test_casts_column_to_boolean
-  #   flunk
-  # end
-
-  # def test_casts_column_to_integer
-  #   flunk
-  # end
-
-  # def test_casts_column_to_decimal
-  #   flunk
-  # end
-
-  # def test_casts_column_with_passed_block
-  #   flunk
-  # end
-
-  # def test_allows_definition_of_named_parsers
   #   flunk
   # end
 end
