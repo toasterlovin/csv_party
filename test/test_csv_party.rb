@@ -8,6 +8,11 @@ class CSVPartTest < Minitest::Test
     assert_equal 9.99,     $result[:price]
   end
 
+  def test_raw_parser
+    importer = RawParserImporter.new("test/csv/raw_parser.csv").import!
+    assert_equal " has whitespace ", $result[:raw]
+  end
+
   # def test_requires_valid_built_in_parser
   #   flunk
   # end
