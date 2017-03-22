@@ -14,7 +14,8 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_string_parser
-    flunk
+    importer = StringParserImporter.new("test/csv/string_parser.csv").import!
+    assert_equal "has whitespace", $result[:string]
   end
 
   def test_boolean_parser
