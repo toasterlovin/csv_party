@@ -4,6 +4,7 @@ Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 class CSVPartTest < Minitest::Test
   def test_happy_path
     HappyPathImporter.new("test/csv/happy_path.csv").import!
+    flunk
     assert_equal "Widget", $result[:product]
     assert_equal 9.99,     $result[:price]
   end
@@ -42,7 +43,10 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_decimal_parser
-    flunk
+    DecimalParserImporter.new("test/csv/decimal_parser.csv").import!
+    assert_equal 42.42, $result[:decimal]
+    assert_equal 42.42, $result[:whitespace]
+    assert_equal 42.42, $result[:dollars]
   end
 
   def test_custom_parser
