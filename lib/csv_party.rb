@@ -49,6 +49,14 @@ class CSVParty
   private
 
 
+  def raw_parser(value)
+    value
+  end
+
+  def string_parser(value)
+    value.to_s.strip
+  end
+
   def boolean_parser(value)
     ['1', 't', 'true'].include? value.to_s.strip.downcase
   end
@@ -60,13 +68,5 @@ class CSVParty
   def decimal_parser(value)
     cleaned_value = value.to_s.gsub(/[^0-9.]/, "")
     BigDecimal.new(cleaned_value)
-  end
-
-  def string_parser(value)
-    value.to_s.strip
-  end
-
-  def raw_parser(value)
-    value
   end
 end
