@@ -19,7 +19,20 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_boolean_parser
-    flunk
+    importer = BooleanParserImporter.new("test/csv/boolean_parser.csv").import!
+    assert $result[:t]
+    assert $result[:T]
+    assert $result[:true]
+    assert $result[:TRUE]
+    assert $result[:one]
+    assert $result[:true_whitespace]
+    refute $result[:f]
+    refute $result[:F]
+    refute $result[:false]
+    refute $result[:FALSE]
+    refute $result[:zero]
+    refute $result[:two]
+    refute $result[:random]
   end
 
   def test_integer_parser
