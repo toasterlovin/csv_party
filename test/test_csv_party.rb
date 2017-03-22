@@ -3,23 +3,23 @@ Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 
 class CSVPartTest < Minitest::Test
   def test_happy_path
-    importer = HappyPathImporter.new("test/csv/happy_path.csv").import!
+    HappyPathImporter.new("test/csv/happy_path.csv").import!
     assert_equal "Widget", $result[:product]
     assert_equal 9.99,     $result[:price]
   end
 
   def test_raw_parser
-    importer = RawParserImporter.new("test/csv/raw_parser.csv").import!
+    RawParserImporter.new("test/csv/raw_parser.csv").import!
     assert_equal " has whitespace ", $result[:raw]
   end
 
   def test_string_parser
-    importer = StringParserImporter.new("test/csv/string_parser.csv").import!
+    StringParserImporter.new("test/csv/string_parser.csv").import!
     assert_equal "has whitespace", $result[:string]
   end
 
   def test_boolean_parser
-    importer = BooleanParserImporter.new("test/csv/boolean_parser.csv").import!
+    BooleanParserImporter.new("test/csv/boolean_parser.csv").import!
     assert $result[:t]
     assert $result[:T]
     assert $result[:true]
