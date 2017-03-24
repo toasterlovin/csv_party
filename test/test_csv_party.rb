@@ -83,4 +83,8 @@ class CSVPartTest < Minitest::Test
   # def test_strips_whitespace_from_a_column_by_default
   #   flunk
   # end
+  #
+  # def test_requires_that_all_column_headers_are_present
+  #   flunk
+  # end
 end
