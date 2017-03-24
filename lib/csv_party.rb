@@ -15,7 +15,8 @@ class CSVParty
 
   def parse_row(row)
     parsed_row = {}
-    @@columns.each do |name, options|
+    columns.each do |name, options|
+      # puts "Parsing column: #{name}, with options: #{options}"
       header = options[:header]
       parser = options[:parser]
       parsed_row[name] = instance_exec(row[header], &parser)
@@ -24,10 +25,8 @@ class CSVParty
   end
 
   def import_row(parsed_row)
-    @@importer.call(parsed_row)
+    importer.call(parsed_row)
   end
-
-  @@columns = {}
 
   def self.column(name, options, &block)
     header = options[:header]
@@ -39,11 +38,27 @@ class CSVParty
       parser = Proc.new { |value| send("#{options[:as]}_parser", value) }
     end
 
-    @@columns[name] = { header: header, parser: parser }
+    columns[name] = { header: header, parser: parser }
   end
 
   def self.import(&block)
-    @@importer = block
+    @importer = block
+  end
+
+  def self.columns
+    @columns ||= {}
+  end
+
+  def columns
+    self.class.columns
+  end
+
+  def self.importer
+    @importer
+  end
+
+  def importer
+    self.class.importer
   end
 
   private
@@ -66,7 +81,7 @@ class CSVParty
   end
 
   def decimal_parser(value)
-    cleaned_value = value.to_s.gsub(/[^0-9.]/, "")
+    cleaned_value = value.to_s.strip.gsub(/[^0-9.]/, "")
     BigDecimal.new(cleaned_value)
   end
 end

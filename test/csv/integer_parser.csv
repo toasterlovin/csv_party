@@ -1,2 +1,2 @@
-Integer,Decimal
-42,42.42
+Integer,Whitespace,Decimal
+42, 42 ,42.42
