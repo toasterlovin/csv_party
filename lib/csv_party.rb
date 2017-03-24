@@ -15,16 +15,17 @@ class CSVParty
   end
 
   def parse_row(row)
-    raw_values = {}
-    parsed_values = {}
+    parsed_row = OpenStruct.new
+    parsed_row[:values] = OpenStruct.new
+
     columns.each do |name, options|
       header = options[:header]
       parser = options[:parser]
-      raw_values[name] = row[header]
-      parsed_values[name] = instance_exec(row[header], &parser)
+      parsed_row[name] = instance_exec(row[header], &parser)
+      parsed_row[:values][name] = row[header]
     end
-    parsed_values[:values] = OpenStruct.new(raw_values)
-    return OpenStruct.new(parsed_values)
+
+    return parsed_row
   end
 
   def import_row(parsed_row)
