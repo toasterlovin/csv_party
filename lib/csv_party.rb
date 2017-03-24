@@ -1,5 +1,6 @@
 require 'csv'
 require 'bigdecimal'
+require 'ostruct'
 
 class CSVParty
   def initialize(csv_path)
@@ -14,13 +15,16 @@ class CSVParty
   end
 
   def parse_row(row)
-    parsed_row = {}
+    raw_values = {}
+    parsed_values = {}
     columns.each do |name, options|
       header = options[:header]
       parser = options[:parser]
-      parsed_row[name] = instance_exec(row[header], &parser)
+      raw_values[name] = row[header]
+      parsed_values[name] = instance_exec(row[header], &parser)
     end
-    parsed_row
+    parsed_values[:values] = OpenStruct.new(raw_values)
+    return OpenStruct.new(parsed_values)
   end
 
   def import_row(parsed_row)

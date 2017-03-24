@@ -7,53 +7,53 @@ class CSVPartTest < Minitest::Test
     HappyPathImporter.new("test/csv/happy_path.csv").import!
 
     row_one = $result[0]
-    assert_equal "Widget", row_one[:product]
-    assert_equal 9.99,     row_one[:price]
+    assert_equal "Widget", row_one.product
+    assert_equal 9.99,     row_one.price
 
     row_two = $result[1]
-    assert_equal "Gadget", row_two[:product]
-    assert_equal 12.99,    row_two[:price]
+    assert_equal "Gadget", row_two.product
+    assert_equal 12.99,    row_two.price
   end
 
   def test_raw_parser
     RawParserImporter.new("test/csv/raw_parser.csv").import!
-    assert_equal " has whitespace ", $result[:raw]
+    assert_equal " has whitespace ", $result.raw
   end
 
   def test_string_parser
     StringParserImporter.new("test/csv/string_parser.csv").import!
-    assert_equal "has whitespace", $result[:string]
+    assert_equal "has whitespace", $result.string
   end
 
   def test_boolean_parser
     BooleanParserImporter.new("test/csv/boolean_parser.csv").import!
-    assert $result[:t]
-    assert $result[:T]
-    assert $result[:true]
-    assert $result[:TRUE]
-    assert $result[:one]
-    assert $result[:true_whitespace]
-    refute $result[:f]
-    refute $result[:F]
-    refute $result[:false]
-    refute $result[:FALSE]
-    refute $result[:zero]
-    refute $result[:two]
-    refute $result[:random]
+    assert $result.t
+    assert $result.T
+    assert $result.true
+    assert $result.TRUE
+    assert $result.one
+    assert $result.true_whitespace
+    refute $result.f
+    refute $result.F
+    refute $result.false
+    refute $result.FALSE
+    refute $result.zero
+    refute $result.two
+    refute $result.random
   end
 
   def test_integer_parser
     IntegerParserImporter.new("test/csv/integer_parser.csv").import!
-    assert_equal 42,    $result[:integer]
-    assert_equal 42,    $result[:whitespace]
-    assert_equal 42.00, $result[:decimal_as_integer]
+    assert_equal 42,    $result.integer
+    assert_equal 42,    $result.whitespace
+    assert_equal 42.00, $result.decimal_as_integer
   end
 
   def test_decimal_parser
     DecimalParserImporter.new("test/csv/decimal_parser.csv").import!
-    assert_equal 42.42, $result[:decimal]
-    assert_equal 42.42, $result[:whitespace]
-    assert_equal 42.42, $result[:dollars]
+    assert_equal 42.42, $result.decimal
+    assert_equal 42.42, $result.whitespace
+    assert_equal 42.42, $result.dollars
   end
 
   def test_custom_parser
