@@ -2,11 +2,20 @@ require "minitest/autorun"
 Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 
 class CSVPartTest < Minitest::Test
+  def setup
+  end
+
   def test_happy_path
+    $result = []
     HappyPathImporter.new("test/csv/happy_path.csv").import!
-    flunk
-    assert_equal "Widget", $result[:product]
-    assert_equal 9.99,     $result[:price]
+
+    row_one = $result[0]
+    assert_equal "Widget", row_one[:product]
+    assert_equal 9.99,     row_one[:price]
+
+    row_two = $result[1]
+    assert_equal "Gadget", row_two[:product]
+    assert_equal 12.99,    row_two[:price]
   end
 
   def test_raw_parser
@@ -39,6 +48,7 @@ class CSVPartTest < Minitest::Test
   def test_integer_parser
     IntegerParserImporter.new("test/csv/integer_parser.csv").import!
     assert_equal 42,    $result[:integer]
+    assert_equal 42,    $result[:whitespace]
     assert_equal 42.00, $result[:decimal_as_integer]
   end
 
