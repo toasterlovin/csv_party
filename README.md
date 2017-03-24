@@ -68,7 +68,6 @@ Once your importer class is defined, you use it like this:
 
 # TODO
 
-- Make values available as `row.value`, rather than `row[:value]`
 - Implement raw value access from import block (`row.values.value`)
 - Add tests
 - Add error handling
