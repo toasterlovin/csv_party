@@ -64,11 +64,11 @@ class CSVPartTest < Minitest::Test
     flunk
   end
 
-  # def test_requires_valid_built_in_parser
+  # def test_requires_valid_named_parser
   #   flunk
   # end
 
-  # def test_requires_either_built_in_parser_or_block
+  # def test_requires_either_named_parser_or_block
   #   flunk
   # end
 
@@ -85,6 +85,14 @@ class CSVPartTest < Minitest::Test
   # end
   #
   # def test_requires_that_all_column_headers_are_present
+  #   flunk
+  # end
+  #
+  # def test_allows_runtime_column_definition
+  #   flunk
+  # end
+  #
+  # def test_provides_access_to_raw_row_values_in_import_block
   #   flunk
   # end
 end
