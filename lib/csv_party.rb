@@ -16,7 +16,6 @@ class CSVParty
   def parse_row(row)
     parsed_row = {}
     columns.each do |name, options|
-      # puts "Parsing column: #{name}, with options: #{options}"
       header = options[:header]
       parser = options[:parser]
       parsed_row[name] = instance_exec(row[header], &parser)
