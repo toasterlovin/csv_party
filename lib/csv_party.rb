@@ -34,6 +34,7 @@ class CSVParty
   end
 
   def self.column(name, options, &block)
+    raise DuplicateColumnError, "A column named :#{name} has already been defined, choose a different name" if columns.has_key?(name)
     header = options[:header]
     raise MissingHeaderError, "A header must be specified for #{name}" unless header
 
@@ -123,4 +124,7 @@ class UnknownParserError < ArgumentError
 end
 
 class MissingHeaderError < ArgumentError
+end
+
+class DuplicateColumnError < ArgumentError
 end

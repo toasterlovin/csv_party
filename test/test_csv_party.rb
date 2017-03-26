@@ -84,9 +84,11 @@ class CSVPartTest < Minitest::Test
     end
   end
 
-  # def test_does_not_allow_a_column_to_be_defined_twice
-  #   flunk
-  # end
+  def test_duplicate_columns
+    assert_raises DuplicateColumnError do
+      require 'importers/invalid/duplicate_columns_importer'
+    end
+  end
 
   # def test_strips_whitespace_from_a_column_by_default
   #   flunk
