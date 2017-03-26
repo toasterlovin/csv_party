@@ -1,3 +1,5 @@
+require 'csv_party'
+
 class ParsesAsStringByDefaultImporter < CSVParty
   column :whitespace, header: "Whitespace"
 
