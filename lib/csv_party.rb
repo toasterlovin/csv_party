@@ -34,12 +34,15 @@ class CSVParty
   end
 
   def self.column(name, options, &block)
-    raise DuplicateColumnError, "A column named :#{name} has already been defined, choose a different name" if columns.has_key?(name)
-    header = options[:header]
-    raise MissingHeaderError, "A header must be specified for #{name}" unless header
+    if columns.has_key?(name)
+      raise DuplicateColumnError, "A column named :#{name} has already been defined, choose a different name"
+    end
+    unless options.has_key?(:header)
+      raise MissingHeaderError, "A header must be specified for #{name}"
+    end
 
     if block_given?
-      columns[name] = { header: header, parser: block }
+      columns[name] = { header: options[:header], parser: block }
     else
       if options.has_key?(:as)
         parser_method = "#{options[:as]}_parser".to_sym
@@ -47,7 +50,7 @@ class CSVParty
         parser_method = :string_parser
       end
       columns[name] = {
-        header: header,
+        header: options[:header],
         parser: Proc.new { |value| send(parser_method, value) },
         parser_method: parser_method
       }
