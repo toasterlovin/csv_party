@@ -1,4 +1,4 @@
-class ParsesAsRawByDefaultImporter < CSVParty
+class ParsesAsStringByDefaultImporter < CSVParty
   column :whitespace, header: "Whitespace"
 
   import do |row|

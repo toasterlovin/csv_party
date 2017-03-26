@@ -39,7 +39,7 @@ class CSVParty
     if block_given?
       parser = block
     else
-      parser_method = options.has_key?(:as) ? "#{options[:as]}_parser" : :raw_parser
+      parser_method = options.has_key?(:as) ? "#{options[:as]}_parser" : :string_parser
       parser = Proc.new { |value| send(parser_method, value) }
     end
 
