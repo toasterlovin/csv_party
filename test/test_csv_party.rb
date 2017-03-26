@@ -67,15 +67,16 @@ class CSVPartTest < Minitest::Test
     assert_equal "value 2 plus added text", $result.custom_2
   end
 
+  def test_parses_as_raw_by_default
+    ParsesAsRawByDefaultImporter.new("test/csv/parses_as_raw_by_default.csv").import!
+    assert_equal " has whitespace ", $result.whitespace
+  end
+
   # def test_requires_valid_named_parser
   #   flunk
   # end
 
-  # def test_requires_either_named_parser_or_block
-  #   flunk
-  # end
-
-  # def test_requires_a_column_header
+  # def test_requires_column_header
   #   flunk
   # end
 
