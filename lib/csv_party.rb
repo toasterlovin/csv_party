@@ -5,6 +5,7 @@ require 'ostruct'
 class CSVParty
   def initialize(csv_path)
     @csv_path = csv_path
+    raise_unless_named_parsers_are_valid
   end
 
   def import!
@@ -95,4 +96,25 @@ class CSVParty
     cleaned_value = value.to_s.strip.gsub(/[^0-9.]/, "")
     BigDecimal.new(cleaned_value)
   end
+
+  def named_parsers
+    (private_methods + methods).grep(/_parser$/)
+  end
+
+  def columns_with_named_parsers
+    columns.select { |name, options| options.has_key?(:parser_method) }
+  end
+
+  def raise_unless_named_parsers_are_valid
+    columns_with_named_parsers.each do |name, options|
+      parser = options[:parser_method]
+      unless named_parsers.include? parser
+        raise UnknownParserError,
+          "You're trying to use the :#{parser.to_s.gsub('_parser', '')} parser for the :#{name} column, but it doesn't exist. Available parsers are: :#{named_parsers.map { |p| p.to_s.gsub('_parser', '') }.join(', :')}."
+      end
+    end
+  end
+end
+
+class UnknownParserError < ArgumentError
 end
