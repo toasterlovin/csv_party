@@ -1,32 +1,32 @@
-require "minitest/autorun"
+require 'minitest/autorun'
 Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 
 class CSVPartTest < Minitest::Test
   def test_happy_path
     $result = []
-    HappyPathImporter.new("test/csv/happy_path.csv").import!
+    HappyPathImporter.new('test/csv/happy_path.csv').import!
 
     row_one = $result[0]
-    assert_equal "Widget", row_one.product
+    assert_equal 'Widget', row_one.product
     assert_equal 9.99,     row_one.price
 
     row_two = $result[1]
-    assert_equal "Gadget", row_two.product
+    assert_equal 'Gadget', row_two.product
     assert_equal 12.99,    row_two.price
   end
 
   def test_raw_parser
-    RawParserImporter.new("test/csv/raw_parser.csv").import!
-    assert_equal " has whitespace ", $result.raw
+    RawParserImporter.new('test/csv/raw_parser.csv').import!
+    assert_equal ' has whitespace ', $result.raw
   end
 
   def test_string_parser
-    StringParserImporter.new("test/csv/string_parser.csv").import!
-    assert_equal "has whitespace", $result.string
+    StringParserImporter.new('test/csv/string_parser.csv').import!
+    assert_equal 'has whitespace', $result.string
   end
 
   def test_boolean_parser
-    BooleanParserImporter.new("test/csv/boolean_parser.csv").import!
+    BooleanParserImporter.new('test/csv/boolean_parser.csv').import!
     assert $result.t
     assert $result.T
     assert $result.true
@@ -43,38 +43,47 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_integer_parser
-    IntegerParserImporter.new("test/csv/integer_parser.csv").import!
+    IntegerParserImporter.new('test/csv/integer_parser.csv').import!
     assert_equal 42,    $result.integer
     assert_equal 42,    $result.whitespace
     assert_equal 42.00, $result.decimal_as_integer
   end
 
   def test_decimal_parser
-    DecimalParserImporter.new("test/csv/decimal_parser.csv").import!
+    DecimalParserImporter.new('test/csv/decimal_parser.csv').import!
     assert_equal 42.42, $result.decimal
     assert_equal 42.42, $result.whitespace
     assert_equal 42.42, $result.dollars
   end
 
   def test_custom_parser
-    CustomParserImporter.new("test/csv/custom_parser.csv").import!
-    assert_equal "value plus added text", $result.custom
+    CustomParserImporter.new('test/csv/custom_parser.csv').import!
+    assert_equal 'value plus added text', $result.custom
   end
 
   def test_named_custom_parser
-    NamedCustomParserImporter.new("test/csv/named_custom_parser.csv").import!
-    assert_equal "value 1 plus added text", $result.custom_1
-    assert_equal "value 2 plus added text", $result.custom_2
+    NamedCustomParserImporter.new('test/csv/named_custom_parser.csv').import!
+    assert_equal 'value 1 plus added text', $result.custom_1
+    assert_equal 'value 2 plus added text', $result.custom_2
   end
 
   def test_parses_as_string_by_default
-    ParsesAsStringByDefaultImporter.new("test/csv/parses_as_string_by_default.csv").import!
-    assert_equal "removed whitespace", $result.whitespace
+    ParsesAsStringByDefaultImporter.new('test/csv/parses_as_string_by_default.csv').import!
+    assert_equal 'removed whitespace', $result.whitespace
   end
 
-  # def test_requires_valid_named_parser
-    # RequiresValidNamedParserImporter.new("test/csv/requires_valid_named_parser_importer.csv").import!
-  # end
+  def test_requires_valid_named_parser
+    assert_raise ArgumentError do
+      require 
+      class RequiresValidNamedParserImporter < CSVParty
+        column :custom, header: 'Custom', as: :mispelled
+
+        def custom_parser(value)
+          "#{value} plus some text"
+        end
+      end
+    end
+  end
 
   # def test_requires_column_header
   #   flunk
