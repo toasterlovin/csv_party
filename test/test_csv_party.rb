@@ -73,7 +73,6 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_unknown_named_parser
-    flunk "Make sure this actually needs to happen at runtime"
     assert_raises UnknownParserError do
       UnknownNamedParserImporter.new('')
     end
