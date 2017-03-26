@@ -105,6 +105,9 @@ class CSVParty
     columns.select { |name, options| options.has_key?(:parser_method) }
   end
 
+  # This error has to be raised at runtime because, when the class body
+  # is being executed, the parser methods won't be available unless
+  # they are defined above the column definitions in the class body
   def raise_unless_named_parsers_are_valid
     columns_with_named_parsers.each do |name, options|
       parser = options[:parser_method]
