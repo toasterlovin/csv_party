@@ -78,9 +78,11 @@ class CSVPartTest < Minitest::Test
     end
   end
 
-  # def test_requires_column_header
-  #   flunk
-  # end
+  def test_requires_column_header
+    assert_raises MissingHeaderError do
+      require 'importers/invalid/requires_column_header_importer'
+    end
+  end
 
   # def test_does_not_allow_a_column_to_be_defined_twice
   #   flunk

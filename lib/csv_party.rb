@@ -35,7 +35,7 @@ class CSVParty
 
   def self.column(name, options, &block)
     header = options[:header]
-    raise ArgumentError, "A header must be specified for #{name}" unless header
+    raise MissingHeaderError, "A header must be specified for #{name}" unless header
 
     if block_given?
       columns[name] = { header: header, parser: block }
@@ -112,9 +112,15 @@ class CSVParty
     columns_with_named_parsers.each do |name, options|
       parser = options[:parser_method]
       unless named_parsers.include? parser
-        raise ArgumentError,
+        raise UnknownParserError,
           "You're trying to use the :#{parser.to_s.gsub('_parser', '')} parser for the :#{name} column, but it doesn't exist. Available parsers are: :#{named_parsers.map { |p| p.to_s.gsub('_parser', '') }.join(', :')}."
       end
     end
   end
+end
+
+class UnknownParserError < ArgumentError
+end
+
+class MissingHeaderError < ArgumentError
 end
