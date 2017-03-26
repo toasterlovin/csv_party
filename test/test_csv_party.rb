@@ -62,7 +62,9 @@ class CSVPartTest < Minitest::Test
   end
 
   def test_named_custom_parser
-    flunk
+    NamedCustomParserImporter.new("test/csv/named_custom_parser.csv").import!
+    assert_equal "value 1 plus added text", $result.custom_1
+    assert_equal "value 2 plus added text", $result.custom_2
   end
 
   # def test_requires_valid_named_parser
