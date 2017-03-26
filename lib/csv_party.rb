@@ -37,13 +37,19 @@ class CSVParty
     raise ArgumentError, "A header must be specified for #{name}" unless header
 
     if block_given?
-      parser = block
+      columns[name] = { header: header, parser: block }
     else
-      parser_method = options.has_key?(:as) ? "#{options[:as]}_parser" : :string_parser
-      parser = Proc.new { |value| send(parser_method, value) }
+      if options.has_key?(:as)
+        parser_method = "#{options[:as]}_parser".to_sym
+      else
+        parser_method = :string_parser
+      end
+      columns[name] = {
+        header: header,
+        parser: Proc.new { |value| send(parser_method, value) },
+        parser_method: parser_method
+      }
     end
-
-    columns[name] = { header: header, parser: parser }
   end
 
   def self.import(&block)

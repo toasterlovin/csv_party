@@ -72,18 +72,11 @@ class CSVPartTest < Minitest::Test
     assert_equal 'removed whitespace', $result.whitespace
   end
 
-  def test_requires_valid_named_parser
-    assert_raise ArgumentError do
-      require 
-      class RequiresValidNamedParserImporter < CSVParty
-        column :custom, header: 'Custom', as: :mispelled
-
-        def custom_parser(value)
-          "#{value} plus some text"
-        end
-      end
-    end
-  end
+  # def test_requires_valid_named_parser
+  #   assert_raises ArgumentError do
+  #     require 'csv/requires_valid_named_parser_importer'
+  #   end
+  # end
 
   # def test_requires_column_header
   #   flunk
