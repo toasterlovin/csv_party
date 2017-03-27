@@ -69,6 +69,8 @@ Once your importer class is defined, you use it like this:
 # TODO
 
 - Implement raw value access from import block (`row.values.value`)
-- Add tests
-- Add error handling
 - Allow runtime configuration
+- Add tests
+- Add date parser
+- Add date time parser
+- Add error handling
