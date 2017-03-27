@@ -74,3 +74,4 @@ Once your importer class is defined, you use it like this:
 - Add date parser
 - Add date time parser
 - Add error handling
+- Add mechanism for skipping rows (at both parser and import level)
