@@ -4,8 +4,10 @@ require 'ostruct'
 
 class CSVParty
   def initialize(csv_path)
+    @headers = CSV.new(File.open(csv_path)).shift
     @csv = CSV.new(File.open(csv_path), headers: true)
     raise_unless_named_parsers_are_valid
+    raise_unless_csv_has_all_headers
   end
 
   def import!
@@ -119,6 +121,17 @@ class CSVParty
         raise UnknownParserError,
           "You're trying to use the :#{parser.to_s.gsub('_parser', '')} parser for the :#{name} column, but it doesn't exist. Available parsers are: :#{named_parsers.map { |p| p.to_s.gsub('_parser', '') }.join(', :')}."
       end
+    end
+  end
+
+  def defined_headers
+    columns.map { |name, options| options[:header] }
+  end
+
+  def raise_unless_csv_has_all_headers
+    missing_columns = defined_headers - @headers
+    unless missing_columns.empty?
+      raise MissingColumnError, "CSV file is missing column(s) with header(s) '#{missing_columns.join("', '")}'."
     end
   end
 end

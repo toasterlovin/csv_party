@@ -74,7 +74,7 @@ class CSVPartTest < Minitest::Test
 
   def test_unknown_named_parser
     assert_raises UnknownParserError do
-      UnknownNamedParserImporter.new('')
+      UnknownNamedParserImporter.new('test/csv/unknown_named_parser.csv')
     end
   end
 
@@ -90,13 +90,11 @@ class CSVPartTest < Minitest::Test
     end
   end
 
-  # def test_strips_whitespace_from_a_column_by_default
-  #   flunk
-  # end
-  #
-  # def test_requires_that_all_column_headers_are_present
-  #   flunk
-  # end
+  def test_missing_column_in_csv
+    assert_raises MissingColumnError do
+      MissingColumnImporter.new('test/csv/missing_column.csv')
+    end
+  end
   #
   # def test_allows_runtime_column_definition
   #   flunk
