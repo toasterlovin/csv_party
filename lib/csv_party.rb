@@ -4,12 +4,12 @@ require 'ostruct'
 
 class CSVParty
   def initialize(csv_path)
-    @csv_path = csv_path
+    @csv = CSV.new(File.open(csv_path), headers: true)
     raise_unless_named_parsers_are_valid
   end
 
   def import!
-    CSV.foreach(@csv_path, headers: true) do |row|
+    @csv.each do |row|
       parsed_row = parse_row(row)
       import_row(parsed_row)
     end
@@ -130,4 +130,7 @@ class MissingHeaderError < ArgumentError
 end
 
 class DuplicateColumnError < ArgumentError
+end
+
+class MissingColumnError < ArgumentError
 end
