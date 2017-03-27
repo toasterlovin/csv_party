@@ -68,7 +68,6 @@ Once your importer class is defined, you use it like this:
 
 # TODO
 
-- Default to raw parser when no parser is specified
 - Implement raw value access from import block (`row.values.value`)
 - Add tests
 - Add error handling
