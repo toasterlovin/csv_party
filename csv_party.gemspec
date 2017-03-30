@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'csv_party'
-  s.version     = '0.0.1'
-  s.date        = '2017-03-19'
+  s.version     = '0.0.1.pre'
+  s.date        = '2017-03-30'
   s.summary     = 'CSV Party'
   s.description = 'A gem for making CSV imports a little more fun.'
   s.authors     = ['Rico Jones']
