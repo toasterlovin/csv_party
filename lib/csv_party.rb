@@ -95,6 +95,7 @@ class CSVParty
   end
 
   def integer_parser(value)
+    return nil if value.nil? or value.strip.empty?
     value.to_i
   end
 

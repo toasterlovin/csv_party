@@ -47,6 +47,8 @@ class CSVPartTest < Minitest::Test
     assert_equal 42,    $result.integer
     assert_equal 42,    $result.whitespace
     assert_equal 42.00, $result.decimal_as_integer
+    assert_nil $result.whitespace_only
+    assert_nil $result.blank
   end
 
   def test_decimal_parser
