@@ -70,7 +70,6 @@ Once your importer class is defined, you use it like this:
 
 - README: make clear that columns can't reference each other when being parsed
 - Implement nil and blank value behavior for built-in parsers
-- Implement raw value access from import block (`row.values.value`)
 - Allow runtime configuration
 - Add tests
 - Add date parser
