@@ -19,13 +19,13 @@ class CSVParty
 
   def parse_row(row)
     parsed_row = OpenStruct.new
-    parsed_row[:values] = OpenStruct.new
+    parsed_row[:unparsed] = OpenStruct.new
 
     columns.each do |name, options|
       header = options[:header]
       parser = options[:parser]
       parsed_row[name] = instance_exec(row[header], &parser)
-      parsed_row[:values][name] = row[header]
+      parsed_row[:unparsed][name] = row[header]
     end
 
     return parsed_row

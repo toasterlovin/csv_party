@@ -101,8 +101,10 @@ class CSVPartTest < Minitest::Test
   # def test_allows_runtime_column_definition
   #   flunk
   # end
-  #
-  # def test_provides_access_to_raw_row_values_in_import_block
-  #   flunk
-  # end
+
+  def test_provides_access_to_raw_row_values_in_import_block
+    UnparsedRowValuesImporter.new('test/csv/unparsed_row_values.csv').import!
+    assert_equal "Has whitespace", $result.whitespace
+    assert_equal " Has whitespace ", $result.unparsed.whitespace
+  end
 end
