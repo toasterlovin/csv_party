@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 Dir[File.dirname(__FILE__) + '/importers/*.rb'].each {|file| require file }
 
-class CSVPartTest < Minitest::Test
+class CSVPartyTest < Minitest::Test
   def test_happy_path
     $result = []
     HappyPathImporter.new('test/csv/happy_path.csv').import!
