@@ -55,7 +55,7 @@ Once you've defined all of your columns, you define your import logic:
     class MyImporter < CSVParty
       import do |row|
         row.price           # access parsed values
-        row.values.price    # access raw values
+        row.unparsed.price    # access unparsed values
       end
     end
 
