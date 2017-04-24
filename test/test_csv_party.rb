@@ -107,7 +107,6 @@ class CSVPartyTest < Minitest::Test
   def test_provides_access_to_csv_row_as_string
     csv_file_path = 'test/csv/csv_row_as_string.csv'
     CsvRowAsStringImporter.new(csv_file_path).import!
-    puts $result
     assert_equal "Some text", $result.column_1
     assert_equal IO.readlines(csv_file_path)[1], $result.csv_string
   end
