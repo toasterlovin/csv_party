@@ -70,6 +70,7 @@ Once your importer class is defined, you use it like this:
 
 - README: make clear that columns can't reference each other when being parsed
 - Implement nil and blank value behavior for built-in parsers
+- Throw errors when using reserved column names (`unparsed` & `csv_string`)
 - Allow runtime configuration
 - Add tests
 - Add date parser
