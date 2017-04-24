@@ -20,6 +20,7 @@ class CSVParty
   def parse_row(row)
     parsed_row = OpenStruct.new
     parsed_row[:unparsed] = OpenStruct.new
+    parsed_row[:csv_string] = row.to_csv
 
     columns.each do |name, options|
       header = options[:header]

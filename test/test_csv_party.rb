@@ -97,14 +97,18 @@ class CSVPartyTest < Minitest::Test
       MissingColumnImporter.new('test/csv/missing_column.csv')
     end
   end
-  #
-  # def test_allows_runtime_column_definition
-  #   flunk
-  # end
 
   def test_provides_access_to_raw_row_values_in_import_block
     UnparsedRowValuesImporter.new('test/csv/unparsed_row_values.csv').import!
     assert_equal "Has whitespace", $result.whitespace
     assert_equal " Has whitespace ", $result.unparsed.whitespace
+  end
+
+  def test_provides_access_to_csv_row_as_string
+    csv_file_path = 'test/csv/csv_row_as_string.csv'
+    CsvRowAsStringImporter.new(csv_file_path).import!
+    puts $result
+    assert_equal "Some text", $result.column_1
+    assert_equal IO.readlines(csv_file_path)[1], $result.csv_string
   end
 end
