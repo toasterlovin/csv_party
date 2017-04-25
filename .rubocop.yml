@@ -2,10 +2,16 @@ Metrics/ClassLength:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 20
 
 Metrics/AbcSize:
   Max: 20
 
 Style/PreferredHashMethods:
   EnforcedStyle: verbose
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/TrivialAccessors:
+  IgnoreClassMethods: true
