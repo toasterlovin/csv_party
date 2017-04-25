@@ -69,11 +69,12 @@ Once your importer class is defined, you use it like this:
 # TODO
 
 - README: make clear that columns can't reference each other when being parsed
+- Implement CI
+- Add rubocop
 - Implement nil and blank value behavior for built-in parsers
-- Throw errors when using reserved column names (`unparsed` & `csv_string`)
-- Allow runtime configuration
-- Add tests
 - Add date parser
 - Add date time parser
-- Add error handling
 - Add mechanism for skipping rows (at both parser and import level)
+- Add error handling
+- Throw errors when using reserved column names (`unparsed` & `csv_string`)
+- Allow runtime configuration
