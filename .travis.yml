@@ -5,5 +5,5 @@ rvm:
   - 2.0
   - 1.9
 script:
-  - rubocop
-  - rake test
+  - bundle exec rubocop
+  - bundle exec rake test
