@@ -4,3 +4,6 @@ rvm:
   - 2.1
   - 2.0
   - 1.9
+script:
+  - rubocop
+  - rake test
