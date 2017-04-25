@@ -61,14 +61,13 @@ define has no way to reference the values from any other columns. So, this won't
       end
     end
 
-Instead, you would accomplish this in the import block:
+Instead, you would accomplish this in your import logic.
 
 ## Defining Import Logic
 
-Once you've defined all of your columns, you define your import logic by passing a
+Once you've defined all of your columns, you specify your import logic by passing a
 block to the `import` DSL method. That block will have access to a `row` variable
-which provides access to all of the parsed values for your columns. Here's what that
-looks like:
+which contains all of the parsed values for your columns. Here's what that looks like:
 
     class MyImporter < CSVParty
       import do |row|
@@ -82,8 +81,6 @@ The `row` variable also provides access to two other things:
 
 - The unparsed values for your columns
 - The raw CSV string for that row
-
-Here's how you access those:
 
     class MyImporter < CSVParty
       import do |row|
