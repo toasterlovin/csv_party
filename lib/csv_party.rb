@@ -26,15 +26,12 @@ class CSVParty
       unparsed_value = row[header]
       parser = options[:parser]
 
-      # []= is not available on OpenStruct until
-      # ruby 2.0, so we have to assign this way
-      # to support ruby 1.9
-      unparsed_row.send("#{name}=", unparsed_value)
-      parsed_row.send("#{name}=", instance_exec(unparsed_value, &parser))
+      unparsed_row[name] = unparsed_value
+      parsed_row[name] = instance_exec(unparsed_value, &parser)
     end
 
-    parsed_row.send('unparsed=', unparsed_row)
-    parsed_row.send('csv_string=', row.to_csv)
+    parsed_row['unparsed'] = unparsed_row
+    parsed_row['csv_string'] = row.to_csv
 
     return parsed_row
   end
