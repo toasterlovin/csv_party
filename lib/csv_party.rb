@@ -40,7 +40,7 @@ class CSVParty
   end
 
   def import_row(parsed_row)
-    importer.call(parsed_row)
+    instance_exec(parsed_row, &importer)
   end
 
   def self.column(name, options, &block)
