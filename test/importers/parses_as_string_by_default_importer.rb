@@ -4,6 +4,6 @@ class ParsesAsStringByDefaultImporter < CSVParty
   column :whitespace, header: 'Whitespace'
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

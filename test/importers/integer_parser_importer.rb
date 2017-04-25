@@ -8,6 +8,6 @@ class IntegerParserImporter < CSVParty
   column :blank, header: 'Blank', as: :integer
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

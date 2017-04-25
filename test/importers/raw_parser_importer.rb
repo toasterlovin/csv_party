@@ -5,6 +5,6 @@ class RawParserImporter < CSVParty
   column :second_column, header: 'Second Column', as: :raw
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

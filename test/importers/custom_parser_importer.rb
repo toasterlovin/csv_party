@@ -6,6 +6,6 @@ class CustomParserImporter < CSVParty
   end
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

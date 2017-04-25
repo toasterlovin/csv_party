@@ -4,6 +4,6 @@ class UnparsedRowValuesImporter < CSVParty
   column :whitespace, header: 'String', as: :string
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

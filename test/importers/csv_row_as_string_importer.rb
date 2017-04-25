@@ -5,6 +5,6 @@ class CsvRowAsStringImporter < CSVParty
   column :column_2, header: 'Column 2', as: :integer
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

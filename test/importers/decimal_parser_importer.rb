@@ -6,6 +6,6 @@ class DecimalParserImporter < CSVParty
   column :dollars, header: 'Dollars', as: :decimal
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end

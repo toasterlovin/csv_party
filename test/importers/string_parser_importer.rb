@@ -5,6 +5,6 @@ class StringParserImporter < CSVParty
   column :second_column, header: 'Second Column', as: :string
 
   import do |row|
-    $result = row
+    self.result = row
   end
 end
