@@ -28,6 +28,7 @@ class CSVParty
 
       # []= is not available on OpenStruct until
       # ruby 2.0, so we have to assign this way
+      # to support ruby 1.9
       unparsed_row.send("#{name}=", unparsed_value)
       parsed_row.send("#{name}=", instance_exec(unparsed_value, &parser))
     end
@@ -43,24 +44,20 @@ class CSVParty
   end
 
   def self.column(name, options, &block)
-    if columns.has_key?(name)
-      raise DuplicateColumnError, "A column named :#{name} has already been defined, choose a different name"
-    end
-    unless options.has_key?(:header)
-      raise MissingHeaderError, "A header must be specified for #{name}"
-    end
+    raise_if_duplicate_column(name)
+    raise_if_missing_header(name, options)
 
     if block_given?
       columns[name] = { header: options[:header], parser: block }
     else
-      if options.has_key?(:as)
-        parser_method = "#{options[:as]}_parser".to_sym
-      else
-        parser_method = :string_parser
-      end
+      parser_method = if options.has_key?(:as)
+                        "#{options[:as]}_parser".to_sym
+                      else
+                        :string_parser
+                      end
       columns[name] = {
         header: options[:header],
-        parser: Proc.new { |value| send(parser_method, value) },
+        parser: proc { |value| send(parser_method, value) },
         parser_method: parser_method
       }
     end
@@ -86,8 +83,20 @@ class CSVParty
     self.class.importer
   end
 
-  private
+  def self.raise_if_duplicate_column(name)
+    return unless columns.has_key?(name)
 
+    raise DuplicateColumnError, "A column named :#{name} has already been \
+            defined, choose a different name"
+  end
+
+  def self.raise_if_missing_header(name, options)
+    return if options.has_key?(:header)
+
+    raise MissingHeaderError, "A header must be specified for #{name}"
+  end
+
+  private
 
   def raw_parser(value)
     value
@@ -98,16 +107,16 @@ class CSVParty
   end
 
   def boolean_parser(value)
-    ['1', 't', 'true'].include? value.to_s.strip.downcase
+    %w[1 t true].include? value.to_s.strip.downcase
   end
 
   def integer_parser(value)
-    return nil if value.nil? or value.strip.empty?
+    return nil if value.nil? || value.strip.empty?
     value.to_i
   end
 
   def decimal_parser(value)
-    cleaned_value = value.to_s.strip.gsub(/[^0-9.]/, "")
+    cleaned_value = value.to_s.strip.gsub(/[^0-9.]/, '')
     BigDecimal.new(cleaned_value)
   end
 
@@ -116,7 +125,7 @@ class CSVParty
   end
 
   def columns_with_named_parsers
-    columns.select { |name, options| options.has_key?(:parser_method) }
+    columns.select { |_name, options| options.has_key?(:parser_method) }
   end
 
   # This error has to be raised at runtime because, when the class body
@@ -125,22 +134,29 @@ class CSVParty
   def raise_unless_named_parsers_are_valid
     columns_with_named_parsers.each do |name, options|
       parser = options[:parser_method]
-      unless named_parsers.include? parser
-        raise UnknownParserError,
-          "You're trying to use the :#{parser.to_s.gsub('_parser', '')} parser for the :#{name} column, but it doesn't exist. Available parsers are: :#{named_parsers.map { |p| p.to_s.gsub('_parser', '') }.join(', :')}."
-      end
+      next if named_parsers.include? parser
+
+      parser = parser.to_s.gsub('_parser', '')
+      parsers = named_parsers
+                .map { |p| p.to_s.gsub('_parser', '') }
+                .join(', :')
+      raise UnknownParserError,
+            "You're trying to use the :#{parser} parser for the :#{name} \
+            column, but it doesn't exist. Available parsers are: :#{parsers}."
     end
   end
 
   def defined_headers
-    columns.map { |name, options| options[:header] }
+    columns.map { |_name, options| options[:header] }
   end
 
   def raise_unless_csv_has_all_headers
     missing_columns = defined_headers - @headers
-    unless missing_columns.empty?
-      raise MissingColumnError, "CSV file is missing column(s) with header(s) '#{missing_columns.join("', '")}'."
-    end
+    return if missing_columns.empty?
+
+    columns = missing_columns.join("', '")
+    raise MissingColumnError,
+          "CSV file is missing column(s) with header(s) '#{columns}'."
   end
 end
 
