@@ -15,3 +15,6 @@ Style/RedundantReturn:
 
 Style/TrivialAccessors:
   IgnoreClassMethods: true
+
+Style/Documentation:
+  Enabled: false
