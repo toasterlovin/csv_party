@@ -99,6 +99,15 @@ Once your importer class is defined, you use it like this:
     importer = MyImporter.new("path/to/file.csv")
     importer.import!
 
+# Tested Rubies
+
+CSVParty has been tested against the following Rubies:
+
+MRI
+- 2.2
+- 2.1
+- 2.0
+
 # TODO
 
 - Add rubocop
