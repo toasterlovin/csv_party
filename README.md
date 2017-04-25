@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/toasterlovin/csv_party.svg?branch=master)](https://travis-ci.org/toasterlovin/csv_party)
+
 # Make importing CSV files a party
 
 The point of this gem is to make it easier to focus on the business
@@ -110,7 +112,6 @@ MRI
 
 # TODO
 
-- Add Travis build status to README
 - Re-enable class documentation cop
 - Implement nil and blank value behavior for built-in parsers
 - Add date parser
