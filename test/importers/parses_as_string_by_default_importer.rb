@@ -1,7 +1,7 @@
 require 'csv_party'
 
 class ParsesAsStringByDefaultImporter < CSVParty
-  column :whitespace, header: "Whitespace"
+  column :whitespace, header: 'Whitespace'
 
   import do |row|
     $result = row
