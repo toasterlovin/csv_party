@@ -110,7 +110,6 @@ MRI
 
 # TODO
 
-- Add rubocop
 - Re-enable class documentation cop
 - Implement nil and blank value behavior for built-in parsers
 - Add date parser
