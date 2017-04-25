@@ -31,7 +31,7 @@ parsing logic:
 
     class MyImporter < CSVParty
       column :product, header: "Product" do |value|
-        Product.find_by(name: value.strip)
+        Product.find_by(name: value)
       end
     end
 
@@ -40,7 +40,7 @@ define a method on your class with a name that ends in `_parser` and
 you can use it the same way you use the built-in parsers:
 
     class MyImporter < CSVParty
-      def dollar_to_cents_parser(value)
+      def dollars_to_cents_parser(value)
         (BigDecimal.new(value) * 100).to_i
       end
 
@@ -48,14 +48,48 @@ you can use it the same way you use the built-in parsers:
       column :cost_in_cents, header: "Cost in $", as: :dollars_to_cents
     end
 
+NOTE: when using a custom parser to parse a column, the block or method that you
+define has no way to reference the values from any other columns. So, this won't work:
+
+    class MyImporter < CSVParty
+      column :product, header: "Product", do |value|
+        Product.find_by(name: value)
+      end
+
+      column :price, header: "Price", do |value|
+        product.price = BigDecimal.new(value)  # product is not defined
+      end
+    end
+
+Instead, you would accomplish this in the import block:
+
 ## Defining Import Logic
 
-Once you've defined all of your columns, you define your import logic:
+Once you've defined all of your columns, you define your import logic by passing a
+block to the `import` DSL method. That block will have access to a `row` variable
+which provides access to all of the parsed values for your columns. Here's what that
+looks like:
 
     class MyImporter < CSVParty
       import do |row|
-        row.price           # access parsed values
-        row.unparsed.price    # access unparsed values
+        product = row.product
+        product.price = row.price
+        product.save
+      end
+    end
+
+The `row` variable also provides access to two other things:
+
+- The unparsed values for your columns
+- The raw CSV string for that row
+
+Here's how you access those:
+
+    class MyImporter < CSVParty
+      import do |row|
+        row.price           # parsed value: #<BigDecimal:7f88d92cb820,'0.9E1',9(18)>
+        row.unparsed.price  # unparsed value: "$9.00"
+        row.string          # raw CSV string: "USB Cable,$9.00,Box,Blue"
       end
     end
 
@@ -63,12 +97,11 @@ Once you've defined all of your columns, you define your import logic:
 
 Once your importer class is defined, you use it like this:
 
-    importer = MyImporterClass.new("path/to/file.csv")
+    importer = MyImporter.new("path/to/file.csv")
     importer.import!
 
 # TODO
 
-- README: make clear that columns can't reference each other when being parsed
 - Implement CI
 - Add rubocop
 - Implement nil and blank value behavior for built-in parsers
