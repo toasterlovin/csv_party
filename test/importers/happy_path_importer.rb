@@ -5,6 +5,6 @@ class HappyPathImporter < CSVParty
   column :price, header: 'Price', as: :decimal
 
   import do |row|
-    self.result << row
+    result << row
   end
 end
