@@ -101,7 +101,6 @@ Once your importer class is defined, you use it like this:
 
 # TODO
 
-- Implement CI
 - Add rubocop
 - Implement nil and blank value behavior for built-in parsers
 - Add date parser
