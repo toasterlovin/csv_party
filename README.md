@@ -82,6 +82,8 @@ The `row` variable also provides access to two other things:
 - The unparsed values for your columns
 - The raw CSV string for that row
 
+Here's how you access those:
+
     class MyImporter < CSVParty
       import do |row|
         row.price           # parsed value: #<BigDecimal:7f88d92cb820,'0.9E1',9(18)>
