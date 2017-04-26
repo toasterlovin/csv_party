@@ -114,7 +114,6 @@ MRI
 
 - Add error handling
   - Provide access to CSV file for error handling
-  - Provide line number to error handler
   - Add error class that skips row
   - Add error class that aborts row
   - Add error class that aborts whole import
