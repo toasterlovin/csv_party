@@ -177,7 +177,8 @@ class CSVParty
 
     columns = missing_columns.join("', '")
     raise MissingColumnError,
-          "CSV file is missing column(s) with header(s) '#{columns}'."
+          "CSV file is missing column(s) with header(s) '#{columns}'. \
+          File has these headers: #{@headers.join(', ')}."
   end
 end
 
