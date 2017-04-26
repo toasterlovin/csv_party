@@ -142,6 +142,7 @@ class CSVPartyTest < Minitest::Test
     importer = MalformedCSVErrorImporter.new('test/csv/malformed_csv_error.csv')
     importer.import!
 
-    assert importer.result.is_a? CSV::MalformedCSVError
+    assert importer.result.first.is_a? CSV::MalformedCSVError
+    assert_equal 2, importer.result.last
   end
 end

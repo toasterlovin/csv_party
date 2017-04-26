@@ -17,8 +17,8 @@ class CSVParty
         row = @csv.shift
         break unless row
         import_row(row)
-      rescue CSV::MalformedCSVError => e
-        process_error(e)
+      rescue CSV::MalformedCSVError => error
+        process_error(error, @csv.lineno + 1)
         next
       end
     end
@@ -48,8 +48,8 @@ class CSVParty
     instance_exec(parsed_row, &importer)
   end
 
-  def process_error(e)
-    instance_exec(e, &error_handler)
+  def process_error(error, line_number)
+    instance_exec(error, line_number, &error_handler)
   end
 
   def self.column(name, options, &block)

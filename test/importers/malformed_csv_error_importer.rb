@@ -7,7 +7,7 @@ class MalformedCSVErrorImporter < CSVParty
   import do |row|
   end
 
-  error do |error|
-    self.result = error
+  error do |error, line_number|
+    self.result = [error, line_number]
   end
 end
