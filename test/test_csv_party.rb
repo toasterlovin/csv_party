@@ -137,4 +137,11 @@ class CSVPartyTest < Minitest::Test
     assert_equal 'Some text', importer.result.column_1
     assert_equal IO.readlines(csv_file_path)[1], importer.result.csv_string
   end
+
+  def test_captures_malformed_csv_errors
+    importer = MalformedCSVErrorImporter.new('test/csv/malformed_csv_error.csv')
+    importer.import!
+
+    assert importer.result.is_a? CSV::MalformedCSVError
+  end
 end

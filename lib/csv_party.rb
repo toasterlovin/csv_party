@@ -6,14 +6,21 @@ class CSVParty
   def initialize(csv_path)
     @headers = CSV.new(File.open(csv_path)).shift
     @csv = CSV.new(File.open(csv_path), headers: true)
+
     raise_unless_named_parsers_are_valid
     raise_unless_csv_has_all_headers
   end
 
   def import!
-    @csv.each do |row|
-      parsed_row = parse_row(row)
-      import_row(parsed_row)
+    loop do
+      begin
+        row = @csv.shift
+        break unless row
+        import_row(row)
+      rescue CSV::MalformedCSVError => e
+        process_error(e)
+        next
+      end
     end
   end
 
@@ -36,8 +43,13 @@ class CSVParty
     return parsed_row
   end
 
-  def import_row(parsed_row)
+  def import_row(row)
+    parsed_row = parse_row(row)
     instance_exec(parsed_row, &importer)
+  end
+
+  def process_error(e)
+    instance_exec(e, &error_handler)
   end
 
   def self.column(name, options, &block)
@@ -60,10 +72,6 @@ class CSVParty
     end
   end
 
-  def self.import(&block)
-    @importer = block
-  end
-
   def self.columns
     @columns ||= {}
   end
@@ -72,12 +80,28 @@ class CSVParty
     self.class.columns
   end
 
+  def self.import(&block)
+    @importer = block
+  end
+
   def self.importer
     @importer
   end
 
   def importer
     self.class.importer
+  end
+
+  def self.error(&block)
+    @error = block
+  end
+
+  def self.error_handler
+    @error
+  end
+
+  def error_handler
+    self.class.error_handler
   end
 
   def self.raise_if_duplicate_column(name)

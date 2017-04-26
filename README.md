@@ -112,11 +112,18 @@ MRI
 
 # TODO
 
+- Add error handling
+  - Provide access to CSV file for error handling
+  - Provide line number to error handler
+  - Add error class that skips row
+  - Add error class that aborts row
+  - Add error class that aborts whole import
+  - Allow options rather than blocks for common
+    error handling strategies
 - Re-enable class documentation cop
 - Implement nil and blank value behavior for built-in parsers
 - Add date parser
 - Add date time parser
 - Add mechanism for skipping rows (at both parser and import level)
-- Add error handling
 - Throw errors when using reserved column names (`unparsed` & `csv_string`)
 - Allow runtime configuration
