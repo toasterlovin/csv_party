@@ -112,6 +112,7 @@ MRI
 
 # TODO
 
+- Inject dependencies
 - Add error handling
   - Provide access to CSV file for error handling
   - Add error class that skips row
