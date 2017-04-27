@@ -17,7 +17,7 @@ class CSVParty
         row = @csv.shift
         break unless row
         import_row(row)
-      rescue CSV::MalformedCSVError => error
+      rescue StandardError => error
         process_error(error, @csv.lineno + 1)
         next
       end
