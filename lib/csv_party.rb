@@ -3,7 +3,7 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
-  def initialize(csv_path, options)
+  def initialize(csv_path, options = {})
     options[:headers] = true
     @headers = CSV.new(File.open(csv_path)).shift
     @csv = CSV.new(File.open(csv_path), options)
