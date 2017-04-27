@@ -3,9 +3,10 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
-  def initialize(csv_path)
+  def initialize(csv_path, options)
+    options[:headers] = true
     @headers = CSV.new(File.open(csv_path)).shift
-    @csv = CSV.new(File.open(csv_path), headers: true)
+    @csv = CSV.new(File.open(csv_path), options)
 
     raise_unless_named_parsers_are_valid
     raise_unless_csv_has_all_headers
