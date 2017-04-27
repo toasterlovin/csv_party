@@ -112,6 +112,7 @@ MRI
 
 # TODO
 
+- Bug fix: line_number doesn't work on errors beyond the first
 - Parse blank values as nil for custom parsers
 - Inject dependencies
 - Add error handling
