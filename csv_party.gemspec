@@ -7,6 +7,6 @@ Gem::Specification.new do |s|
   s.authors     = ['Rico Jones']
   s.email       = 'rico@toasterlovin.com'
   s.files       = ['lib/csv_party.rb']
-  s.homepage    = 'http://rubygems.org/gems/csv_party'
+  s.homepage    = 'https://github.com/toasterlovin/csv_party'
   s.license     = 'MIT'
 end
