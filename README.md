@@ -112,6 +112,7 @@ MRI
 
 # TODO
 
+- Parse blank values as nil for custom parsers
 - Inject dependencies
 - Add error handling
   - Provide access to CSV file for error handling
