@@ -137,8 +137,6 @@ MRI
 
 # TODO
 
-- Return nil on all blank columns by default
-  - Way to opt out
 - Allow dependency injection
   - Arbitrary dependencies
   - Defined at runtime
