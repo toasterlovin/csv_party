@@ -148,10 +148,6 @@ MRI
   - Abort import
   - Should be possible from parsers, import, and error blocks
 - Add error handling
-  - Provide access to CSV file for error handling
-  - Add error class that skips row
-  - Add error class that aborts row
-  - Add error class that aborts whole import
   - Allow options rather than blocks for common
     error handling strategies
 - Bug fix: line_number is sometimes off by oone
