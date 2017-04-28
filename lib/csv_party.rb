@@ -35,7 +35,11 @@ class CSVParty
       parser = options[:parser]
 
       unparsed_row[name] = unparsed_value
-      parsed_row[name] = instance_exec(unparsed_value, &parser)
+      parsed_row[name] = if parser.is_a? Symbol
+                           send(parser, unparsed_value)
+                         else
+                           instance_exec(unparsed_value, &parser)
+                         end
     end
 
     parsed_row['unparsed'] = unparsed_row
@@ -57,20 +61,18 @@ class CSVParty
     raise_if_duplicate_column(name)
     raise_if_missing_header(name, options)
 
-    if block_given?
-      columns[name] = { header: options[:header], parser: block }
-    else
-      parser_method = if options.has_key?(:as)
-                        "#{options[:as]}_parser".to_sym
-                      else
-                        :string_parser
-                      end
-      columns[name] = {
-        header: options[:header],
-        parser: proc { |value| send(parser_method, value) },
-        parser_method: parser_method
-      }
-    end
+    parser = if block_given?
+               block
+             elsif options.has_key?(:as)
+               "#{options[:as]}_parser".to_sym
+             else
+               :string_parser
+             end
+
+    columns[name] = {
+      header: options[:header],
+      parser: parser
+    }
   end
 
   def self.columns
@@ -147,7 +149,7 @@ class CSVParty
   end
 
   def columns_with_named_parsers
-    columns.select { |_name, options| options.has_key?(:parser_method) }
+    columns.select { |_name, options| options[:parser].is_a? Symbol }
   end
 
   # This error has to be raised at runtime because, when the class body
@@ -155,7 +157,7 @@ class CSVParty
   # they are defined above the column definitions in the class body
   def raise_unless_named_parsers_are_valid
     columns_with_named_parsers.each do |name, options|
-      parser = options[:parser_method]
+      parser = options[:parser]
       next if named_parsers.include? parser
 
       parser = parser.to_s.gsub('_parser', '')
