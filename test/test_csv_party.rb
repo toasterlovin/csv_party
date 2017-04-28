@@ -97,6 +97,18 @@ class CSVPartyTest < Minitest::Test
     assert_equal 'removed whitespace', importer.result.whitespace
   end
 
+  def test_parses_blanks_as_nil
+    importer = BlanksAsNilImporter.new('test/csv/blanks_as_nil.csv')
+    importer.import!
+
+    assert_nil importer.result.string
+    assert_nil importer.result.integer
+    assert_nil importer.result.decimal
+    assert_nil importer.result.boolean
+    assert_nil importer.result.custom
+    assert_equal 'Not nil', importer.result.opt_out
+  end
+
   def test_unknown_named_parser
     assert_raises UnknownParserError do
       UnknownNamedParserImporter.new('test/csv/unknown_named_parser.csv')

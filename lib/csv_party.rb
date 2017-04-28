@@ -35,7 +35,9 @@ class CSVParty
       parser = options[:parser]
 
       unparsed_row[name] = unparsed_value
-      parsed_row[name] = if parser.is_a? Symbol
+      parsed_row[name] = if options[:blanks_as_nil] && is_blank?(unparsed_value)
+                           nil
+                         elsif parser.is_a? Symbol
                            send(parser, unparsed_value)
                          else
                            instance_exec(unparsed_value, &parser)
@@ -61,17 +63,21 @@ class CSVParty
     raise_if_duplicate_column(name)
     raise_if_missing_header(name, options)
 
+    options = {
+      blanks_as_nil: true,
+      as: :string
+    }.merge(options)
+
     parser = if block_given?
                block
-             elsif options.has_key?(:as)
-               "#{options[:as]}_parser".to_sym
              else
-               :string_parser
+               "#{options[:as]}_parser".to_sym
              end
 
     columns[name] = {
       header: options[:header],
-      parser: parser
+      parser: parser,
+      blanks_as_nil: options[:blanks_as_nil]
     }
   end
 
@@ -122,6 +128,10 @@ class CSVParty
 
   private
 
+  def is_blank?(value)
+    value.nil? || value.strip.empty?
+  end
+
   def raw_parser(value)
     value
   end
@@ -135,7 +145,6 @@ class CSVParty
   end
 
   def integer_parser(value)
-    return nil if value.nil? || value.strip.empty?
     value.to_i
   end
 
