@@ -13,10 +13,10 @@ That's it; CSVParty takes care of all the tedious stuff for you.
 This is what defining your import columns look like:
 
     class MyImporter < CSVParty
-      column :price, header: "Nonsensical Column Name", as: :decimal
+      column :price, header: 'Nonsensical Column Name', as: :decimal
     end
 
-This will take the value in the "Nonsensical Column Name" column,
+This will take the value in the 'Nonsensical Column Name' column,
 parse it as a decimal, then make it available to your import logic
 as a nice, sane variable named `price`.
 
@@ -32,7 +32,7 @@ When defining a column, you can also pass a block if you need custom
 parsing logic:
 
     class MyImporter < CSVParty
-      column :product, header: "Product" do |value|
+      column :product, header: 'Product' do |value|
         Product.find_by(name: value)
       end
     end
@@ -46,19 +46,19 @@ you can use it the same way you use the built-in parsers:
         (BigDecimal.new(value) * 100).to_i
       end
 
-      column :price_in_cents, header: "Price in $", as: :dollars_to_cents
-      column :cost_in_cents, header: "Cost in $", as: :dollars_to_cents
+      column :price_in_cents, header: 'Price in $', as: :dollars_to_cents
+      column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
     end
 
 NOTE: when using a custom parser to parse a column, the block or method that you
 define has no way to reference the values from any other columns. So, this won't work:
 
     class MyImporter < CSVParty
-      column :product, header: "Product", do |value|
+      column :product, header: 'Product', do |value|
         Product.find_by(name: value)
       end
 
-      column :price, header: "Price", do |value|
+      column :price, header: 'Price', do |value|
         product.price = BigDecimal.new(value)  # product is not defined
       end
     end
@@ -89,8 +89,8 @@ Here's how you access those:
     class MyImporter < CSVParty
       import do |row|
         row.price           # parsed value: #<BigDecimal:7f88d92cb820,'0.9E1',9(18)>
-        row.unparsed.price  # unparsed value: "$9.00"
-        row.string          # raw CSV string: "USB Cable,$9.00,Box,Blue"
+        row.unparsed.price  # unparsed value: '$9.00'
+        row.string          # raw CSV string: 'USB Cable,$9.00,Box,Blue'
       end
     end
 
@@ -98,7 +98,7 @@ Here's how you access those:
 
 Once your importer class is defined, you use it like this:
 
-    importer = MyImporter.new("path/to/file.csv")
+    importer = MyImporter.new('path/to/file.csv')
     importer.import!
 
 # Tested Rubies
