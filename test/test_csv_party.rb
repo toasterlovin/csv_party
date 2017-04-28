@@ -101,10 +101,12 @@ class CSVPartyTest < Minitest::Test
     importer = BlanksAsNilImporter.new('test/csv/blanks_as_nil.csv')
     importer.import!
 
-    assert_nil importer.result.string
+    assert_nil importer.result.empty
+    assert_nil importer.result.blank
     assert_nil importer.result.integer
     assert_nil importer.result.decimal
     assert_nil importer.result.boolean
+    assert_equal ' ', importer.result.raw_blank
     assert_nil importer.result.custom
     assert_equal 'Not nil', importer.result.opt_out
   end

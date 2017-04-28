@@ -1,12 +1,12 @@
 require 'csv_party'
 
 class BlanksAsNilImporter < CSVParty
-  column :empty, header: 'Empty', as: :raw
-  column :blank, header: 'Blank', as: :raw
-  column :string, header: 'String', as: :string
+  column :empty, header: 'Empty', as: :string
+  column :blank, header: 'Blank', as: :string
   column :integer, header: 'Integer', as: :integer
   column :decimal, header: 'Decimal', as: :decimal
   column :boolean, header: 'Boolean', as: :boolean
+  column :raw_blank, header: 'Raw Blank', as: :raw
   column :custom, header: 'Custom' do
     'Not nil'
   end
