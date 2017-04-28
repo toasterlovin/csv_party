@@ -112,9 +112,18 @@ MRI
 
 # TODO
 
-- Bug fix: line_number doesn't work on errors beyond the first
-- Parse blank values as nil for custom parsers
-- Inject dependencies
+- Return nil on all blank columns by default
+  - Way to opt out
+- Allow dependency injection
+  - Arbitrary dependencies
+  - Defined at runtime
+  - Accessible from parsers, import, and error blocks
+  - Use dependency injection for tests
+- Add flow control mechanism
+  - Skip row
+  - Abort row
+  - Abort import
+  - Should be possible from parsers, import, and error blocks
 - Add error handling
   - Provide access to CSV file for error handling
   - Add error class that skips row
@@ -122,10 +131,10 @@ MRI
   - Add error class that aborts whole import
   - Allow options rather than blocks for common
     error handling strategies
+- Bug fix: line_number is sometimes off by oone
 - Re-enable class documentation cop
-- Implement nil and blank value behavior for built-in parsers
 - Add date parser
 - Add date time parser
-- Add mechanism for skipping rows (at both parser and import level)
 - Throw errors when using reserved column names (`unparsed` & `csv_string`)
 - Allow runtime configuration
+  - `column`, `import`, & `error`
