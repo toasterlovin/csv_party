@@ -50,8 +50,33 @@ you can use it the same way you use the built-in parsers:
       column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
     end
 
-NOTE: when using a custom parser to parse a column, the block or method that you
-define has no way to reference the values from any other columns. So, this won't work:
+Some gotchas to be aware of:
+
+1. Nil and blank values
+
+By default, CSVParty will intercept any values that are nil or which contain
+only whitespace and coerce them to nil _without invoking the parser for that
+column_. This applies to all parsers, including custom parsers which you
+define, with one exception: the :raw parser. This is done as a convenience to
+avoid pesky `NoMethodError`s that arise when a parser tries to do its thing
+to a nil value that it wasn't expecting. You can turn this behavior off on a
+given column by setting `blanks_as_nil` to `false` in the options hash:
+
+    class MyImporter < CSVParty
+      column :price, header: 'Price', blanks_as_nil: false do |value|
+        if value.nil?
+          'n/a'
+        else
+          BigDecimal.new(value)
+        end
+      end
+    end
+
+2. Parsers cannot reference each other
+
+When using a custom parser to parse a column, the block or method that you
+define has no way to reference the values from any other columns. So, this won't
+work:
 
     class MyImporter < CSVParty
       column :product, header: 'Product', do |value|
@@ -63,7 +88,7 @@ define has no way to reference the values from any other columns. So, this won't
       end
     end
 
-Instead, you would accomplish this in your import logic.
+Instead, you would accomplish this in your import logic. Which brings us to:
 
 ## Defining Import Logic
 
