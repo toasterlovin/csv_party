@@ -64,7 +64,7 @@ class CSVParty
     raise_if_missing_header(name, options)
 
     options = {
-      blanks_as_nil: (options[:as] == :raw ? false: true),
+      blanks_as_nil: (options[:as] == :raw ? false : true),
       as: :string
     }.merge(options)
 
