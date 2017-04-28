@@ -9,4 +9,5 @@ Gem::Specification.new do |s|
   s.files       = ['lib/csv_party.rb']
   s.homepage    = 'https://github.com/toasterlovin/csv_party'
   s.license     = 'MIT'
+  s.required_ruby_version = '< 2.0'
 end
