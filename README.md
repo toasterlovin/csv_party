@@ -119,6 +119,13 @@ Here's how you access those:
       end
     end
 
+## Importing
+
+Once your importer class is defined, you use it like this:
+
+    importer = MyImporter.new('path/to/file.csv')
+    importer.import!
+
 ## External Dependencies
 
 Sometimes you need access to external objects in your importer's logic. You can specify
@@ -158,13 +165,6 @@ And in your `error` blocks:
     error do |error, line_number|
       product_import.errors.create(product)
     end
-
-## Importing
-
-Once your importer class is defined, you use it like this:
-
-    importer = MyImporter.new('path/to/file.csv')
-    importer.import!
 
 # Tested Rubies
 
