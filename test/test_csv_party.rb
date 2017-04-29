@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'securerandom'
 Dir[File.dirname(__FILE__) + '/importers/*.rb'].each { |file| require file }
 
 class CSVParty
@@ -158,5 +159,25 @@ class CSVPartyTest < Minitest::Test
 
     assert importer.result.first.is_a? CSV::MalformedCSVError
     assert_equal 2, importer.result.last
+  end
+
+  def test_provides_access_to_external_dependencies
+    column = SecureRandom.random_number
+    import = SecureRandom.random_number
+    error = SecureRandom.random_number
+    importer = ExternalDependencyImporter.new(
+      'test/csv/external_dependency.csv',
+      dependencies: {
+        column: column,
+        import: import,
+        error: error
+      }
+    )
+    importer.result = {}
+    importer.import!
+
+    assert_equal column, importer.result[:column]
+    assert_equal import, importer.result[:import]
+    assert_equal error,  importer.result[:error]
   end
 end

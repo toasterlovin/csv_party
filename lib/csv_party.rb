@@ -5,9 +5,11 @@ require 'ostruct'
 class CSVParty
   def initialize(csv_path, options = {})
     options[:headers] = true
+    dependencies = options.delete(:dependencies)
     @headers = CSV.new(File.open(csv_path)).shift
     @csv = CSV.new(File.open(csv_path), options)
 
+    setup_dependencies(dependencies)
     raise_unless_named_parsers_are_valid
     raise_unless_csv_has_all_headers
   end
@@ -191,6 +193,15 @@ class CSVParty
     raise MissingColumnError,
           "CSV file is missing column(s) with header(s) '#{columns}'. \
           File has these headers: #{@headers.join(', ')}."
+  end
+
+  def setup_dependencies(dependencies)
+    return unless dependencies
+
+    dependencies.each do |dependency, value|
+      self.class.class_eval { attr_accessor dependency }
+      send("#{dependency}=", value)
+    end
   end
 end
 

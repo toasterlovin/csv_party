@@ -119,6 +119,46 @@ Here's how you access those:
       end
     end
 
+## External Dependencies
+
+Sometimes you need access to external objects in your importer's logic. You can specify
+a `dependencies` option when instantiating your importer to provide this access. This is
+one of those things that's difficult to describe, but dead simple to understand with a
+little bit of code, so here goes:
+
+    class MyImporter < CSVParty
+      column :product, header: 'Product'
+      column :price, header: 'Price'
+
+      import do |row|
+        # import product...
+
+        # product_import is not provided by the class!
+        product_import.log_success(product)
+      end
+    end
+
+In order for your `import` block to have access to `product_import`, you simply pass
+it in the `dependencies` option when you instantiate your importer, like so:
+
+    MyImporter.new(
+      'path/to/csv',
+       dependencies: { product_import: @product_import }
+    )
+
+You can pass in as many dependencies as you want this way. And dependencies are not just
+available in your `import` block; you can also use them in your column parsers:
+
+    column :price_in_yen, header: 'Price in $' do |value|
+      value * product_import.exchange_rate
+    end
+
+And in your `error` blocks:
+
+    error do |error, line_number|
+      product_import.errors.create(product)
+    end
+
 ## Importing
 
 Once your importer class is defined, you use it like this:
@@ -137,11 +177,6 @@ MRI
 
 # TODO
 
-- Allow dependency injection
-  - Arbitrary dependencies
-  - Defined at runtime
-  - Accessible from parsers, import, and error blocks
-  - Use dependency injection for tests
 - Add flow control mechanism
   - Skip row
   - Abort row
