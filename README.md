@@ -177,6 +177,7 @@ MRI
 
 # TODO
 
+- Add error handling section to README
 - Add flow control mechanism
   - Skip row
   - Abort row
