@@ -54,7 +54,7 @@ you can use it the same way you use the built-in parsers:
 
 Some gotchas to be aware of:
 
-1. Nil and blank values
+#### Nil and blank values
 
 By default, CSVParty will intercept any values that are `nil` or which contain
 only whitespace and coerce them to `nil` _without invoking the parser for that
@@ -74,7 +74,7 @@ given column by setting `blanks_as_nil` to `false` in the options hash:
       end
     end
 
-2. Parsers cannot reference each other
+#### Parsers cannot reference each other
 
 When using a custom parser to parse a column, the block or method that you
 define has no way to reference the values from any other columns. So, this won't
