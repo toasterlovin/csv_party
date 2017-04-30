@@ -6,15 +6,20 @@ class ExternalDependencyImporter < CSVParty
     # ensures errors block gets run at least once
     raise if value.eql?('0')
 
-    result[:column] = column
+    result[:column_dep] = column_dep
     value
   end
 
   rows do
-    result[:rows] = rows
+    result[:rows_dep] = rows_dep
+  end
+
+  import do
+    result[:import_dep] = import_dep
+    import_rows!
   end
 
   errors do
-    result[:errors] = errors
+    result[:errors_dep] = errors_dep
   end
 end

@@ -162,23 +162,26 @@ class CSVPartyTest < Minitest::Test
   end
 
   def test_provides_access_to_external_dependencies
-    column = SecureRandom.random_number
-    rows = SecureRandom.random_number
-    errors = SecureRandom.random_number
+    column_dep = SecureRandom.random_number
+    rows_dep = SecureRandom.random_number
+    import_dep = SecureRandom.random_number
+    errors_dep = SecureRandom.random_number
     importer = ExternalDependencyImporter.new(
       'test/csv/external_dependency.csv',
       dependencies: {
-        column: column,
-        rows: rows,
-        errors: errors
+        column_dep: column_dep,
+        rows_dep: rows_dep,
+        import_dep: import_dep,
+        errors_dep: errors_dep
       }
     )
     importer.result = {}
     importer.import!
 
-    assert_equal column, importer.result[:column]
-    assert_equal rows, importer.result[:rows]
-    assert_equal errors, importer.result[:errors]
+    assert_equal column_dep, importer.result[:column_dep]
+    assert_equal rows_dep, importer.result[:rows_dep]
+    assert_equal import_dep, importer.result[:import_dep]
+    assert_equal errors_dep, importer.result[:errors_dep]
   end
 
   def test_import_block
@@ -192,4 +195,9 @@ class CSVPartyTest < Minitest::Test
     assert_equal 'Value 1', importer.result[:rows].first.value
     assert_equal 'Value 2', importer.result[:rows].last.value
   end
+
+#   def test_skipped_rows
+#     importer = SkippedRowsImporter.new('text/csv/skipped_rows.csv')
+#     importer.import!
+#   end
 end
