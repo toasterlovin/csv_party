@@ -52,7 +52,7 @@ you can use it the same way you use the built-in parsers:
       column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
     end
 
-#### NOTE: Nil and blank values
+#### NOTE: Parsing nil and blank values
 
 By default, CSVParty will intercept any values that are `nil` or which contain
 only whitespace and coerce them to `nil` _without invoking the parser for that
