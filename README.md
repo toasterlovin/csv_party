@@ -236,3 +236,7 @@ MRI
 - Throw errors when using reserved column names (`unparsed` & `csv_string`)
 - Allow runtime configuration
   - `column`, `import`, & `error`
+
+# Outstanding Questions
+
+- Better to catch all errors, or only explicit flow control errors?
