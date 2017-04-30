@@ -223,20 +223,13 @@ MRI
 - Consider what to do if error handler is not defined
 - Test error handling in all blocks, not just `rows`
 - Add flow control mechanism
-  - Skip row
-  - Abort row
-  - Abort import
-  - Should be possible from parsers, import, and error blocks
-  - Should provide list of errored and skipped rows
+  - Test that it works from `parsers`, `rows`, `import` & `errors`
   - Allow options rather than blocks for common error handling strategies
-- Bug fix: line_number is sometimes off by oone
+  - Better to catch all errors, or only explicit flow control errors?
+- Bug fix: line_number is sometimes off by one (possibly only MalformedCSVError)
 - Re-enable class documentation cop
 - Add date parser
 - Add date time parser
 - Throw errors when using reserved column names (`unparsed` & `csv_string`)
 - Allow runtime configuration
   - `column`, `import`, & `error`
-
-# Outstanding Questions
-
-- Better to catch all errors, or only explicit flow control errors?
