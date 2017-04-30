@@ -200,7 +200,7 @@ class CSVPartyTest < Minitest::Test
     importer = SkippedRowsImporter.new('test/csv/skipped_rows.csv')
     importer.import!
 
-    assert_equal 'Not skipped', importer.result
+    assert_equal 'Imported', importer.result
     assert_equal 2, importer.imported_rows.first
     assert_equal 3, importer.skipped_rows.first
   end

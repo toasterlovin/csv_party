@@ -155,7 +155,7 @@ class CSVParty
     instance_exec(error, line_number, &error_processor)
   end
 
-  def skip
+  def skip_row
     raise SkippedRowError
   end
 

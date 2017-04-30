@@ -5,7 +5,7 @@ class SkippedRowsImporter < CSVParty
   column :second, header: 'Second'
 
   rows do |row|
-    skip if row.first == 'Skipped'
+    skip_row if row.first == 'Skipped'
     self.result = row.first
   end
 end
