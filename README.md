@@ -177,6 +177,7 @@ MRI
 
 # TODO
 
+- Consider what to do if error handler is not defined
 - Add error handling section to README
 - Add flow control mechanism
   - Skip row
