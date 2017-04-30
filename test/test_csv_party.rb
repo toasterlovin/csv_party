@@ -178,6 +178,6 @@ class CSVPartyTest < Minitest::Test
 
     assert_equal column, importer.result[:column]
     assert_equal rows, importer.result[:rows]
-    assert_equal errors,  importer.result[:errors]
+    assert_equal errors, importer.result[:errors]
   end
 end
