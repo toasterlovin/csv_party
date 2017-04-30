@@ -52,9 +52,7 @@ you can use it the same way you use the built-in parsers:
       column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
     end
 
-Some gotchas to be aware of:
-
-#### Nil and blank values
+#### NOTE: Nil and blank values
 
 By default, CSVParty will intercept any values that are `nil` or which contain
 only whitespace and coerce them to `nil` _without invoking the parser for that
@@ -74,7 +72,7 @@ given column by setting `blanks_as_nil` to `false` in the options hash:
       end
     end
 
-#### Parsers cannot reference each other
+#### NOTE: Parsers cannot reference each other
 
 When using a custom parser to parse a column, the block or method that you
 define has no way to reference the values from any other columns. So, this won't
