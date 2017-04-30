@@ -212,9 +212,8 @@ MRI
   - Abort row
   - Abort import
   - Should be possible from parsers, import, and error blocks
-- Add error handling
-  - Allow options rather than blocks for common
-    error handling strategies
+  - Should provide list of errored and skipped rows
+  - Allow options rather than blocks for common error handling strategies
 - Bug fix: line_number is sometimes off by oone
 - Re-enable class documentation cop
 - Add date parser
