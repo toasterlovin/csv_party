@@ -3,11 +3,12 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
-  attr_accessor :columns, :row_importer, :error_processor
+  attr_accessor :columns, :row_importer, :importer, :error_processor
 
   def initialize(csv_path, options = {})
     @columns = self.class.columns
     @row_importer = self.class.row_importer
+    @importer = self.class.importer
     @error_processor = self.class.error_processor
 
     options[:headers] = true
@@ -21,7 +22,11 @@ class CSVParty
   end
 
   def import!
-    import_rows!
+    if importer
+      instance_exec(&importer)
+    else
+      import_rows!
+    end
   end
 
   def import_rows!
@@ -63,6 +68,10 @@ class CSVParty
     @row_importer = block
   end
 
+  def self.import(&block)
+    @importer = block
+  end
+
   def self.errors(&block)
     @error_processor = block
   end
@@ -73,6 +82,10 @@ class CSVParty
 
   def self.row_importer
     @row_importer ||= nil
+  end
+
+  def self.importer
+    @importer ||= nil
   end
 
   def self.error_processor

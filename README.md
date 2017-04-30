@@ -128,6 +128,23 @@ Once your importer class is defined, you use it like this:
     importer = MyImporter.new('path/to/file.csv')
     importer.import!
 
+You can also specify what should happen before and after your import by passing
+a block to `import`, like so:
+
+    class MyImporter < CSVParty
+      # column definitions
+      # row import logic
+
+      import do
+        puts 'Starting import'
+        import_rows!
+        puts 'Import finished!'
+      end
+    end
+
+You can do whatever you want inside of the `import` block, just make sure to
+call `import_rows!` somewhere in there.
+
 ## Handling Errors
 
 One of the hallmarks of importing data from CSV files is that there are
