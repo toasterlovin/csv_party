@@ -97,7 +97,7 @@ block to the `import` DSL method. That block will have access to a `row` variabl
 which contains all of the parsed values for your columns. Here's what that looks like:
 
     class MyImporter < CSVParty
-      import do |row|
+      rows do |row|
         product = row.product
         product.price = row.price
         product.save
@@ -112,7 +112,7 @@ The `row` variable also provides access to two other things:
 Here's how you access those:
 
     class MyImporter < CSVParty
-      import do |row|
+      rows do |row|
         row.price           # parsed value: #<BigDecimal:7f88d92cb820,'0.9E1',9(18)>
         row.unparsed.price  # unparsed value: '$9.00'
         row.string          # raw CSV string: 'USB Cable,$9.00,Box,Blue'
@@ -137,7 +137,7 @@ little bit of code, so here goes:
       column :product, header: 'Product'
       column :price, header: 'Price'
 
-      import do |row|
+      rows do |row|
         # import product...
 
         # product_import is not provided by the class!
@@ -162,7 +162,7 @@ available in your `import` block; you can also use them in your column parsers:
 
 And in your `error` blocks:
 
-    error do |error, line_number|
+    errors do |error, line_number|
       product_import.errors.create(product)
     end
 
