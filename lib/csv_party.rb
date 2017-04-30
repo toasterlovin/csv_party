@@ -3,12 +3,14 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
-  attr_accessor :columns, :row_importer, :importer, :error_processor,
-                :imported_rows, :skipped_rows, :aborted_rows
+  attr_accessor :columns, :row_importer, :importer, :error_processor
+
+  attr_reader :imported_rows, :skipped_rows, :aborted_rows,
+              :abort_message
 
   def initialize(csv_path, options = {})
     initialize_import_settings
-    initialize_counters
+    initialize_counters_and_statuses
 
     options[:headers] = true
     dependencies = options.delete(:dependencies)
@@ -26,6 +28,9 @@ class CSVParty
     else
       import_rows!
     end
+  rescue AbortedImportError => error
+    @aborted = true
+    @abort_message = error.message
   end
 
   def import_rows!
@@ -38,6 +43,8 @@ class CSVParty
       rescue SkippedRowError
         skipped_rows << @csv.lineno
         next
+      rescue AbortedImportError => error
+        raise AbortedImportError, error.message
       rescue StandardError => error
         process_error(error, @csv.lineno + 1)
         aborted_rows << @csv.lineno
@@ -94,6 +101,10 @@ class CSVParty
 
   def self.error_processor
     @error_processor ||= nil
+  end
+
+  def aborted?
+    @aborted
   end
 
   def self.raise_if_duplicate_column(name)
@@ -161,6 +172,10 @@ class CSVParty
 
   def abort_row(message)
     raise AbortedRowError, message
+  end
+
+  def abort_import(message)
+    raise AbortedImportError, message
   end
 
   def is_blank?(value)
@@ -244,10 +259,11 @@ class CSVParty
     @error_processor = self.class.error_processor
   end
 
-  def initialize_counters
+  def initialize_counters_and_statuses
     @imported_rows = []
     @skipped_rows = []
     @aborted_rows = []
+    @aborted = false
   end
 end
 
@@ -267,4 +283,7 @@ class SkippedRowError < RuntimeError
 end
 
 class AbortedRowError < RuntimeError
+end
+
+class AbortedImportError < RuntimeError
 end
