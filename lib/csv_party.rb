@@ -3,7 +3,13 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
+  attr_accessor :columns, :row_importer, :error_processor
+
   def initialize(csv_path, options = {})
+    @columns = self.class.columns
+    @row_importer = self.class.row_importer
+    @error_processor = self.class.error_processor
+
     options[:headers] = true
     dependencies = options.delete(:dependencies)
     @headers = CSV.new(File.open(csv_path)).shift
@@ -66,11 +72,11 @@ class CSVParty
   end
 
   def self.row_importer
-    @row_importer
+    @row_importer ||= nil
   end
 
   def self.error_processor
-    @error_processor
+    @error_processor ||= nil
   end
 
   def self.raise_if_duplicate_column(name)
@@ -130,18 +136,6 @@ class CSVParty
 
   def process_error(error, line_number)
     instance_exec(error, line_number, &error_processor)
-  end
-
-  def columns
-    self.class.columns
-  end
-
-  def row_importer
-    self.class.row_importer
-  end
-
-  def error_processor
-    self.class.error_processor
   end
 
   def is_blank?(value)
