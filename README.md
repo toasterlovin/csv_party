@@ -25,8 +25,10 @@ The available built-in parsers are:
   - `:raw` returns the value from the CSV file, unchanged
   - `:string` strips whitespace and returns the resulting string
   - `:integer` strips whitespace, then calls `to_i` on the resulting string
-  - `:decimal` strips all characters except `0-9` and `.`, then passes the resulting string to `BigDecimal.new`
-  - `:boolean` strips whitespace, downcases, then returns `true` if the resulting string is `'1'`, `'t'`, or `'true'`, otherwise it returns `false`
+  - `:decimal` strips all characters except `0-9` and `.`, then passes the
+    resulting string to `BigDecimal.new`
+  - `:boolean` strips whitespace, downcases, then returns `true` if the
+    resulting string is `'1'`, `'t'`, or `'true'`, otherwise it returns `false`
 
 When defining a column, you can also pass a block if you need custom
 parsing logic:
@@ -54,12 +56,12 @@ Some gotchas to be aware of:
 
 1. Nil and blank values
 
-By default, CSVParty will intercept any values that are nil or which contain
-only whitespace and coerce them to nil _without invoking the parser for that
+By default, CSVParty will intercept any values that are `nil` or which contain
+only whitespace and coerce them to `nil` _without invoking the parser for that
 column_. This applies to all parsers, including custom parsers which you
 define, with one exception: the :raw parser. This is done as a convenience to
 avoid pesky `NoMethodError`s that arise when a parser tries to do its thing
-to a nil value that it wasn't expecting. You can turn this behavior off on a
+to a `nil` value that it wasn't expecting. You can turn this behavior off on a
 given column by setting `blanks_as_nil` to `false` in the options hash:
 
     class MyImporter < CSVParty
@@ -84,17 +86,19 @@ work:
       end
 
       column :price, header: 'Price', do |value|
-        product.price = BigDecimal.new(value)  # product is not defined
+        # product is not defined...
+        product.price = BigDecimal.new(value)
       end
     end
 
-Instead, you would accomplish this in your import logic. Which brings us to:
+Instead, you would do this in your row import logic. Which brings us to:
 
-## Defining Import Logic
+## Importing Rows
 
-Once you've defined all of your columns, you specify your import logic by passing a
-block to the `import` DSL method. That block will have access to a `row` variable
-which contains all of the parsed values for your columns. Here's what that looks like:
+Once you've defined all of your columns, you specify your logic for importing
+rows by passing a block to the `rows` DSL method. That block will have access
+to a `row` variable which contains all of the parsed values for your columns.
+Here's what that looks like:
 
     class MyImporter < CSVParty
       rows do |row|
@@ -126,6 +130,30 @@ Once your importer class is defined, you use it like this:
     importer = MyImporter.new('path/to/file.csv')
     importer.import!
 
+## Handling Errors
+
+One of the hallmarks of importing data from CSV files is that there are
+inevitably rows with errors of some kind. You can handle error rows by
+specifying an `errors` block:
+
+    class MyImporter < CSVParty
+      # column definitions
+      # row import logic
+
+      errors do |error, line_number|
+        # log error
+      end
+    end
+
+Any row in your CSV file which results in an exception will be passed to this
+block. Which means you can specify that there is an error with a given row by
+raising an exception:
+
+    rows do |row|
+      # rows with price less than 0 will be treated as errors
+      raise if row.price < 0
+    end
+
 ## External Dependencies
 
 Sometimes you need access to external objects in your importer's logic. You can specify
@@ -145,7 +173,7 @@ little bit of code, so here goes:
       end
     end
 
-In order for your `import` block to have access to `product_import`, you simply pass
+In order for your `rows` block to have access to `product_import`, you simply pass
 it in the `dependencies` option when you instantiate your importer, like so:
 
     MyImporter.new(
@@ -154,13 +182,13 @@ it in the `dependencies` option when you instantiate your importer, like so:
     )
 
 You can pass in as many dependencies as you want this way. And dependencies are not just
-available in your `import` block; you can also use them in your column parsers:
+available in your `rows` block; you can also use them in your column parsers:
 
     column :price_in_yen, header: 'Price in $' do |value|
       value * product_import.exchange_rate
     end
 
-And in your `error` blocks:
+And in your `errors` block:
 
     errors do |error, line_number|
       product_import.errors.create(product)
@@ -178,7 +206,7 @@ MRI
 # TODO
 
 - Consider what to do if error handler is not defined
-- Add error handling section to README
+- Test error handling in all blocks, not just `rows`
 - Add flow control mechanism
   - Skip row
   - Abort row
