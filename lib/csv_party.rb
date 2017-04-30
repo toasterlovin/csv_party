@@ -4,15 +4,11 @@ require 'ostruct'
 
 class CSVParty
   attr_accessor :columns, :row_importer, :importer, :error_processor,
-                :imported_rows, :skipped_rows
+                :imported_rows, :skipped_rows, :aborted_rows
 
   def initialize(csv_path, options = {})
-    @columns = self.class.columns
-    @row_importer = self.class.row_importer
-    @importer = self.class.importer
-    @error_processor = self.class.error_processor
-    @imported_rows = []
-    @skipped_rows = []
+    initialize_import_settings
+    initialize_counters
 
     options[:headers] = true
     dependencies = options.delete(:dependencies)
@@ -44,6 +40,7 @@ class CSVParty
         next
       rescue StandardError => error
         process_error(error, @csv.lineno + 1)
+        aborted_rows << @csv.lineno
         next
       end
     end
@@ -162,6 +159,10 @@ class CSVParty
     raise SkippedRowError
   end
 
+  def abort_row(message)
+    raise AbortedRowError, message
+  end
+
   def is_blank?(value)
     value.nil? || value.strip.empty?
   end
@@ -235,6 +236,19 @@ class CSVParty
       send("#{dependency}=", value)
     end
   end
+
+  def initialize_import_settings
+    @columns = self.class.columns
+    @row_importer = self.class.row_importer
+    @importer = self.class.importer
+    @error_processor = self.class.error_processor
+  end
+
+  def initialize_counters
+    @imported_rows = []
+    @skipped_rows = []
+    @aborted_rows = []
+  end
 end
 
 class UnknownParserError < ArgumentError
@@ -250,4 +264,7 @@ class MissingColumnError < ArgumentError
 end
 
 class SkippedRowError < RuntimeError
+end
+
+class AbortedRowError < RuntimeError
 end

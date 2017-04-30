@@ -204,4 +204,16 @@ class CSVPartyTest < Minitest::Test
     assert_equal 2, importer.imported_rows.first
     assert_equal 3, importer.skipped_rows.first
   end
+
+  def test_aborted_rows
+    importer = AbortedRowsImporter.new('test/csv/aborted_rows.csv')
+    importer.result = {}
+    importer.import!
+
+    assert_equal 'Imported', importer.result[:imported]
+    assert_equal 2, importer.imported_rows.first
+    assert importer.result[:aborted].is_a? AbortedRowError
+    assert_equal 'This row was aborted.', importer.result[:aborted].message
+    assert_equal 3, importer.aborted_rows.first
+  end
 end
