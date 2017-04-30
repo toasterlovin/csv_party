@@ -15,11 +15,15 @@ class CSVParty
   end
 
   def import!
+    import_rows!
+  end
+
+  def import_rows!
     loop do
       begin
         row = @csv.shift
         break unless row
-        import_row(row)
+        import_row!(row)
       rescue StandardError => error
         process_error(error, @csv.lineno + 1)
         next
@@ -27,43 +31,9 @@ class CSVParty
     end
   end
 
-  def parse_row(row)
-    unparsed_row = OpenStruct.new
-    parsed_row = OpenStruct.new
-
-    columns.each do |name, options|
-      header = options[:header]
-      unparsed_value = row[header]
-      parser = options[:parser]
-
-      unparsed_row[name] = unparsed_value
-      parsed_row[name] = if options[:blanks_as_nil] && is_blank?(unparsed_value)
-                           nil
-                         elsif parser.is_a? Symbol
-                           send(parser, unparsed_value)
-                         else
-                           instance_exec(unparsed_value, &parser)
-                         end
-    end
-
-    parsed_row['unparsed'] = unparsed_row
-    parsed_row['csv_string'] = row.to_csv
-
-    return parsed_row
-  end
-
-  def import_row(row)
-    parsed_row = parse_row(row)
-    instance_exec(parsed_row, &importer)
-  end
-
-  def process_error(error, line_number)
-    instance_exec(error, line_number, &error_handler)
-  end
-
-  def self.column(name, options, &block)
-    raise_if_duplicate_column(name)
-    raise_if_missing_header(name, options)
+  def self.column(column, options, &block)
+    raise_if_duplicate_column(column)
+    raise_if_missing_header(column, options)
 
     options = {
       blanks_as_nil: (options[:as] == :raw ? false : true),
@@ -76,59 +46,103 @@ class CSVParty
                "#{options[:as]}_parser".to_sym
              end
 
-    columns[name] = {
+    columns[column] = {
       header: options[:header],
       parser: parser,
       blanks_as_nil: options[:blanks_as_nil]
     }
   end
 
+  def self.import(&block)
+    @row_importer = block
+  end
+
+  def self.error(&block)
+    @error_processor = block
+  end
+
   def self.columns
     @columns ||= {}
   end
 
-  def columns
-    self.class.columns
+  def self.row_importer
+    @row_importer
   end
 
-  def self.import(&block)
-    @importer = block
-  end
-
-  def self.importer
-    @importer
-  end
-
-  def importer
-    self.class.importer
-  end
-
-  def self.error(&block)
-    @error = block
-  end
-
-  def self.error_handler
-    @error
-  end
-
-  def error_handler
-    self.class.error_handler
+  def self.error_processor
+    @error_processor
   end
 
   def self.raise_if_duplicate_column(name)
     return unless columns.has_key?(name)
 
     raise DuplicateColumnError, "A column named :#{name} has already been \
-            defined, choose a different name"
+              defined, choose a different name"
   end
+  private_class_method :raise_if_duplicate_column
 
   def self.raise_if_missing_header(name, options)
     return if options.has_key?(:header)
 
     raise MissingHeaderError, "A header must be specified for #{name}"
   end
+  private_class_method :raise_if_missing_header
 
   private
+
+  def import_row!(row)
+    parsed_row = parse_row(row)
+    instance_exec(parsed_row, &row_importer)
+  end
+
+  def parse_row(row)
+    unparsed_row = OpenStruct.new
+    columns.each do |column, options|
+      header = options[:header]
+      unparsed_row[column] = row[header]
+    end
+
+    parsed_row = OpenStruct.new
+    columns.each do |column, options|
+      value = row[options[:header]]
+      parsed_row[column] = parse_column(
+        value,
+        options[:parser],
+        options[:blanks_as_nil]
+      )
+    end
+
+    parsed_row[:unparsed] = unparsed_row
+    parsed_row[:csv_string] = row.to_csv
+
+    return parsed_row
+  end
+
+  def parse_column(value, parser, blanks_as_nil)
+    if blanks_as_nil && is_blank?(value)
+      nil
+    elsif parser.is_a? Symbol
+      send(parser, value)
+    else
+      instance_exec(value, &parser)
+    end
+  end
+
+  def process_error(error, line_number)
+    instance_exec(error, line_number, &error_processor)
+  end
+
+  def columns
+    self.class.columns
+  end
+
+  def row_importer
+    self.class.row_importer
+  end
+
+  def error_processor
+    self.class.error_processor
+  end
 
   def is_blank?(value)
     value.nil? || value.strip.empty?
@@ -192,7 +206,7 @@ class CSVParty
     columns = missing_columns.join("', '")
     raise MissingColumnError,
           "CSV file is missing column(s) with header(s) '#{columns}'. \
-          File has these headers: #{@headers.join(', ')}."
+              File has these headers: #{@headers.join(', ')}."
   end
 
   def setup_dependencies(dependencies)
