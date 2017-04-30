@@ -5,7 +5,7 @@ class CustomParserImporter < CSVParty
     "#{value} plus added text"
   end
 
-  import do |row|
+  rows do |row|
     self.result = row
   end
 end

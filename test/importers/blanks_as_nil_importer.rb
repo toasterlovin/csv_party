@@ -14,11 +14,11 @@ class BlanksAsNilImporter < CSVParty
     'Not nil'
   end
 
-  import do |row|
+  rows do |row|
     self.result = row
   end
 
-  error do |error|
+  errors do |error|
     raise error
   end
 end

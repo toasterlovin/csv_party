@@ -59,11 +59,11 @@ class CSVParty
     }
   end
 
-  def self.import(&block)
+  def self.rows(&block)
     @row_importer = block
   end
 
-  def self.error(&block)
+  def self.errors(&block)
     @error_processor = block
   end
 

@@ -4,7 +4,7 @@ class StringParserImporter < CSVParty
   column :string, header: 'String', as: :string
   column :second_column, header: 'Second Column', as: :string
 
-  import do |row|
+  rows do |row|
     self.result = row
   end
 end

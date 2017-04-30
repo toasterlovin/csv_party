@@ -5,7 +5,7 @@ class DecimalParserImporter < CSVParty
   column :whitespace, header: 'Whitespace', as: :decimal
   column :dollars, header: 'Dollars', as: :decimal
 
-  import do |row|
+  rows do |row|
     self.result = row
   end
 end

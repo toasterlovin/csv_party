@@ -7,7 +7,7 @@ class IntegerParserImporter < CSVParty
   column :whitespace_only, header: 'Whitespace Only', as: :integer
   column :blank, header: 'Blank', as: :integer
 
-  import do |row|
+  rows do |row|
     self.result = row
   end
 end

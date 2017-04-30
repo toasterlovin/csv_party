@@ -10,11 +10,11 @@ class ExternalDependencyImporter < CSVParty
     value
   end
 
-  import do
+  rows do
     result[:import] = import
   end
 
-  error do
+  errors do
     result[:error] = error
   end
 end

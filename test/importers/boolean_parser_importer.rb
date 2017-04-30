@@ -15,7 +15,7 @@ class BooleanParserImporter < CSVParty
   column :two, header: 'two', as: :boolean
   column :random, header: 'random', as: :boolean
 
-  import do |row|
+  rows do |row|
     self.result = row
   end
 end
