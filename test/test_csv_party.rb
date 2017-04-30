@@ -163,21 +163,21 @@ class CSVPartyTest < Minitest::Test
 
   def test_provides_access_to_external_dependencies
     column = SecureRandom.random_number
-    import = SecureRandom.random_number
-    error = SecureRandom.random_number
+    rows = SecureRandom.random_number
+    errors = SecureRandom.random_number
     importer = ExternalDependencyImporter.new(
       'test/csv/external_dependency.csv',
       dependencies: {
         column: column,
-        import: import,
-        error: error
+        rows: rows,
+        errors: errors
       }
     )
     importer.result = {}
     importer.import!
 
     assert_equal column, importer.result[:column]
-    assert_equal import, importer.result[:import]
-    assert_equal error,  importer.result[:error]
+    assert_equal rows, importer.result[:rows]
+    assert_equal errors,  importer.result[:errors]
   end
 end

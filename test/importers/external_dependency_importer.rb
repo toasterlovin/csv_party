@@ -3,7 +3,7 @@ require 'csv_party'
 class ExternalDependencyImporter < CSVParty
   column :first, header: 'First'
   column :second, header: 'Second' do |value|
-    # ensures error block gets run at least once
+    # ensures errors block gets run at least once
     raise if value.eql?('0')
 
     result[:column] = column
@@ -11,10 +11,10 @@ class ExternalDependencyImporter < CSVParty
   end
 
   rows do
-    result[:import] = import
+    result[:rows] = rows
   end
 
   errors do
-    result[:error] = error
+    result[:errors] = errors
   end
 end
