@@ -3,13 +3,16 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
-  attr_accessor :columns, :row_importer, :importer, :error_processor
+  attr_accessor :columns, :row_importer, :importer, :error_processor,
+                :imported_rows, :skipped_rows
 
   def initialize(csv_path, options = {})
     @columns = self.class.columns
     @row_importer = self.class.row_importer
     @importer = self.class.importer
     @error_processor = self.class.error_processor
+    @imported_rows = []
+    @skipped_rows = []
 
     options[:headers] = true
     dependencies = options.delete(:dependencies)
@@ -35,6 +38,10 @@ class CSVParty
         row = @csv.shift
         break unless row
         import_row!(row)
+        imported_rows << @csv.lineno
+      rescue SkippedRowError
+        skipped_rows << @csv.lineno
+        next
       rescue StandardError => error
         process_error(error, @csv.lineno + 1)
         next
@@ -151,6 +158,10 @@ class CSVParty
     instance_exec(error, line_number, &error_processor)
   end
 
+  def skip
+    raise SkippedRowError
+  end
+
   def is_blank?(value)
     value.nil? || value.strip.empty?
   end
@@ -236,4 +247,7 @@ class DuplicateColumnError < ArgumentError
 end
 
 class MissingColumnError < ArgumentError
+end
+
+class SkippedRowError < RuntimeError
 end
