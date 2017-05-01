@@ -220,6 +220,7 @@ MRI
 
 # TODO
 
+- Test that specifying parsers with procs works
 - Consider what to do if error handler is not defined
 - Test error handling in all blocks, not just `rows`
 - Add flow control mechanism
