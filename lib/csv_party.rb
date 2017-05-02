@@ -12,9 +12,9 @@ class CSVParty
     initialize_import_settings
     initialize_counters_and_statuses
 
-    options[:headers] = true
     dependencies = options.delete(:dependencies)
-    @headers = CSV.new(File.open(csv_path)).shift
+    @headers = CSV.new(File.open(csv_path), options).shift
+    options[:headers] = true
     @csv = CSV.new(File.open(csv_path), options)
 
     setup_dependencies(dependencies)
