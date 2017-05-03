@@ -1,6 +1,8 @@
 require 'csv_party'
 
 class ExternalDependencyImporter < CSVParty
+  depends_on :column_dep, :rows_dep, :import_dep, :errors_dep
+
   column :first, header: 'First'
   column :second, header: 'Second' do |value|
     # ensures errors block gets run at least once

@@ -168,12 +168,10 @@ class CSVPartyTest < Minitest::Test
     errors_dep = SecureRandom.random_number
     importer = ExternalDependencyImporter.new(
       'test/csv/external_dependency.csv',
-      dependencies: {
-        column_dep: column_dep,
-        rows_dep: rows_dep,
-        import_dep: import_dep,
-        errors_dep: errors_dep
-      }
+      column_dep: column_dep,
+      rows_dep: rows_dep,
+      import_dep: import_dep,
+      errors_dep: errors_dep
     )
     importer.result = {}
     importer.import!
@@ -182,6 +180,10 @@ class CSVPartyTest < Minitest::Test
     assert_equal rows_dep, importer.result[:rows_dep]
     assert_equal import_dep, importer.result[:import_dep]
     assert_equal errors_dep, importer.result[:errors_dep]
+  end
+
+  def test_missing_dependency
+    flunk
   end
 
   def test_import_block

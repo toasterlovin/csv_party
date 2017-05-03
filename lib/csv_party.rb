@@ -3,7 +3,8 @@ require 'bigdecimal'
 require 'ostruct'
 
 class CSVParty
-  attr_accessor :columns, :row_importer, :importer, :error_processor
+  attr_accessor :columns, :row_importer, :importer, :error_processor,
+                :dependencies
 
   attr_reader :imported_rows, :skipped_rows, :aborted_rows,
               :abort_message
@@ -11,13 +12,12 @@ class CSVParty
   def initialize(csv_path, options = {})
     initialize_import_settings
     initialize_counters_and_statuses
+    initialize_dependencies(options)
 
-    dependencies = options.delete(:dependencies)
     @headers = CSV.new(File.open(csv_path), options).shift
     options[:headers] = true
     @csv = CSV.new(File.open(csv_path), options)
 
-    setup_dependencies(dependencies)
     raise_unless_named_parsers_are_valid
     raise_unless_csv_has_all_headers
   end
@@ -85,6 +85,17 @@ class CSVParty
 
   def self.errors(&block)
     @error_processor = block
+  end
+
+  def self.depends_on(*args)
+    args.each do |arg|
+      dependencies << arg
+      attr_accessor arg
+    end
+  end
+
+  def self.dependencies
+    @dependencies ||= []
   end
 
   def self.columns
@@ -243,20 +254,12 @@ class CSVParty
               File has these headers: #{@headers.join(', ')}."
   end
 
-  def setup_dependencies(dependencies)
-    return unless dependencies
-
-    dependencies.each do |dependency, value|
-      self.class.class_eval { attr_accessor dependency }
-      send("#{dependency}=", value)
-    end
-  end
-
   def initialize_import_settings
     @columns = self.class.columns
     @row_importer = self.class.row_importer
     @importer = self.class.importer
     @error_processor = self.class.error_processor
+    @dependencies = self.class.dependencies
   end
 
   def initialize_counters_and_statuses
@@ -264,6 +267,14 @@ class CSVParty
     @skipped_rows = []
     @aborted_rows = []
     @aborted = false
+  end
+
+  def initialize_dependencies(options)
+    dependencies.each do |dependency|
+      if options.has_key? dependency
+        send("#{dependency}=", options.delete(dependency))
+      end
+    end
   end
 end
 

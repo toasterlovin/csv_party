@@ -172,42 +172,31 @@ raising an exception:
 ## External Dependencies
 
 Sometimes you need access to external objects in your importer's logic. You can specify
-a `dependencies` option when instantiating your importer to provide this access. This is
-one of those things that's difficult to describe, but dead simple to understand with a
-little bit of code, so here goes:
+what external objects your importer depends on with `depends_on`. Dependencies declared
+this way will then be available in your parsers and your `rows`, `import`, and `errors`
+blocks:
 
     class MyImporter < CSVParty
-      column :product, header: 'Product'
-      column :price, header: 'Price'
+      # column definitions...
+
+      depends_on: :product_import
 
       rows do |row|
-        # import product...
+        # do some stuff
 
-        # product_import is not provided by the class!
+        # product_import is not provided by the class,
+        # but is passed in at runtime instead!
         product_import.log_success(product)
       end
     end
 
-In order for your `rows` block to have access to `product_import`, you simply pass
-it in the `dependencies` option when you instantiate your importer, like so:
+Then, to pass the dependency in at runtime, you just add an option to `.new` with
+the name and value of the dependency:
 
     MyImporter.new(
       'path/to/csv',
-       dependencies: { product_import: @product_import }
+       product_import: @product_import
     )
-
-You can pass in as many dependencies as you want this way. And dependencies are not just
-available in your `rows` block; you can also use them in your column parsers:
-
-    column :price_in_yen, header: 'Price in $' do |value|
-      value * product_import.exchange_rate
-    end
-
-And in your `errors` block:
-
-    errors do |error, line_number|
-      product_import.errors.create(product)
-    end
 
 # Tested Rubies
 
