@@ -162,24 +162,18 @@ class CSVPartyTest < Minitest::Test
   end
 
   def test_provides_access_to_external_dependencies
-    column_dep = SecureRandom.random_number
-    rows_dep = SecureRandom.random_number
-    import_dep = SecureRandom.random_number
-    errors_dep = SecureRandom.random_number
+    dependency = SecureRandom.random_number
     importer = ExternalDependencyImporter.new(
       'test/csv/external_dependency.csv',
-      column_dep: column_dep,
-      rows_dep: rows_dep,
-      import_dep: import_dep,
-      errors_dep: errors_dep
+      dependency: dependency,
     )
     importer.result = {}
     importer.import!
 
-    assert_equal column_dep, importer.result[:column_dep]
-    assert_equal rows_dep, importer.result[:rows_dep]
-    assert_equal import_dep, importer.result[:import_dep]
-    assert_equal errors_dep, importer.result[:errors_dep]
+    assert_equal dependency, importer.result[:column_dep]
+    assert_equal dependency, importer.result[:rows_dep]
+    assert_equal dependency, importer.result[:import_dep]
+    assert_equal dependency, importer.result[:errors_dep]
   end
 
   def test_missing_dependency
