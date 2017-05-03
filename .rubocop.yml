@@ -21,3 +21,6 @@ Style/TrivialAccessors:
 
 Style/Documentation:
   Enabled: false
+
+Style/IndentHeredoc:
+  Enabled: false
