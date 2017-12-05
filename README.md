@@ -209,6 +209,7 @@ MRI
 
 # TODO
 
+- Deal with negative numbers
 - Obsessively cover possible encoding issues in header and body
 - Test that specifying parsers with procs works
 - Consider what to do if error handler is not defined
