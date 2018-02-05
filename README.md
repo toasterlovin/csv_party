@@ -209,6 +209,7 @@ MRI
 
 # TODO
 
+- Allow using multiple columns to generate one variable
 - Allow using strptime to parse date & time
 - Allow regex column headers
 - Allow case insensitive column headers
