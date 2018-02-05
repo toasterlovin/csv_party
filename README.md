@@ -209,6 +209,10 @@ MRI
 
 # TODO
 
+- Allow using strptime to parse date & time
+- Allow regex column headers
+- Allow case insensitive column headers
+- Create parser for ActiveRecord models
 - Deal with negative numbers
 - Obsessively cover possible encoding issues in header and body
 - Test that specifying parsers with procs works
