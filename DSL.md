@@ -2,23 +2,120 @@
 
 ## Columns
 
-- Column name & header
+#### Column name & header
 
-```
-column price: 'Price'
-```
+    column price: 'Price'
 
-- :raw returns the value from the CSV file, unchanged
-- :string strips whitespace and returns the resulting string
-- :integer strips whitespace, then calls to_i on the resulting string
-- :decimal strips all characters except 0-9 and ., then passes the resulting string to BigDecimal.new
-- :boolean strips whitespace, downcases, then returns true if the resulting string is '1', 't', or 'true', otherwise it returns false
-- :date strips all whitespace, parses with `Date.strptime`
-- :time strips all whitespace, parses with `Time.strptime`
-- Parsers can be specified with block or proc
-- Throw errors when using reserved column names (`unparsed` & `csv_string`)
-- Deal with negative numbers
-- `nil` and blank values
+#### `:raw` parser
+Returns the value from the CSV file as a string, unmodified
+
+    column :price, as: :raw
+    ' ' #=> ' '
+    '1' #=> '1'
+
+#### `:string` parser
+Strips whitespace and returns the resulting string. This is the default parser.
+
+    column :price # or
+    column :price, as: :string
+    ' value ' #=> 'value'
+
+#### `:integer` parser
+Strips whitespace, then calls to_i on the resulting string. Values can be positive or negative.
+
+    column :price, as: :integer
+    ' 1 ' #=> 1
+    ' -1 ' #=> -1
+
+#### `:decimal` parser
+Strips all characters except `-`, `0-9` and `.`, then passes the resulting string to `BigDecimal.new`. Values can be positive or negative.
+
+    column :price, as: :decimal
+    ' 1 ' #=> 1.0
+    ' $1.5 ' #=> 1.5
+    ' -$1.5 ' #=> -1.5
+
+#### `:boolean` parser
+Strips whitespace, downcases, then returns `true` if the resulting string is `'1'`, `'t'`, or `'true'`, `false` if the resulting string is `'0'`, `'f'`, or `'false'`, otherise it returns `nil`.
+
+    column :price, as: :decimal
+    '1' #=> true
+    't' #=> true
+    'T' #=> true
+    'true' #=> true
+    'TRUE' #=> true
+    '0' #=> false
+    'f' #=> false
+    'F' #=> false
+    'false' #=> false
+    'FALSE' #=> false
+    '2' #=> nil
+
+#### `:date` parser
+Strips all whitespace, parses with `Date.strptime`.
+
+    column :date, as: :date
+    '2017-01-01' #=> Date.parse('2017-01-01')
+
+    column :date, as: :date, format: '%m/%d/%y'
+    '12/31/17' #=> Date.strptime('12/31/2017', '%m/%d/%y')
+
+#### `:time` parser
+Strips all whitespace, parses with `Time.strptime`.
+
+    column :time, as: :time
+    '2017-01-01 01:01:01 AM' #=> DateTime.parse('2017-01-01 01:01:01 AM')
+
+    column :time, as: :time, format: '%m/%d/%y %I:%M:%S %p'
+    '1/1/17 01:01:01 AM' #=> DateTime.parse('1/1/17 01:01:01 AM', '%m/%d/%y %I:%M:%S %p')
+
+#### Custom parser blocks
+A block containing custom parsing logic can be used as well.
+
+    column :rails_model do |value|
+      Model.find(value)
+    end
+
+    column :rails_model { |value| Model.find(value) }
+
+    column :rails_model, ->(value) { Model.find(value) }
+
+#### Custom named parsers
+A custom parser can be named for re-use across multiple columns. Just add a method with a name that ends in `_parser`.
+
+    def dollars_to_cents_parser(value)
+      (BigDecimal.new(value) * 100).to_i
+    end
+
+    column :price_in_cents, header: 'Price in $', as: :dollars_to_cents
+    column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
+
+#### Reserved column names
+An error will be thrown if trying to name a column `unparsed` or `csv_string`. This
+is because these will automatically be appended to the `row` object that is passed
+to `rows` blocks.
+
+    column :unparsed    # raises ReservedColumnName error
+    column :csv_string  # raises ReservedColumnName error
+
+#### Parsing `nil` and `blank` values
+By default, CSVParty will intercept any values that are `nil` or which contain
+only whitespace and coerce them to `nil` _without invoking the parser for that
+column_. This applies to all parsers, including custom parsers which you
+define, with one exception: the :raw parser. This is done as a convenience to
+avoid pesky `NoMethodErrors` that arise when a parser tries to do its thing
+to a `nil` value that it wasn't expecting. You can turn this behavior off on a
+given column by setting `intercept_nils` to `false` in the options hash:
+
+    class MyImporter < CSVParty
+      column :price, header: 'Price', intercept_nils: false do |value|
+        if value.nil?
+          'n/a'
+        else
+          BigDecimal.new(value)
+        end
+      end
+    end
 
 ## Rows
 This is for specifying what happens with each row. It is required.
@@ -77,7 +174,7 @@ External dependencies are the passed when instantiating the importer:
 Several flow control methods are available in `column`, `rows`, `import`,
 and `errors` blocks:
 
-### `skip_row!`
+#### `skip_row!`
 This stops importing the current row and adds it to the `@skipped_rows`
 instance variable. It is intended for rows that should normally be skipped,
 such as blank rows, etc. Custom handling can be specified:
@@ -96,7 +193,7 @@ such as blank rows, etc. Custom handling can be specified:
     my_import.skipped_rows # returns array of skipped rows
     my_import.skipped_rows.first.skip_message
 
-### `abort_row!`
+#### `abort_row!`
 This stops importing the current row and adds it to the `@skipped_rows`
 instance variable. It is intended for rows that should normally be imported,
 but cannot be for some reason. Custom handling can be specified:
@@ -115,7 +212,7 @@ but cannot be for some reason. Custom handling can be specified:
     my_import.aborted_rows # returns array of aborted rows
     my_import.aborted_rows.first.abort_message
 
-### `next_row!`
+#### `next_row!`
 This silently stops importing the current row. It is intended to be used
 in instances where processing is done for a given row. There is no way to
 specify a handler.
@@ -125,7 +222,7 @@ specify a handler.
       next_row!
     end
 
-### `abort_import!`
+#### `abort_import!`
 This stops importing the entire file and returns false.
 
     rows do |row|
