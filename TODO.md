@@ -1,29 +1,51 @@
 TODO
 -
 
-# Version 1.0
-
-- Allow using multiple columns to generate one variable
-- Allow using strptime to parse date & time
-- Allow regex column headers
-- Allow case insensitive column headers
-- Create parser for ActiveRecord models
-- Deal with negative numbers
-- Obsessively cover possible encoding issues in header and body
-- Test that specifying parsers with procs works
-- Consider what to do if error handler is not defined
-- Test error handling in all blocks, not just `rows`
-- Add flow control mechanism
-  - Test that it works from `parsers`, `rows`, `import` & `errors`
-  - Allow options rather than blocks for common error handling strategies
-  - Better to catch all errors, or only explicit flow control errors?
-- Bug fix: line_number is sometimes off by one (possibly only MalformedCSVError)
+# 1.0
+- Finish documenting DSL spec in DSL.md
+- Implement and test DSL.md in entirety
 - Re-enable class documentation cop
-- Add date parser
-- Add date time parser
-- Throw errors when using reserved column names (`unparsed` & `csv_string`)
-- Allow runtime configuration
-  - `column`, `import`, & `error`
+- Document classes
 
+# Future
 
-# Version 2.0
+## Improve `column` DSL method
+
+- Column header doesn't need to be specified
+
+    column :price # matches 'price', 'Price', 'PRICE', etc.
+
+- Column header can be specified with Regex (examples should include case insensitive Regex):
+
+    column price: /price/
+
+## Investigate CSV parsing issues
+- Make sure parsing issues are well covered by tests
+- Resolve line_number off-by-one error when `MalformedCSVError` is encountered
+
+## Runtime configuration of DSL methods
+
+    my_importer = MyImporter.new
+    my_importer.configure do
+      column :price, as: :decimal
+      rows do |row|
+        # import row
+      end
+    end
+
+## Implement CSV parse error handling
+Default behavior is to raise as normal.
+
+    parse_errors :ignore # to do nothing
+
+    parse_errors do |line_number|
+      # handle parse error
+    end
+
+    my_import.aborted_rows # returns array of parse error rows
+
+## Allow using multiple columns to generate one variable
+
+    column total: ['Price', 'Quantity'] do |price, quantity|
+      BigDecimal.new(price) * BigDecimal.new(quantity)
+    end
