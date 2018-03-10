@@ -13,7 +13,9 @@ TODO
 
 - Column header doesn't need to be specified
 
-    column :price # matches 'price', 'Price', 'PRICE', etc.
+```
+column :price # matches 'price', 'Price', 'PRICE', etc.
+```
 
 - Column header can be specified with Regex (examples should include case insensitive Regex):
 
