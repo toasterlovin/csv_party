@@ -52,3 +52,5 @@ Default behavior is to raise as normal.
     column total: ['Price', 'Quantity'] do |price, quantity|
       BigDecimal.new(price) * BigDecimal.new(quantity)
     end
+
+### Add mechanism for exporting skipped/aborted rows as CSV files
