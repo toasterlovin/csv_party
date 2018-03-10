@@ -1,7 +1,7 @@
-DSL Spec
+# DSL Spec
 -
 
-# Columns
+## Columns
 
 - Column name & header
 
@@ -21,7 +21,7 @@ column price: 'Price'
 - Deal with negative numbers
 - `nil` and blank values
 
-# Rows
+## Rows
 This is for specifying what happens with each row. It is required.
 
     rows do |row|
@@ -31,7 +31,7 @@ This is for specifying what happens with each row. It is required.
       # `row.line_number` for the line in the CSV file
     end
 
-# Files
+## Files
 This is for defining behavior that should happen before, after, or around
 actually importing the rows in the file. It is optional.
 
@@ -41,7 +41,7 @@ actually importing the rows in the file. It is optional.
       # do some stuff after importing rows
     end
 
-# Errors
+## Errors
 This is for gracefully handling errors that may arise in `column`, `rows`,
 `import`, and `errors` blocks. It is optional. If no error handler is defined,
 errors will simply be raised as they normally would.
@@ -52,7 +52,7 @@ errors will simply be raised as they normally would.
       # handle error
     end
 
-# Dependencies
+## Dependencies
 This is for specifying external dependencies that are required while importing
 the CSV file.
 
@@ -74,11 +74,11 @@ External dependencies are the passed when instantiating the importer:
 
     MyImporter.new('path/to/csv').import! # raises a MissingDependency error
 
-# Flow Control
+## Flow Control
 Several flow control methods are available in `column`, `rows`, `import`,
 and `errors` blocks:
 
-## `skip_row!`
+### `skip_row!`
 This stops importing the current row and adds it to the `@skipped_rows`
 instance variable. It is intended for rows that should normally be skipped,
 such as blank rows, etc. Custom handling can be specified:
@@ -97,7 +97,7 @@ such as blank rows, etc. Custom handling can be specified:
     my_import.skipped_rows # returns array of skipped rows
     my_import.skipped_rows.first.skip_message
 
-## `abort_row!`
+### `abort_row!`
 This stops importing the current row and adds it to the `@skipped_rows`
 instance variable. It is intended for rows that should normally be imported,
 but cannot be for some reason. Custom handling can be specified:
@@ -116,7 +116,7 @@ but cannot be for some reason. Custom handling can be specified:
     my_import.aborted_rows # returns array of aborted rows
     my_import.aborted_rows.first.abort_message
 
-## `next_row!`
+### `next_row!`
 This silently stops importing the current row. It is intended to be used
 in instances where processing is done for a given row. There is no way to
 specify a handler.
@@ -126,7 +126,7 @@ specify a handler.
       next_row!
     end
 
-## `abort_import!`
+### `abort_import!`
 This stops importing the entire file and returns false.
 
     rows do |row|
