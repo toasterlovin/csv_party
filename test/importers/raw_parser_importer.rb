@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class RawParserImporter < CSVParty
+class RawParserImporter < CSVParty::Importer
   column :raw, header: 'Raw', as: :raw
   column :second_column, header: 'Second Column', as: :raw
 

@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class BooleanParserImporter < CSVParty
+class BooleanParserImporter < CSVParty::Importer
   column :t, header: 't', as: :boolean
   column :T, header: 'T', as: :boolean
   column :true, header: 'true', as: :boolean

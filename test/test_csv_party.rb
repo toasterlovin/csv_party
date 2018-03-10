@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'securerandom'
 Dir[File.dirname(__FILE__) + '/importers/*.rb'].each { |file| require file }
 
-class CSVParty
+class CSVParty::Importer
   # Add an instance level attribute for passing results back to tests
   attr_accessor :result
 end
@@ -113,25 +113,25 @@ class CSVPartyTest < Minitest::Test
   end
 
   def test_unknown_named_parser
-    assert_raises UnknownParserError do
+    assert_raises CSVParty::UnknownParserError do
       UnknownNamedParserImporter.new('test/csv/unknown_named_parser.csv')
     end
   end
 
   def test_requires_column_header
-    assert_raises MissingHeaderError do
+    assert_raises CSVParty::MissingHeaderError do
       require 'importers/invalid/requires_column_header_importer'
     end
   end
 
   def test_duplicate_columns
-    assert_raises DuplicateColumnError do
+    assert_raises CSVParty::DuplicateColumnError do
       require 'importers/invalid/duplicate_columns_importer'
     end
   end
 
   def test_missing_column_in_csv
-    assert_raises MissingColumnError do
+    assert_raises CSVParty::MissingColumnError do
       MissingColumnImporter.new('test/csv/missing_column.csv')
     end
   end
@@ -177,7 +177,7 @@ class CSVPartyTest < Minitest::Test
   end
 
   def test_missing_dependency
-    assert_raises MissingDependencyError do
+    assert_raises CSVParty::MissingDependencyError do
       ExternalDependencyImporter.new('test/csv/external_dependency.csv')
     end
   end
@@ -210,7 +210,7 @@ class CSVPartyTest < Minitest::Test
 
     assert_equal 'Imported', importer.result[:imported]
     assert_equal 2, importer.imported_rows.first
-    assert importer.result[:aborted].is_a? AbortedRowError
+    assert importer.result[:aborted].is_a? CSVParty::AbortedRowError
     assert_equal 'This row was aborted.', importer.result[:aborted].message
     assert_equal 3, importer.aborted_rows.first
   end

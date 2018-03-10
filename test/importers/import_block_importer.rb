@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class ImportBlockImporter < CSVParty
+class ImportBlockImporter < CSVParty::Importer
   column :value, header: 'Value'
 
   rows do |row|

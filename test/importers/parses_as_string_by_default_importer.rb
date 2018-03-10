@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class ParsesAsStringByDefaultImporter < CSVParty
+class ParsesAsStringByDefaultImporter < CSVParty::Importer
   column :whitespace, header: 'Whitespace'
 
   rows do |row|

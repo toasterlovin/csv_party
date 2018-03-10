@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class HappyPathImporter < CSVParty
+class HappyPathImporter < CSVParty::Importer
   column :product, header: 'Product', as: :string
   column :price, header: 'Price', as: :decimal
 

@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class SkippedRowsImporter < CSVParty
+class SkippedRowsImporter < CSVParty::Importer
   column :first, header: 'First'
   column :second, header: 'Second'
 

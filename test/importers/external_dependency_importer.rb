@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class ExternalDependencyImporter < CSVParty
+class ExternalDependencyImporter < CSVParty::Importer
   depends_on :dependency
 
   column :first, header: 'First'

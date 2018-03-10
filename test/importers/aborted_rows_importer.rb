@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class AbortedRowsImporter < CSVParty
+class AbortedRowsImporter < CSVParty::Importer
   column :first, header: 'First'
   column :second, header: 'Second'
 

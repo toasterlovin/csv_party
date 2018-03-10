@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class UnknownNamedParserImporter < CSVParty
+class UnknownNamedParserImporter < CSVParty::Importer
   column :custom, header: 'Custom', as: :mispelled
 
   def custom_parser(value)

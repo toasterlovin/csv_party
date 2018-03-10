@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class MalformedCSVErrorImporter < CSVParty
+class MalformedCSVErrorImporter < CSVParty::Importer
   column :first, header: 'First', as: :string
   column :second, header: 'Second', as: :integer
 

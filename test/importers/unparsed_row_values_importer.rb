@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class UnparsedRowValuesImporter < CSVParty
+class UnparsedRowValuesImporter < CSVParty::Importer
   column :whitespace, header: 'String', as: :string
 
   rows do |row|

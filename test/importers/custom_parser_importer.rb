@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class CustomParserImporter < CSVParty
+class CustomParserImporter < CSVParty::Importer
   column :custom, header: 'Custom' do |value|
     "#{value} plus added text"
   end

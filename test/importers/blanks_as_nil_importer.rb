@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class BlanksAsNilImporter < CSVParty
+class BlanksAsNilImporter < CSVParty::Importer
   column :empty, header: 'Empty', as: :string
   column :blank, header: 'Blank', as: :string
   column :integer, header: 'Integer', as: :integer
