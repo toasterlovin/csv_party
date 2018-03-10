@@ -19,7 +19,9 @@ column :price # matches 'price', 'Price', 'PRICE', etc.
 
 - Column header can be specified with Regex (examples should include case insensitive Regex):
 
-    column price: /price/
+```
+column price: /price/
+```
 
 ## Investigate CSV parsing issues
 - Make sure parsing issues are well covered by tests

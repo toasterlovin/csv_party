@@ -5,7 +5,9 @@ DSL Spec
 
 - Column name & header
 
-    column price: 'Price'
+```
+column price: 'Price'
+```
 
 - :raw returns the value from the CSV file, unchanged
 - :string strips whitespace and returns the resulting string
