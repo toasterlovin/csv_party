@@ -2,6 +2,7 @@ require 'csv'
 require 'bigdecimal'
 require 'ostruct'
 require 'csv_party/parsers'
+require 'csv_party/errors'
 
 module CSVParty
   class Importer
@@ -265,29 +266,5 @@ Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{d
         end
       end
     end
-  end
-
-  class UnknownParserError < ArgumentError
-  end
-
-  class MissingHeaderError < ArgumentError
-  end
-
-  class DuplicateColumnError < ArgumentError
-  end
-
-  class MissingColumnError < ArgumentError
-  end
-
-  class MissingDependencyError < ArgumentError
-  end
-
-  class SkippedRowError < RuntimeError
-  end
-
-  class AbortedRowError < RuntimeError
-  end
-
-  class AbortedImportError < RuntimeError
   end
 end
