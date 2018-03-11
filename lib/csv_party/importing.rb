@@ -1,10 +1,10 @@
 module CSVParty
   module Importing
     attr_accessor :columns, :row_importer, :importer,
-      :error_processor, :dependencies
+                  :error_processor, :dependencies
 
     attr_reader :imported_rows, :skipped_rows, :aborted_rows,
-      :abort_message
+                :abort_message
 
     def import!
       if importer

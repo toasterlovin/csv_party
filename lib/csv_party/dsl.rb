@@ -70,7 +70,7 @@ module CSVParty
 
       def column_regex(column)
         column = Regexp.escape(column.to_s)
-        underscored_or_whitespaced = "#{column}|#{column.gsub('_', ' ')}"
+        underscored_or_whitespaced = "#{column}|#{column.tr('_', ' ')}"
         /\A\s*#{underscored_or_whitespaced}\s*\z/i
       end
 

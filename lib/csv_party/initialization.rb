@@ -48,10 +48,10 @@ module CSVParty
           send("#{dependency}=", options.delete(dependency))
         else
           raise MissingDependencyError,
-            <<-MESSAGE
+                <<-MESSAGE
 This importer depends on #{dependency}, but you didn't include it.
 Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{dependency})
-          MESSAGE
+                MESSAGE
         end
       end
     end
@@ -66,11 +66,11 @@ Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{d
 
         parser = parser.to_s.gsub('_parser', '')
         parsers = named_parsers
-          .map { |p| p.to_s.gsub('_parser', '') }
-          .join(', :')
+                  .map { |p| p.to_s.gsub('_parser', '') }
+                  .join(', :')
         raise UnknownParserError,
-          "You're trying to use the :#{parser} parser for the :#{name} \
-            column, but it doesn't exist. Available parsers are: :#{parsers}."
+              "You're trying to use the :#{parser} parser for the :#{name} \
+              column, but it doesn't exist. Available parsers are: :#{parsers}."
       end
     end
 
@@ -81,8 +81,8 @@ Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{d
 
       columns = missing_columns.join("', '")
       raise MissingColumnError,
-        "CSV file is missing column(s) with header(s) '#{columns}'. \
-              File has these headers: #{@headers.join(', ')}."
+            "CSV file is missing column(s) with header(s) '#{columns}'. \
+            File has these headers: #{@headers.join(', ')}."
     end
 
     def columns_with_regex_headers
@@ -91,7 +91,8 @@ Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{d
 
     def find_headers!
       columns_with_regex_headers.each do |name, options|
-        options[:header] = @headers.find { |header| options[:header] === header } || name.to_s
+        found_header = @headers.find { |header| options[:header].match(header) }
+        options[:header] = found_header || name.to_s
       end
     end
   end
