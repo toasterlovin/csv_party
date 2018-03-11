@@ -75,6 +75,7 @@ Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{d
     end
 
     def raise_unless_csv_has_all_headers
+      find_headers!
       missing_columns = defined_headers - @headers
       return if missing_columns.empty?
 
@@ -82,6 +83,16 @@ Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{d
       raise MissingColumnError,
         "CSV file is missing column(s) with header(s) '#{columns}'. \
               File has these headers: #{@headers.join(', ')}."
+    end
+
+    def columns_with_regex_headers
+      columns.select { |_name, options| options[:header].is_a? Regexp }
+    end
+
+    def find_headers!
+      columns_with_regex_headers.each do |name, options|
+        options[:header] = @headers.find { |header| options[:header] === header } || name.to_s
+      end
     end
   end
 end

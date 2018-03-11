@@ -5,7 +5,7 @@
 - ~~Split tests out into separate files~~
 - Implement and test DSL.md in entirety
   - Columns
-    - Names & headers (revised header name behavior)
+    - ~~Names & headers (revised header name behavior)~~
     - Raw parser (verify behavior)
     - String parser (verify behavior)
     - Integer parser (handle negative values)

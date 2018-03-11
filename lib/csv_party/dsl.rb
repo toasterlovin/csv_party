@@ -5,11 +5,11 @@ module CSVParty
     end
 
     module ClassMethods
-      def column(column, options, &block)
+      def column(column, options = {}, &block)
         raise_if_duplicate_column(column)
-        raise_if_missing_header(column, options)
 
         options = {
+          header: column_regex(column),
           blanks_as_nil: (options[:as] == :raw ? false : true),
           as: :string
         }.merge(options)
@@ -68,17 +68,17 @@ module CSVParty
 
       private
 
+      def column_regex(column)
+        column = Regexp.escape(column.to_s)
+        underscored_or_whitespaced = "#{column}|#{column.gsub('_', ' ')}"
+        /\A\s*#{underscored_or_whitespaced}\s*\z/i
+      end
+
       def raise_if_duplicate_column(name)
         return unless columns.has_key?(name)
 
         raise DuplicateColumnError, "A column named :#{name} has already been \
                 defined, choose a different name"
-      end
-
-      def raise_if_missing_header(name, options)
-        return if options.has_key?(:header)
-
-        raise MissingHeaderError, "A header must be specified for #{name}"
       end
     end
   end
