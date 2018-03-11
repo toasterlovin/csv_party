@@ -1,0 +1,20 @@
+require 'test_helper'
+
+class RowImportTest < Minitest::Test
+  def test_provides_access_to_raw_row_values_in_import_block
+    importer = UnparsedRowValuesImporter.new('test/csv/unparsed_row_values.csv')
+    importer.import!
+
+    assert_equal 'Has whitespace', importer.result.whitespace
+    assert_equal ' Has whitespace ', importer.result.unparsed.whitespace
+  end
+
+  def test_provides_access_to_csv_row_as_string
+    csv_file_path = 'test/csv/csv_row_as_string.csv'
+    importer = CsvRowAsStringImporter.new(csv_file_path)
+    importer.import!
+
+    assert_equal 'Some text', importer.result.column_1
+    assert_equal IO.readlines(csv_file_path)[1], importer.result.csv_string
+  end
+end
