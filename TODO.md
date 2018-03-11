@@ -1,8 +1,31 @@
 # TODO
 
 ## 1.0
-- Finish documenting DSL spec in DSL.md
+- ~~Finish documenting DSL spec in DSL.md~~
 - Implement and test DSL.md in entirety
+  - Columns
+    - Names & headers (revised header name behavior)
+    - Raw parser (verify behavior)
+    - String parser (verify behavior)
+    - Integer parser (handle negative values)
+    - Decimal parser (handle negative values)
+    - Boolean parser (whitelist negative values; return nil for everythign else)
+    - Date parser (implement)
+    - Time parser (implement)
+    - Custom parser blocks (verify that procs can be used)
+    - Custom named parsers (verify behavior)
+    - Reserved column names (verify behavior)
+    - Parsing `nil` and `blank` values (verify behavior)
+  - Importing
+    - Rows (verify that error is thrown on missing processor)
+    - Files (verify behavior)
+    - Errors (`:ignore` option + raise if unspecified)
+    - Dependencies (MissingDependency error should happen on import, not instantiation)
+  - Flow Control
+    - Skip row (implement new behavior)
+    - Abort row (implement new behavior)
+    - Next row (implement new behavior)
+    - Abort import (rework API; return `false` on `importer.import!`)
 - Re-enable class documentation cop
 - Document classes
 
