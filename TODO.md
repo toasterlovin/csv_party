@@ -32,7 +32,7 @@
 
 ## Future
 
-### Improve `column` DSL method
+### ~~Improve `column` DSL method~~
 
 - Column header doesn't need to be specified
 
