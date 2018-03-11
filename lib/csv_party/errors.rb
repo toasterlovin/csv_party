@@ -2,9 +2,6 @@ module CSVParty
   class UnknownParserError < ArgumentError
   end
 
-  class MissingHeaderError < ArgumentError
-  end
-
   class DuplicateColumnError < ArgumentError
   end
 
