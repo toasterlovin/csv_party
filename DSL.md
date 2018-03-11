@@ -4,7 +4,16 @@
 
 #### Column name & header
 
-    column price: 'Price'
+    # Default behavior is to do a case insensitive comparison of column name,
+    # ignoring whitespace. The following matches `'price'`, `' price '`,
+    # `'Price'`, `'PRICE'`, `'PrIcE'`, etc.
+    column :price
+
+    # A header name can also be specified as a string
+    column :price, header: 'Some random string' # uses
+
+    # Or as a regex
+    column :price, header: /price-\d{1,2}/
 
 #### `:raw` parser
 Returns the value from the CSV file as a string, unmodified
