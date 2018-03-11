@@ -2,6 +2,7 @@
 
 ## 1.0
 - ~~Finish documenting DSL spec in DSL.md~~
+- Split tests out into separate files
 - Implement and test DSL.md in entirety
   - Columns
     - Names & headers (revised header name behavior)
