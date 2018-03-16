@@ -1,2 +1,2 @@
-Integer,Whitespace,Decimal,Whitespace Only,Blank
-42, 42 ,42.42,  ,
+Integer,Negative Integer,Whitespace,Decimal,Negative Decimal,Whitespace Only,Blank
+42,-42, 42 ,42.42,-42.42,  ,
