@@ -40,7 +40,7 @@ class ParserTest < Minitest::Test
 
     assert_equal 42,    importer.result.integer
     assert_equal 42,    importer.result.whitespace
-    assert_equal 42.00, importer.result.decimal_as_integer
+    assert_equal 42.00, importer.result.decimal
     assert_nil importer.result.whitespace_only
     assert_nil importer.result.blank
   end
