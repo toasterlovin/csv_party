@@ -13,6 +13,12 @@ module CSVParty
     end
 
     def integer_parser(value)
+      value = value.to_s.strip
+
+      if is_accounting_negative?(value)
+        value = value.delete('()').insert(0, '-')
+      end
+
       value.to_i
     end
 
@@ -22,6 +28,12 @@ module CSVParty
                       .strip
                       .gsub(/[^\-0-9.]/, '')
       BigDecimal.new(cleaned_value)
+    end
+
+    private
+
+    def is_accounting_negative?(value)
+      value =~ /\A\(.*\)\z/
     end
   end
 end
