@@ -29,6 +29,9 @@
     - Abort import (rework API; return `false` on `importer.import!`)
 - Re-enable class documentation cop
 - Document classes
+- Improve test organization
+  - Move associated importer classes and CSV files into
+    same file as test.
 
 ## Future
 
