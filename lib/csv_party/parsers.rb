@@ -18,9 +18,9 @@ module CSVParty
 
     def decimal_parser(value)
       cleaned_value = value
-                        .to_s
-                        .strip
-                        .gsub(/[^\-0-9.]/, '')
+                      .to_s
+                      .strip
+                      .gsub(/[^\-0-9.]/, '')
       BigDecimal.new(cleaned_value)
     end
   end
