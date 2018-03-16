@@ -7,7 +7,7 @@
   - Columns
     - ~~Names & headers (revised header name behavior)~~
     - ~~Raw parser (verify behavior)~~
-    - String parser (verify behavior)
+    - ~~String parser (verify behavior)~~
     - Integer parser (handle negative values)
     - Decimal parser (handle negative values)
     - Boolean parser (whitelist negative values; return nil for everythign else)
