@@ -51,9 +51,11 @@ class ParserTest < Minitest::Test
     importer = DecimalParserImporter.new('test/csv/decimal_parser.csv')
     importer.import!
 
-    assert_equal 42.42, importer.result.decimal
-    assert_equal 42.42, importer.result.whitespace
-    assert_equal 42.42, importer.result.dollars
+    assert_equal( 42.42, importer.result.decimal)
+    assert_equal(-42.42, importer.result.negative_decimal)
+    assert_equal( 42.42, importer.result.whitespace)
+    assert_equal( 42.42, importer.result.dollars)
+    assert_equal(-42.42, importer.result.negative_dollars)
   end
 
   def test_custom_parser

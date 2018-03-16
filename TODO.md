@@ -9,8 +9,8 @@
     - ~~Raw parser (verify behavior)~~
     - ~~String parser (verify behavior)~~
     - ~~Integer parser (handle negative values)~~
+    - ~~Decimal parser (handle negative values)~~
     - Allow accounting negative notation for integer & decimal
-    - Decimal parser (handle negative values)
     - Boolean parser (whitelist negative values; return nil for everythign else)
     - Date parser (implement)
     - Time parser (implement)
