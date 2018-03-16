@@ -23,11 +23,14 @@ module CSVParty
     end
 
     def decimal_parser(value)
-      cleaned_value = value
-                      .to_s
-                      .strip
-                      .gsub(/[^\-0-9.]/, '')
-      BigDecimal.new(cleaned_value)
+      value = value.to_s.strip
+
+      if is_accounting_negative?(value)
+        value = value.delete('()').insert(0, '-')
+      end
+
+      value = value.gsub(/[^\-0-9.]/, '')
+      BigDecimal.new(value)
     end
 
     private

@@ -55,9 +55,11 @@ class ParserTest < Minitest::Test
 
     assert_equal(42.42, importer.result.decimal)
     assert_equal(-42.42, importer.result.negative_decimal)
+    assert_equal(-42.42, importer.result.negative_accounting_decimal)
     assert_equal(42.42, importer.result.whitespace)
     assert_equal(42.42, importer.result.dollars)
     assert_equal(-42.42, importer.result.negative_dollars)
+    assert_equal(-42.42, importer.result.negative_accounting_dollars)
   end
 
   def test_custom_parser
