@@ -33,22 +33,13 @@
 - Improve test organization
   - Move associated importer classes and CSV files into
     same file as test.
+- Accept all `CSV` options
+- Alternative CSV types
+  - String
+  - IO object
+  - File path
 
 ## Future
-
-### ~~Improve `column` DSL method~~
-
-- Column header doesn't need to be specified
-
-```
-column :price # matches 'price', 'Price', 'PRICE', etc.
-```
-
-- Column header can be specified with Regex (examples should include case insensitive Regex):
-
-```
-column price: /price/
-```
 
 ### Investigate CSV parsing issues
 - Make sure parsing issues are well covered by tests
@@ -77,7 +68,7 @@ Default behavior is to raise as normal.
 
 ### Allow using multiple columns to generate one variable
 
-    column total: ['Price', 'Quantity'] do |price, quantity|
+    column :total, header: ['Price', 'Quantity'] do |price, quantity|
       BigDecimal.new(price) * BigDecimal.new(quantity)
     end
 
