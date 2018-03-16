@@ -38,11 +38,11 @@ class ParserTest < Minitest::Test
     importer = IntegerParserImporter.new('test/csv/integer_parser.csv')
     importer.import!
 
-    assert_equal 42,    importer.result.integer
-    assert_equal (-42), importer.result.negative_integer
-    assert_equal 42,    importer.result.whitespace
-    assert_equal 42,    importer.result.decimal
-    assert_equal (-42), importer.result.negative_decimal
+    assert_equal( 42, importer.result.integer)
+    assert_equal(-42, importer.result.negative_integer)
+    assert_equal( 42, importer.result.whitespace)
+    assert_equal( 42, importer.result.decimal)
+    assert_equal(-42, importer.result.negative_decimal)
     assert_nil importer.result.whitespace_only
     assert_nil importer.result.blank
   end
