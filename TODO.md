@@ -6,7 +6,7 @@
 - Implement and test DSL.md in entirety
   - Columns
     - ~~Names & headers (revised header name behavior)~~
-    - Raw parser (verify behavior)
+    - ~~Raw parser (verify behavior)~~
     - String parser (verify behavior)
     - Integer parser (handle negative values)
     - Decimal parser (handle negative values)
