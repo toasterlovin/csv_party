@@ -45,6 +45,9 @@ class ParserTest < Minitest::Test
     assert_equal(42, importer.result.decimal)
     assert_equal(-42, importer.result.negative_decimal)
     assert_equal(-42, importer.result.negative_accounting_decimal)
+    assert_equal(42, importer.result.dollars)
+    assert_equal(-42, importer.result.negative_dollars)
+    assert_equal(-42, importer.result.negative_accounting_dollars)
     assert_nil importer.result.whitespace_only
     assert_nil importer.result.blank
   end

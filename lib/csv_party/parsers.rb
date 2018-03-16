@@ -14,29 +14,26 @@ module CSVParty
 
     def integer_parser(value)
       value = value.to_s.strip
-
-      if is_accounting_negative?(value)
-        value = value.delete('()').insert(0, '-')
-      end
-
+      value = convert_from_accounting_notation(value)
+      value = value.gsub(/[^\-0-9.]/, '')
       value.to_i
     end
 
     def decimal_parser(value)
       value = value.to_s.strip
-
-      if is_accounting_negative?(value)
-        value = value.delete('()').insert(0, '-')
-      end
-
+      value = convert_from_accounting_notation(value)
       value = value.gsub(/[^\-0-9.]/, '')
       BigDecimal.new(value)
     end
 
     private
 
-    def is_accounting_negative?(value)
-      value =~ /\A\(.*\)\z/
+    def convert_from_accounting_notation(value)
+      if value =~ /\A\(.*\)\z/
+        value.delete('()').insert(0, '-')
+      else
+        value
+      end
     end
   end
 end

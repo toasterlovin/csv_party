@@ -8,6 +8,9 @@ class IntegerParserImporter < CSVParty::Importer
   column :decimal, as: :integer
   column :negative_decimal, as: :integer
   column :negative_accounting_decimal, as: :integer
+  column :dollars, as: :integer
+  column :negative_dollars, as: :integer
+  column :negative_accounting_dollars, as: :integer
   column :whitespace_only, as: :integer
   column :blank, as: :integer
 
