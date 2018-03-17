@@ -106,18 +106,8 @@ module CSVParty
       instance_exec(value, &parser)
     end
 
-    def parse_column_old(value, parser, format, intercept_blanks)
-      if intercept_blanks && is_blank?(value)
-        nil
-      elsif parser.is_a? Symbol
-        if format.nil?
-          send(parser, value)
-        else
-          send(parser, value, format)
-        end
-      else
-        instance_exec(value, &parser)
-      end
+    def is_blank?(value)
+      value.nil? || value.strip.empty?
     end
 
     def process_error(error, line_number)
@@ -134,13 +124,6 @@ module CSVParty
 
     def abort_import(message)
       raise AbortedImportError, message
-    end
-
-    def is_blank?(value)
-      value.nil? || value.strip.empty?
-    end
-
-    module ClassMethods
     end
   end
 end
