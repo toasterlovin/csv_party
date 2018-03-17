@@ -62,7 +62,8 @@ module CSVParty
         header = options[:header]
         unparsed_row[column] = row[header]
       end
-      unparsed_row
+
+      return unparsed_row
     end
 
     def extract_parsed_values(row)
@@ -77,7 +78,7 @@ module CSVParty
         )
       end
 
-      parsed_row
+      return parsed_row
     end
 
     def parse_column(value, parser, format, intercept_blanks)
