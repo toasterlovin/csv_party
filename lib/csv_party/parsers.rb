@@ -28,6 +28,14 @@ module CSVParty
       BigDecimal.new(prepare_numeric_value(value))
     end
 
+    def date_parser(value, format = nil)
+      if format.nil?
+        Date.parse(value)
+      else
+        Date.strptime(value, format)
+      end
+    end
+
     private
 
     def prepare_numeric_value(value)

@@ -65,6 +65,14 @@ class ParserTest < Minitest::Test
     assert_equal(-42.42, importer.result.negative_accounting_dollars)
   end
 
+  def test_date_parser
+    importer = DateParserImporter.new('test/csv/date_parser.csv')
+    importer.import!
+
+    assert_equal Date.new(2017, 12, 31), importer.result.date
+    assert_equal Date.new(2017, 12, 31), importer.result.date_with_format
+  end
+
   def test_custom_parser
     importer = CustomParserImporter.new('test/csv/custom_parser.csv')
     importer.import!

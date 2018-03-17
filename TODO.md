@@ -12,7 +12,7 @@
     - ~~Decimal parser (handle negative values)~~
     - ~~Allow accounting negative notation for integer & decimal~~
     - ~~Boolean parser (whitelist negative values; return nil for everythign else)~~
-    - Date parser (implement)
+    - ~~Date parser (implement)~~
     - Time parser (implement)
     - Think about what to do with invalid date/time values
     - Update error messages to reflect additional parsers

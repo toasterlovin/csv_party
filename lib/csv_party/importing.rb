@@ -61,6 +61,7 @@ module CSVParty
         parsed_row[column] = parse_column(
           value,
           options[:parser],
+          options[:format],
           options[:blanks_as_nil]
         )
       end
@@ -71,11 +72,15 @@ module CSVParty
       return parsed_row
     end
 
-    def parse_column(value, parser, blanks_as_nil)
+    def parse_column(value, parser, format, blanks_as_nil)
       if blanks_as_nil && is_blank?(value)
         nil
       elsif parser.is_a? Symbol
-        send(parser, value)
+        if format.nil?
+          send(parser, value)
+        else
+          send(parser, value, format)
+        end
       else
         instance_exec(value, &parser)
       end

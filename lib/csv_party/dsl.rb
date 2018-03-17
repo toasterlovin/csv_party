@@ -10,8 +10,9 @@ module CSVParty
 
         options = {
           header: column_regex(column),
-          blanks_as_nil: (options[:as] == :raw ? false : true),
-          as: :string
+          as: :string,
+          format: nil,
+          blanks_as_nil: (options[:as] == :raw ? false : true)
         }.merge(options)
 
         parser = if block_given?
@@ -23,6 +24,7 @@ module CSVParty
         columns[column] = {
           header: options[:header],
           parser: parser,
+          format: options[:format],
           blanks_as_nil: options[:blanks_as_nil]
         }
       end
