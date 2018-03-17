@@ -30,8 +30,8 @@ class ParserTest < Minitest::Test
     refute importer.result.false
     refute importer.result.FALSE
     refute importer.result.zero
-    refute importer.result.two
-    refute importer.result.random
+    refute importer.result.false_whitespace
+    assert_nil importer.result.random
   end
 
   def test_integer_parser

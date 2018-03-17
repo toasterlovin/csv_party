@@ -11,9 +11,10 @@
     - ~~Integer parser (handle negative values)~~
     - ~~Decimal parser (handle negative values)~~
     - ~~Allow accounting negative notation for integer & decimal~~
-    - Boolean parser (whitelist negative values; return nil for everythign else)
+    - ~~Boolean parser (whitelist negative values; return nil for everythign else)~~
     - Date parser (implement)
     - Time parser (implement)
+    - Update error messages to reflect additional parsers
     - Custom parser blocks (verify that procs can be used)
     - Custom named parsers (verify behavior)
     - Reserved column names (verify behavior)

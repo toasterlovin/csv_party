@@ -9,7 +9,15 @@ module CSVParty
     end
 
     def boolean_parser(value)
-      %w[1 t true].include? value.to_s.strip.downcase
+      value = value.to_s.strip.downcase
+
+      if %w[1 t true].include? value
+        true
+      elsif %w[0 f false].include? value
+        false
+      else
+        nil
+      end
     end
 
     def integer_parser(value)
