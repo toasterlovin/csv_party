@@ -24,3 +24,9 @@ Style/Documentation:
 
 Style/IndentHeredoc:
   Enabled: false
+
+Style/EmptyElse:
+  EnforcedStyle: empty
+
+Metrics/ModuleLength:
+  Enabled: false
