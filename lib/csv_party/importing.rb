@@ -49,17 +49,7 @@ module CSVParty
     end
 
     def parse_row(row)
-      parsed_row = OpenStruct.new
-      columns.each do |column, options|
-        value = row[options[:header]]
-        parsed_row[column] = parse_column(
-          value,
-          options[:parser],
-          options[:format],
-          options[:intercept_blanks]
-        )
-      end
-
+      parsed_row = extract_parsed_values(row)
       parsed_row[:unparsed] = extract_unparsed_values(row)
       parsed_row[:csv_string] = row.to_csv
 
@@ -73,6 +63,21 @@ module CSVParty
         unparsed_row[column] = row[header]
       end
       unparsed_row
+    end
+
+    def extract_parsed_values(row)
+      parsed_row = OpenStruct.new
+      columns.each do |column, options|
+        value = row[options[:header]]
+        parsed_row[column] = parse_column(
+          value,
+          options[:parser],
+          options[:format],
+          options[:intercept_blanks]
+        )
+      end
+
+      parsed_row
     end
 
     def parse_column(value, parser, format, intercept_blanks)
