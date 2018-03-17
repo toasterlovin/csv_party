@@ -69,19 +69,44 @@ module CSVParty
     def extract_parsed_values(row)
       parsed_row = OpenStruct.new
       columns.each do |column, options|
-        value = row[options[:header]]
-        parsed_row[column] = parse_column(
-          value,
-          options[:parser],
-          options[:format],
-          options[:intercept_blanks]
-        )
+        header = options[:header]
+        value = row[header]
+        parsed_row[column] = parse_value(value, options)
       end
 
       return parsed_row
     end
 
-    def parse_column(value, parser, format, intercept_blanks)
+    def parse_value(value, options)
+      return nil if options[:intercept_blanks] && is_blank?(value)
+
+      parser = options[:parser]
+
+      if parser.is_a?(Symbol)
+        parse_with_method(value, options)
+      else
+        parse_with_block(value, options)
+      end
+    end
+
+    def parse_with_method(value, options)
+      format = options[:format]
+      parser = options[:parser]
+
+      if format.nil?
+        send(parser, value)
+      else
+        send(parser, value, format)
+      end
+    end
+
+    def parse_with_block(value, options)
+      parser = options[:parser]
+
+      instance_exec(value, &parser)
+    end
+
+    def parse_column_old(value, parser, format, intercept_blanks)
       if intercept_blanks && is_blank?(value)
         nil
       elsif parser.is_a? Symbol
