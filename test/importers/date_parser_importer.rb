@@ -8,7 +8,7 @@ class DateParserImporter < CSVParty::Importer
     self.result = row
   end
 
-  errors do |error, lineno|
+  errors do |error|
     raise error
   end
 end
