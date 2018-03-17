@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class BlanksAsNilImporter < CSVParty::Importer
+class InterceptBlanksImporter < CSVParty::Importer
   column :empty, header: 'Empty', as: :string
   column :blank, header: 'Blank', as: :string
   column :integer, header: 'Integer', as: :integer
@@ -10,7 +10,7 @@ class BlanksAsNilImporter < CSVParty::Importer
   column :custom, header: 'Custom' do
     'Not nil'
   end
-  column :opt_out, header: 'Opt Out', blanks_as_nil: false do
+  column :opt_out, header: 'Opt Out', intercept_blanks: false do
     'Not nil'
   end
 

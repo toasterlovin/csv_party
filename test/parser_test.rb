@@ -96,8 +96,8 @@ class ParserTest < Minitest::Test
     assert_equal 'removed whitespace', importer.result.whitespace
   end
 
-  def test_parses_blanks_as_nil
-    importer = BlanksAsNilImporter.new('test/csv/blanks_as_nil.csv')
+  def test_intercept_blank_values
+    importer = InterceptBlanksImporter.new('test/csv/intercept_blanks.csv')
     importer.import!
 
     assert_nil importer.result.empty

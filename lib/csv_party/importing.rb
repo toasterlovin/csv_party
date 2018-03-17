@@ -62,7 +62,7 @@ module CSVParty
           value,
           options[:parser],
           options[:format],
-          options[:blanks_as_nil]
+          options[:intercept_blanks]
         )
       end
 
@@ -72,8 +72,8 @@ module CSVParty
       return parsed_row
     end
 
-    def parse_column(value, parser, format, blanks_as_nil)
-      if blanks_as_nil && is_blank?(value)
+    def parse_column(value, parser, format, intercept_blanks)
+      if intercept_blanks && is_blank?(value)
         nil
       elsif parser.is_a? Symbol
         if format.nil?

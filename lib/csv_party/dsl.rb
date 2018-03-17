@@ -12,7 +12,7 @@ module CSVParty
           header: column_regex(column),
           as: :string,
           format: nil,
-          blanks_as_nil: (options[:as] == :raw ? false : true)
+          intercept_blanks: (options[:as] == :raw ? false : true)
         }.merge(options)
 
         parser = if block_given?
@@ -25,7 +25,7 @@ module CSVParty
           header: options[:header],
           parser: parser,
           format: options[:format],
-          blanks_as_nil: options[:blanks_as_nil]
+          intercept_blanks: options[:intercept_blanks]
         }
       end
 
