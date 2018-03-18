@@ -1,5 +1,7 @@
 module CSVParty
   module DSL
+    RESERVED_COLUMN_NAMES = [:unparsed, :csv_string]
+
     def self.included(base)
       base.send :extend, ClassMethods
     end
@@ -7,6 +9,7 @@ module CSVParty
     module ClassMethods
       def column(column, options = {}, &block)
         raise_if_duplicate_column(column)
+        raise_if_reserved_column_name(column)
 
         options = {
           header: column_regex(column),
@@ -80,7 +83,16 @@ module CSVParty
         return unless columns.has_key?(name)
 
         raise DuplicateColumnError, "A column named :#{name} has already been \
-                defined, choose a different name"
+                defined, choose a different name."
+      end
+
+      def raise_if_reserved_column_name(column)
+        return unless RESERVED_COLUMN_NAMES.include? column
+
+        raise ReservedColumnNameError, <<-MSG
+The following column names are reserved for interal use, please use a different
+column name: #{RESERVED_COLUMN_NAMES.join(', ')}.
+        MSG
       end
     end
   end

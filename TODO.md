@@ -18,7 +18,7 @@
     - ~~Update error messages to reflect additional parsers~~
     - ~~Custom parser blocks (verify behavior)~~
     - ~~Custom named parsers (verify behavior)~~
-    - Reserved column names (verify behavior)
+    - ~~Reserved column names (verify behavior)~~
     - Parsing `nil` and `blank` values (verify behavior)
   - Importing
     - Rows (verify that error is thrown on missing processor)

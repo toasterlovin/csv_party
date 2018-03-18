@@ -40,4 +40,14 @@ class ColumnTest < Minitest::Test
       MissingColumnImporter.new('test/csv/missing_column.csv')
     end
   end
+
+  def test_reserved_column_names
+    assert_raises CSVParty::ReservedColumnNameError do
+      require 'importers/invalid/unparsed_reserved_column_name_importer'
+    end
+
+    assert_raises CSVParty::ReservedColumnNameError do
+      require 'importers/invalid/csv_string_reserved_column_name_importer'
+    end
+  end
 end
