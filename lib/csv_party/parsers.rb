@@ -36,6 +36,14 @@ module CSVParty
       end
     end
 
+    def time_parser(value, format = nil)
+      if format.nil?
+        DateTime.parse(value).to_time
+      else
+        DateTime.strptime(value, format).to_time
+      end
+    end
+
     private
 
     def prepare_numeric_value(value)
