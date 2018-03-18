@@ -71,6 +71,8 @@ class ParserTest < Minitest::Test
 
     assert_equal Date.new(2017, 12, 31), importer.result.date
     assert_equal Date.new(2017, 12, 31), importer.result.date_with_format
+    assert_nil importer.result.invalid_date
+    assert_nil importer.result.invalid_format
   end
 
   def test_time_parser
@@ -83,6 +85,8 @@ class ParserTest < Minitest::Test
                  importer.result.time_with_timezone
     assert_equal Time.new(2018, 3, 17, 5, 31, 0, '+00:00'),
                  importer.result.time_with_format
+    assert_nil importer.result.invalid_time
+    assert_nil importer.result.invalid_format
   end
 
   def test_custom_parser

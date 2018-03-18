@@ -69,6 +69,8 @@ Strips all whitespace, parses with `Date.strptime`.
     column :date, as: :date, format: '%m/%d/%y'
     '12/31/17' #=> Date.strptime('12/31/2017', '%m/%d/%y')
 
+Returns `nil` for unparseable values.
+
 #### `:time` parser
 Strips all whitespace, parses with `Time.strptime`.
 
@@ -77,6 +79,8 @@ Strips all whitespace, parses with `Time.strptime`.
 
     column :time, as: :time, format: '%m/%d/%y %I:%M:%S %p'
     '1/1/17 01:01:01 AM' #=> DateTime.parse('1/1/17 01:01:01 AM', '%m/%d/%y %I:%M:%S %p')
+
+Returns `nil` for unparseable values.
 
 #### Custom parser blocks
 A block containing custom parsing logic can be used as well.
