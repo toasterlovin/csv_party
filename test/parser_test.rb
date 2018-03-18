@@ -77,9 +77,12 @@ class ParserTest < Minitest::Test
     importer = TimeParserImporter.new('test/csv/time_parser.csv')
     importer.import!
 
-    assert_equal Time.new(2018, 03, 17, 17, 31, 59, '+00:00'), importer.result.time
-    assert_equal Time.new(2018, 03, 17, 17, 31, 59, '+04:00'), importer.result.time_with_timezone
-    assert_equal Time.new(2018, 03, 17, 5, 31, 00, '+00:00'), importer.result.time_with_format
+    assert_equal Time.new(2018, 3, 17, 17, 31, 59, '+00:00'),
+                 importer.result.time
+    assert_equal Time.new(2018, 3, 17, 17, 31, 59, '+04:00'),
+                 importer.result.time_with_timezone
+    assert_equal Time.new(2018, 3, 17, 5, 31, 0, '+00:00'),
+                 importer.result.time_with_format
   end
 
   def test_custom_parser
