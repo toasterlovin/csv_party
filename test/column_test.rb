@@ -31,7 +31,7 @@ class ColumnTest < Minitest::Test
 
   def test_duplicate_columns
     assert_raises CSVParty::DuplicateColumnError do
-      require 'importers/invalid/duplicate_columns_importer'
+      require 'importers/invalid/duplicate_column_importer'
     end
   end
 
