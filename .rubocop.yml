@@ -7,6 +7,9 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Max: 20
 
+Metrics/ModuleLength:
+  Enabled: false
+
 Style/PredicateName:
   Enabled: false
 
@@ -28,5 +31,5 @@ Style/IndentHeredoc:
 Style/EmptyElse:
   EnforcedStyle: empty
 
-Metrics/ModuleLength:
+Style/SymbolArray:
   Enabled: false
