@@ -17,7 +17,7 @@
     - ~~Think about what to do with invalid date/time values~~
     - ~~Update error messages to reflect additional parsers~~
     - ~~Custom parser blocks (verify behavior)~~
-    - Custom named parsers (verify behavior)
+    - ~~Custom named parsers (verify behavior)~~
     - Reserved column names (verify behavior)
     - Parsing `nil` and `blank` values (verify behavior)
   - Importing
