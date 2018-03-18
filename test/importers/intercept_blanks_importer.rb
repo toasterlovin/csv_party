@@ -1,16 +1,16 @@
 require 'csv_party'
 
 class InterceptBlanksImporter < CSVParty::Importer
-  column :empty, header: 'Empty', as: :string
-  column :blank, header: 'Blank', as: :string
-  column :integer, header: 'Integer', as: :integer
-  column :decimal, header: 'Decimal', as: :decimal
-  column :boolean, header: 'Boolean', as: :boolean
-  column :raw_blank, header: 'Raw Blank', as: :raw
-  column :custom, header: 'Custom' do
+  column :empty, as: :string
+  column :blank, as: :string
+  column :integer, as: :integer
+  column :decimal, as: :decimal
+  column :boolean, as: :boolean
+  column :raw_blank, as: :raw
+  column :custom do
     'Not nil'
   end
-  column :opt_out, header: 'Opt Out', intercept_blanks: false do
+  column :opt_out, intercept_blanks: false do
     'Not nil'
   end
 
