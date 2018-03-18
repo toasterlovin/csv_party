@@ -29,27 +29,23 @@ module CSVParty
     end
 
     def date_parser(value, format = nil)
-      begin
-        if format.nil?
-          Date.parse(value)
-        else
-          Date.strptime(value, format)
-        end
-      rescue ArgumentError
-        nil
+      if format.nil?
+        Date.parse(value)
+      else
+        Date.strptime(value, format)
       end
+    rescue ArgumentError
+      nil
     end
 
     def time_parser(value, format = nil)
-      begin
-        if format.nil?
-          DateTime.parse(value).to_time
-        else
-          DateTime.strptime(value, format).to_time
-        end
-      rescue ArgumentError
-        nil
+      if format.nil?
+        DateTime.parse(value).to_time
+      else
+        DateTime.strptime(value, format).to_time
       end
+    rescue ArgumentError
+      nil
     end
 
     private
