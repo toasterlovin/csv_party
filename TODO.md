@@ -15,7 +15,7 @@
     - ~~Date parser (implement)~~
     - ~~Time parser (implement)~~
     - ~~Think about what to do with invalid date/time values~~
-    - Update error messages to reflect additional parsers
+    - ~~Update error messages to reflect additional parsers~~
     - Custom parser blocks (verify that procs can be used)
     - Custom named parsers (verify behavior)
     - Reserved column names (verify behavior)
