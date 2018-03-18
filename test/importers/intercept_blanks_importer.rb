@@ -6,6 +6,8 @@ class InterceptBlanksImporter < CSVParty::Importer
   column :integer, as: :integer
   column :decimal, as: :decimal
   column :boolean, as: :boolean
+  column :date, as: :date
+  column :time, as: :time
   column :raw_blank, as: :raw
   column :custom do
     'Not nil'

@@ -4,7 +4,7 @@
 - ~~Finish documenting DSL spec in DSL.md~~
 - ~~Split tests out into separate files~~
 - Implement and test DSL.md in entirety
-  - Columns
+  - ~~Columns~~
     - ~~Names & headers (revised header name behavior)~~
     - ~~Raw parser (verify behavior)~~
     - ~~String parser (verify behavior)~~
@@ -19,7 +19,7 @@
     - ~~Custom parser blocks (verify behavior)~~
     - ~~Custom named parsers (verify behavior)~~
     - ~~Reserved column names (verify behavior)~~
-    - Parsing `nil` and `blank` values (verify behavior)
+    - ~~Parsing `nil` and `blank` values (verify behavior)~~
   - Importing
     - Rows (verify that error is thrown on missing processor)
     - Files (verify behavior + raise error if `import_rows!` is not called)

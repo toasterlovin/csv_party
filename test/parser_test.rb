@@ -121,6 +121,8 @@ class ParserTest < Minitest::Test
     assert_nil importer.result.integer
     assert_nil importer.result.decimal
     assert_nil importer.result.boolean
+    assert_nil importer.result.date
+    assert_nil importer.result.time
     assert_equal ' ', importer.result.raw_blank
     assert_nil importer.result.custom
     assert_equal 'Not nil', importer.result.opt_out
