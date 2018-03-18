@@ -17,4 +17,12 @@ class RowImportTest < Minitest::Test
     assert_equal 'Some text', importer.result.column_1
     assert_equal IO.readlines(csv_file_path)[1], importer.result.csv_string
   end
+
+  def test_raises_error_when_accessing_undefined_column
+    importer = UndefinedColumnImporter.new('test/csv/undefined_column.csv')
+
+    assert_raises NoMethodError do
+      importer.import!
+    end
+  end
 end

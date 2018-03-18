@@ -1,6 +1,5 @@
 require 'csv'
 require 'bigdecimal'
-require 'ostruct'
 require 'csv_party/errors'
 require 'csv_party/parsers'
 require 'csv_party/dsl'

@@ -57,7 +57,7 @@ module CSVParty
     end
 
     def extract_unparsed_values(row)
-      unparsed_row = OpenStruct.new
+      unparsed_row = blank_unparsed_row_struct
       columns.each do |column, options|
         header = options[:header]
         unparsed_row[column] = row[header]
@@ -67,7 +67,7 @@ module CSVParty
     end
 
     def extract_parsed_values(row)
-      parsed_row = OpenStruct.new
+      parsed_row = blank_parsed_row_struct
       columns.each do |column, options|
         header = options[:header]
         value = row[header]
@@ -104,6 +104,14 @@ module CSVParty
       parser = options[:parser]
 
       instance_exec(value, &parser)
+    end
+
+    def blank_parsed_row_struct
+      Struct.new(*columns.keys, :unparsed, :csv_string).new
+    end
+
+    def blank_unparsed_row_struct
+      Struct.new(*columns.keys).new
     end
 
     def is_blank?(value)
