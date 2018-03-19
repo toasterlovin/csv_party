@@ -23,7 +23,7 @@
   - Importing
     - ~~Rows (verify that error is thrown on missing processor)~~
     - ~~Files (verify behavior + raise error if `import_rows!` is not called)~~
-    - Errors (`:ignore` option + raise if unspecified)
+    - Errors (`:ignore` option, raise if unspecified, don't capture parsing errors from CSV library)
     - Dependencies (MissingDependency error should happen on import, not instantiation)
     - All validations should happen at import time, not instantiation time
   - Flow Control
