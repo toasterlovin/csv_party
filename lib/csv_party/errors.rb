@@ -17,6 +17,9 @@ module CSVParty
   class MissingDependencyError < ArgumentError
   end
 
+  class UnimportedRowsError < RuntimeError
+  end
+
   class SkippedRowError < RuntimeError
   end
 

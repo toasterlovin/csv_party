@@ -4,11 +4,12 @@ module CSVParty
                   :error_processor, :dependencies
 
     attr_reader :imported_rows, :skipped_rows, :aborted_rows,
-                :abort_message
+                :abort_message, :rows_have_been_imported
 
     def import!
       if importer
         instance_exec(&importer)
+        raise_unless_rows_have_been_imported!
       else
         import_rows!
       end
@@ -37,6 +38,8 @@ module CSVParty
           next
         end
       end
+
+      @rows_have_been_imported = true
     end
 
     def aborted?
@@ -146,6 +149,22 @@ with each row. It should look something like this:
     rows do |row|
       row.column  # access parsed column values
       row.unparsed.column  # access unparsed column values
+    end
+      MSG
+    end
+
+    def raise_unless_rows_have_been_imported!
+      return if rows_have_been_imported
+
+      raise CSVParty::UnimportedRowsError, <<-MSG
+The rows in your CSV file have not been imported. You should include a call to
+import_rows! at the point in your import block where you want them to be
+imported. It should should look something like this:
+
+    import do
+      # do stuff before importing rows
+      import_rows!
+      # do stuff after importing rows
     end
       MSG
     end

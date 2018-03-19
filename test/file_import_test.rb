@@ -12,4 +12,12 @@ class FileImportTest < Minitest::Test
     assert_equal 'Value 1', importer.result[:rows].first.value
     assert_equal 'Value 2', importer.result[:rows].last.value
   end
+
+  def test_raises_error_when_rows_are_not_imported
+    importer = UnimportedRowsImporter.new('test/csv/unimported_rows.csv')
+
+    assert_raises CSVParty::UnimportedRowsError do
+      importer.import!
+    end
+  end
 end
