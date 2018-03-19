@@ -26,6 +26,7 @@
     - Errors (`:ignore` option, raise if unspecified, don't capture parsing errors from CSV library)
     - Dependencies (MissingDependency error should happen on import, not instantiation)
     - All validations should happen at import time, not instantiation time
+    - Add row number as attribute on row struct
   - Flow Control
     - Skip row (implement new behavior)
     - Abort row (implement new behavior)
