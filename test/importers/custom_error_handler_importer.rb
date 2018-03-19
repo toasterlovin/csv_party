@@ -6,12 +6,12 @@ class CustomErrorHandlerImporter < CSVParty::Importer
   rows do |row|
     raise TestCaseError if row.value == 'raise'
 
-    self.result[:success] = row
+    result[:success] = row
   end
 
   errors do |error, line_number, csv_string|
-    self.result[:error] = error
-    self.result[:line_number] = line_number
-    self.result[:csv_string] = csv_string
+    result[:error] = error
+    result[:line_number] = line_number
+    result[:csv_string] = csv_string
   end
 end

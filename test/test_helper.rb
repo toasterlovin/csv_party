@@ -7,7 +7,6 @@ module CSVParty
     # Add an instance level attribute for passing results back to tests
     attr_accessor :result
   end
-
 end
 
 # This class exists only to have a unique error class for the purpose of
