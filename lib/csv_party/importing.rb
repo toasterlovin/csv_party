@@ -29,15 +29,13 @@ module CSVParty
           imported_rows << @csv.lineno
         rescue SkippedRowError
           skipped_rows << @csv.lineno
-          next
-        rescue AbortedImportError => error
-          raise AbortedImportError, error.message
+        rescue AbortedImportError
+          raise
         rescue CSV::MalformedCSVError
           raise
         rescue StandardError => error
           process_error(error, @csv.lineno, row.to_csv)
           aborted_rows << @csv.lineno
-          next
         end
       end
 
