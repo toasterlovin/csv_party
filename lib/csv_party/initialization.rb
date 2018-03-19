@@ -39,6 +39,7 @@ module CSVParty
       @imported_rows = []
       @skipped_rows = []
       @aborted_rows = []
+      @error_rows = []
       @aborted = false
     end
 

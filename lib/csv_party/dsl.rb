@@ -40,8 +40,8 @@ module CSVParty
         @importer = block
       end
 
-      def errors(&block)
-        @error_processor = block
+      def errors(setting = nil, &block)
+        @error_processor = setting || block
       end
 
       def depends_on(*args)

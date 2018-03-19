@@ -3,7 +3,7 @@ module CSVParty
     attr_accessor :columns, :row_importer, :importer,
                   :error_processor, :dependencies
 
-    attr_reader :imported_rows, :skipped_rows, :aborted_rows,
+    attr_reader :imported_rows, :skipped_rows, :aborted_rows, :error_rows,
                 :abort_message, :rows_have_been_imported
 
     def import!
@@ -32,8 +32,10 @@ module CSVParty
           next
         rescue AbortedImportError => error
           raise AbortedImportError, error.message
+        rescue CSV::MalformedCSVError
+          raise
         rescue StandardError => error
-          process_error(error, @csv.lineno + 1)
+          process_error(error, @csv.lineno, row.to_csv)
           aborted_rows << @csv.lineno
           next
         end
@@ -135,8 +137,19 @@ module CSVParty
       value.nil? || value.strip.empty?
     end
 
-    def process_error(error, line_number)
-      instance_exec(error, line_number, &error_processor)
+    def process_error(error, line_number, csv_string)
+      raise error unless error_processor
+
+      if error_processor == :ignore
+        error_rows << error_struct(error, line_number, csv_string)
+      else
+        instance_exec(error, line_number, csv_string, &error_processor)
+      end
+    end
+
+    def error_struct(error, line_number, csv_string)
+      Struct.new(:error, :line_number, :csv_string)
+            .new(error, line_number, csv_string)
     end
 
     def raise_unless_row_processor_is_defined!
