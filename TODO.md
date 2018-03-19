@@ -32,16 +32,24 @@
     - Abort row (implement new behavior)
     - Next row (implement new behavior)
     - Abort import (rework API; return `false` on `importer.import!`)
-- Re-enable class documentation cop
-- Document classes
+- CSV Improvements
+  - Accept applicable options that 'CSV' accepts
+  - Accept file path string
+  - Accept IO object
+  - Accept CSV string
 - Improve test organization
-  - Move associated importer classes and CSV files into
-    same file as test.
-- Accept all `CSV` options
-- Alternative CSV types
-  - String
-  - IO object
-  - File path
+  - Move associated importer classes and CSV files into same file as test.
+- Documentation
+  - Re-enable class documentation cop
+  - Document classes
+  - Revamp README.md
+  - Flesh out advanced usage in Wiki
+    - Testing
+    - User specified column names
+    - Automatically determining file encoding
+    - Low memory usage
+    - Downloads of skipped/aborted/errored rowm
+  - Blog post + video showing best practices in a Rails app
 
 ## Future
 
