@@ -77,3 +77,5 @@ Default behavior is to raise as normal.
     end
 
 ### Add mechanism for exporting skipped/aborted rows as CSV files
+
+### Think through what happens when rows that have not been fully parsed are skipped, aborted, have errors, etc.
