@@ -18,6 +18,8 @@ module CSVParty
     end
 
     def import_rows!
+      raise_unless_row_processor_is_defined!
+
       loop do
         begin
           row = @csv.shift
@@ -132,6 +134,20 @@ module CSVParty
 
     def abort_import(message)
       raise AbortedImportError, message
+    end
+
+    def raise_unless_row_processor_is_defined!
+      return if row_importer
+
+      raise CSVParty::UndefinedRowProcessorError, <<-MSG
+Your importer has to define a row processor which specifies what should be done
+with each row. It should look something like this:
+
+    rows do |row|
+      row.column  # access parsed column values
+      row.unparsed.column  # access unparsed column values
+    end
+      MSG
     end
   end
 end

@@ -21,7 +21,7 @@
     - ~~Reserved column names (verify behavior)~~
     - ~~Parsing `nil` and `blank` values (verify behavior)~~
   - Importing
-    - Rows (verify that error is thrown on missing processor)
+    - ~~Rows (verify that error is thrown on missing processor)~~
     - Files (verify behavior + raise error if `import_rows!` is not called)
     - Errors (`:ignore` option + raise if unspecified)
     - Dependencies (MissingDependency error should happen on import, not instantiation)

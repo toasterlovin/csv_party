@@ -8,7 +8,10 @@ module CSVParty
   class ReservedColumnNameError < ArgumentError
   end
 
-  class MissingColumnError < ArgumentError
+  class MissingColumnError < RuntimeError
+  end
+
+  class UndefinedRowProcessorError < RuntimeError
   end
 
   class MissingDependencyError < ArgumentError

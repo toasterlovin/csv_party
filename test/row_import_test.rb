@@ -18,6 +18,15 @@ class RowImportTest < Minitest::Test
     assert_equal IO.readlines(csv_file_path)[1], importer.result.csv_string
   end
 
+  def test_raises_error_if_row_processor_is_undefined
+    importer = UndefinedRowProcessorImporter
+               .new('test/csv/undefined_row_processor.csv')
+
+    assert_raises CSVParty::UndefinedRowProcessorError do
+      importer.import!
+    end
+  end
+
   def test_raises_error_when_accessing_undefined_column
     importer = UndefinedColumnImporter.new('test/csv/undefined_column.csv')
 
