@@ -43,6 +43,18 @@ module CSVParty
       @aborted
     end
 
+    def skip_row
+      raise SkippedRowError
+    end
+
+    def abort_row(message)
+      raise AbortedRowError, message
+    end
+
+    def abort_import(message)
+      raise AbortedImportError, message
+    end
+
     private
 
     def import_row!(row)
@@ -122,18 +134,6 @@ module CSVParty
 
     def process_error(error, line_number)
       instance_exec(error, line_number, &error_processor)
-    end
-
-    def skip_row
-      raise SkippedRowError
-    end
-
-    def abort_row(message)
-      raise AbortedRowError, message
-    end
-
-    def abort_import(message)
-      raise AbortedImportError, message
     end
 
     def raise_unless_row_processor_is_defined!
