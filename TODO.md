@@ -3,35 +3,34 @@
 ## 1.0
 - ~~Finish documenting DSL spec in DSL.md~~
 - ~~Split tests out into separate files~~
-- Implement and test DSL.md in entirety
-  - ~~Columns~~
-    - ~~Names & headers (revised header name behavior)~~
-    - ~~Raw parser (verify behavior)~~
-    - ~~String parser (verify behavior)~~
-    - ~~Integer parser (handle negative values)~~
-    - ~~Decimal parser (handle negative values)~~
-    - ~~Allow accounting negative notation for integer & decimal~~
-    - ~~Boolean parser (whitelist negative values; return nil for everythign else)~~
-    - ~~Date parser (implement)~~
-    - ~~Time parser (implement)~~
-    - ~~Think about what to do with invalid date/time values~~
-    - ~~Update error messages to reflect additional parsers~~
-    - ~~Custom parser blocks (verify behavior)~~
-    - ~~Custom named parsers (verify behavior)~~
-    - ~~Reserved column names (verify behavior)~~
-    - ~~Parsing `nil` and `blank` values (verify behavior)~~
-  - Importing
-    - ~~Rows (verify that error is thrown on missing processor)~~
-    - ~~Files (verify behavior + raise error if `import_rows!` is not called)~~
-    - ~~Errors (`:ignore` option, raise if unspecified, don't capture parsing errors from CSV library)~~
-    - Dependencies (MissingDependency error should happen on import, not instantiation)
-    - All validations should happen at import time, not instantiation time
-    - Add row number as attribute on row struct
-  - Flow Control
-    - Skip row (implement new behavior)
-    - Abort row (implement new behavior)
-    - Next row (implement new behavior)
-    - Abort import (rework API; return `false` on `importer.import!`)
+- ~~Columns~~
+  - ~~Names & headers (revised header name behavior)~~
+  - ~~Raw parser (verify behavior)~~
+  - ~~String parser (verify behavior)~~
+  - ~~Integer parser (handle negative values)~~
+  - ~~Decimal parser (handle negative values)~~
+  - ~~Allow accounting negative notation for integer & decimal~~
+  - ~~Boolean parser (whitelist negative values; return nil for everythign else)~~
+  - ~~Date parser (implement)~~
+  - ~~Time parser (implement)~~
+  - ~~Think about what to do with invalid date/time values~~
+  - ~~Update error messages to reflect additional parsers~~
+  - ~~Custom parser blocks (verify behavior)~~
+  - ~~Custom named parsers (verify behavior)~~
+  - ~~Reserved column names (verify behavior)~~
+  - ~~Parsing `nil` and `blank` values (verify behavior)~~
+- Importing
+  - ~~Rows (verify that error is thrown on missing processor)~~
+  - ~~Files (verify behavior + raise error if `import_rows!` is not called)~~
+  - ~~Errors (`:ignore` option, raise if unspecified, don't capture parsing errors from CSV library)~~
+  - Dependencies (MissingDependency error should happen on import, not instantiation)
+  - All validations should happen at import time, not instantiation time
+  - Add row number as attribute on row struct
+- Flow Control
+  - Skip row (implement new behavior)
+  - Abort row (implement new behavior)
+  - Next row (implement new behavior)
+  - Abort import (rework API; return `false` on `importer.import!`)
 - CSV Improvements
   - Accept applicable options that 'CSV' accepts
   - Accept file path string
