@@ -47,7 +47,7 @@
     - User specified column names
     - Automatically determining file encoding
     - Low memory usage
-    - Downloads of skipped/aborted/errored rowm
+    - Downloads of skipped/aborted/errored rows
   - Blog post + video showing best practices in a Rails app
 
 ## Future
