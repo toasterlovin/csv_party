@@ -8,6 +8,8 @@ module CSVParty
 
     def import!
       raise_unless_all_dependencies_are_present!
+      raise_unless_all_named_parsers_exist!
+      raise_unless_csv_has_all_columns!
 
       if importer
         instance_exec(&importer)
@@ -198,6 +200,48 @@ Or any time before you import:
     importer.#{dependency} = #{dependency}
     importer.import!
         MESSAGE
+      end
+    end
+
+    # This error has to be raised at runtime because, when the class body
+    # is being executed, the parser methods won't be available unless
+    # they are defined above the column definitions in the class body
+    def raise_unless_all_named_parsers_exist!
+      columns_with_named_parsers.each do |name, options|
+        parser = options[:parser]
+        next if named_parsers.include? parser
+
+        parser = parser.to_s.gsub('_parser', '')
+        parsers = named_parsers
+                  .map { |p| p.to_s.gsub('_parser', '') }
+                  .join(', :')
+        raise UnknownParserError, <<-MSG
+You're trying to use the :#{parser} parser for the :#{name} column, but it
+doesn't exist. Available parsers are: :#{parsers}."
+        MSG
+      end
+    end
+
+    def raise_unless_csv_has_all_columns!
+      find_headers!
+      missing_columns = defined_headers - @headers
+      return if missing_columns.empty?
+
+      columns = missing_columns.join("', '")
+      raise MissingColumnError, <<-MSG
+CSV file is missing column(s) with header(s) '#{columns}'. File has these
+headers: #{@headers.join(', ')}.
+      MSG
+    end
+
+    def columns_with_regex_headers
+      columns.select { |_name, options| options[:header].is_a? Regexp }
+    end
+
+    def find_headers!
+      columns_with_regex_headers.each do |name, options|
+        found_header = @headers.find { |header| options[:header].match(header) }
+        options[:header] = found_header || name.to_s
       end
     end
   end

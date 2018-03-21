@@ -129,8 +129,12 @@ class ParserTest < Minitest::Test
   end
 
   def test_unknown_named_parser
+    importer = UnknownNamedParserImporter.new(
+      'test/csv/unknown_named_parser.csv'
+    )
+
     assert_raises CSVParty::UnknownParserError do
-      UnknownNamedParserImporter.new('test/csv/unknown_named_parser.csv')
+      importer.import!
     end
   end
 end

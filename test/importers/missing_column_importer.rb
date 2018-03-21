@@ -1,6 +1,9 @@
 require 'csv_party'
 
 class MissingColumnImporter < CSVParty::Importer
-  column :present, header: 'Present'
-  column :missing, header: 'Missing'
+  column :present
+  column :missing
+
+  rows do
+  end
 end

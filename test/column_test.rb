@@ -36,8 +36,10 @@ class ColumnTest < Minitest::Test
   end
 
   def test_missing_column_in_csv
+    importer = MissingColumnImporter.new('test/csv/missing_column.csv')
+
     assert_raises CSVParty::MissingColumnError do
-      MissingColumnImporter.new('test/csv/missing_column.csv')
+      importer.import!
     end
   end
 
