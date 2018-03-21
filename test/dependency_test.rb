@@ -17,8 +17,16 @@ class DependencyTest < Minitest::Test
   end
 
   def test_missing_dependency
+    importer = ExternalDependencyImporter.new(
+      'test/csv/external_dependency.csv'
+    )
+    importer.result = {}
+
     assert_raises CSVParty::MissingDependencyError do
-      ExternalDependencyImporter.new('test/csv/external_dependency.csv')
+      importer.import!
     end
+
+    importer.dependency = SecureRandom.random_number
+    importer.import!
   end
 end

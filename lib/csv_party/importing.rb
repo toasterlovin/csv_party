@@ -7,6 +7,8 @@ module CSVParty
                 :abort_message, :rows_have_been_imported
 
     def import!
+      raise_unless_all_dependencies_are_present!
+
       if importer
         instance_exec(&importer)
         raise_unless_rows_have_been_imported!
@@ -178,6 +180,25 @@ imported. It should should look something like this:
       # do stuff after importing rows
     end
       MSG
+    end
+
+    def raise_unless_all_dependencies_are_present!
+      dependencies.each do |dependency|
+        next unless send(dependency).nil?
+
+        raise MissingDependencyError, <<-MESSAGE
+This importer depends on #{dependency}, but you didn't include it.
+You can do that when instantiating your importer:
+
+    #{self.class.name}.new('path/to/csv', #{dependency}: #{dependency})
+
+Or any time before you import:
+
+    importer = #{self.class.name}.new('path/to/csv')
+    importer.#{dependency} = #{dependency}
+    importer.import!
+        MESSAGE
+      end
     end
   end
 end

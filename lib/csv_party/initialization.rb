@@ -47,12 +47,6 @@ module CSVParty
       dependencies.each do |dependency|
         if options.has_key? dependency
           send("#{dependency}=", options.delete(dependency))
-        else
-          raise MissingDependencyError,
-                <<-MESSAGE
-This importer depends on #{dependency}, but you didn't include it.
-Here's how you do that: #{self.class.name}.new('path/to/csv', #{dependency}: #{dependency})
-                MESSAGE
         end
       end
     end
