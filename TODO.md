@@ -52,9 +52,13 @@
 
 ## Future
 
+### Think through what happens when rows that have not been fully parsed are skipped, aborted, have errors, etc.
+
 ### Investigate CSV parsing issues
 - Make sure parsing issues are well covered by tests
 - Resolve line_number off-by-one error when `MalformedCSVError` is encountered
+
+### Add mechanism for exporting skipped/aborted rows as CSV files
 
 ### Runtime configuration of DSL methods
 
@@ -77,12 +81,12 @@ Default behavior is to raise as normal.
 
     my_import.aborted_rows # returns array of parse error rows
 
+### Add batch import feature
+- Users should be able to accumulate a data structure somehow
+- Then a block should be executed every N rows and on the last row
+
 ### Allow using multiple columns to generate one variable
 
     column :total, header: ['Price', 'Quantity'] do |price, quantity|
       BigDecimal.new(price) * BigDecimal.new(quantity)
     end
-
-### Add mechanism for exporting skipped/aborted rows as CSV files
-
-### Think through what happens when rows that have not been fully parsed are skipped, aborted, have errors, etc.
