@@ -9,6 +9,7 @@ module CSVParty
     def import!
       raise_unless_all_dependencies_are_present!
       raise_unless_all_named_parsers_exist!
+      find_regex_headers!
       raise_unless_csv_has_all_columns!
 
       if importer
@@ -223,7 +224,6 @@ doesn't exist. Available parsers are: :#{parsers}."
     end
 
     def raise_unless_csv_has_all_columns!
-      find_headers!
       missing_columns = defined_headers - @headers
       return if missing_columns.empty?
 
@@ -238,7 +238,7 @@ headers: #{@headers.join(', ')}.
       columns.select { |_name, options| options[:header].is_a? Regexp }
     end
 
-    def find_headers!
+    def find_regex_headers!
       columns_with_regex_headers.each do |name, options|
         found_header = @headers.find { |header| options[:header].match(header) }
         options[:header] = found_header || name.to_s
