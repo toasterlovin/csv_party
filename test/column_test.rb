@@ -51,5 +51,9 @@ class ColumnTest < Minitest::Test
     assert_raises CSVParty::ReservedColumnNameError do
       require 'importers/invalid/csv_string_reserved_column_name_importer'
     end
+
+    assert_raises CSVParty::ReservedColumnNameError do
+      require 'importers/invalid/row_number_reserved_column_name_importer'
+    end
   end
 end

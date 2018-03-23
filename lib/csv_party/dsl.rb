@@ -1,6 +1,6 @@
 module CSVParty
   module DSL
-    RESERVED_COLUMN_NAMES = [:unparsed, :csv_string].freeze
+    RESERVED_COLUMN_NAMES = [:unparsed, :csv_string, :row_number].freeze
 
     def self.included(base)
       base.send :extend, ClassMethods
