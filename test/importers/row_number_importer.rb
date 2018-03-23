@@ -1,6 +1,6 @@
 require 'csv_party'
 
-class CsvRowNumberImporter < CSVParty::Importer
+class RowNumberImporter < CSVParty::Importer
   column :product
 
   rows do |row|

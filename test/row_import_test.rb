@@ -19,7 +19,7 @@ class RowImportTest < Minitest::Test
   end
 
   def test_provides_access_to_csv_row_number
-    importer = CsvRowNumberImporter.new('test/csv/csv_row_number.csv')
+    importer = RowNumberImporter.new('test/csv/row_number.csv')
     importer.import!
 
     assert_equal 3, importer.result.row_number
