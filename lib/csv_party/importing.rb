@@ -3,8 +3,8 @@ module CSVParty
     attr_accessor :columns, :row_importer, :importer,
                   :error_processor, :dependencies
 
-    attr_reader :imported_rows, :skipped_rows, :aborted_rows, :error_rows,
-                :abort_message, :rows_have_been_imported
+    attr_reader :row_number, :imported_rows, :skipped_rows, :aborted_rows,
+                :error_rows, :abort_message, :rows_have_been_imported
 
     def import!
       raise_unless_all_dependencies_are_present!
@@ -30,6 +30,7 @@ module CSVParty
         begin
           row = @csv.shift
           break unless row
+          @row_number += 1
           import_row!(row)
           imported_rows << @csv.lineno
         rescue SkippedRowError
@@ -74,6 +75,7 @@ module CSVParty
       parsed_row = extract_parsed_values(row)
       parsed_row[:unparsed] = extract_unparsed_values(row)
       parsed_row[:csv_string] = row.to_csv
+      parsed_row[:row_number] = row_number
 
       return parsed_row
     end
@@ -129,7 +131,7 @@ module CSVParty
     end
 
     def blank_parsed_row_struct
-      Struct.new(*columns.keys, :unparsed, :csv_string).new
+      Struct.new(*columns.keys, :unparsed, :csv_string, :row_number).new
     end
 
     def blank_unparsed_row_struct

@@ -18,6 +18,13 @@ class RowImportTest < Minitest::Test
     assert_equal IO.readlines(csv_file_path)[1], importer.result.csv_string
   end
 
+  def test_provides_access_to_csv_row_number
+    importer = CsvRowNumberImporter.new('test/csv/csv_row_number.csv')
+    importer.import!
+
+    assert_equal 3, importer.result.row_number
+  end
+
   def test_raises_error_if_row_processor_is_undefined
     importer = UndefinedRowProcessorImporter
                .new('test/csv/undefined_row_processor.csv')

@@ -33,6 +33,7 @@ module CSVParty
     end
 
     def initialize_counters_and_statuses
+      @row_number = 1
       @imported_rows = []
       @skipped_rows = []
       @aborted_rows = []
