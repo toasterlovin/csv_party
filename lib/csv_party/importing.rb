@@ -32,16 +32,16 @@ module CSVParty
           break unless row
           @row_number += 1
           import_row!(row)
-          imported_rows << @csv.lineno
+          imported_rows << row_number
         rescue SkippedRowError
-          skipped_rows << @csv.lineno
+          skipped_rows << row_number
         rescue AbortedImportError
           raise
         rescue CSV::MalformedCSVError
           raise
         rescue StandardError => error
-          process_error(error, @csv.lineno, row.to_csv)
-          aborted_rows << @csv.lineno
+          process_error(error, row_number, row.to_csv)
+          aborted_rows << row_number
         end
       end
 
