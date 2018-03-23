@@ -19,13 +19,13 @@
   - ~~Custom named parsers (verify behavior)~~
   - ~~Reserved column names (verify behavior)~~
   - ~~Parsing `nil` and `blank` values (verify behavior)~~
-- Importing
+- ~~Importing~~
   - ~~Rows (verify that error is thrown on missing processor)~~
   - ~~Files (verify behavior + raise error if `import_rows!` is not called)~~
   - ~~Errors (`:ignore` option, raise if unspecified, don't capture parsing errors from CSV library)~~
   - ~~Dependencies (MissingDependency error should happen on import, not instantiation)~~
   - ~~All validations should happen at import time, not instantiation time~~
-  - Add row number as attribute on row struct
+  - ~~Add row number as attribute on row struct~~
 - Flow Control
   - Skip row (implement new behavior)
   - Abort row (implement new behavior)
