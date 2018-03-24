@@ -30,6 +30,7 @@ module CSVParty
       @importer = self.class.importer
       @error_handler = self.class.error_handler
       @skipped_row_handler = self.class.skipped_row_handler
+      @aborted_row_handler = self.class.aborted_row_handler
       @dependencies = self.class.dependencies
     end
 

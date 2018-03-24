@@ -1,18 +1,6 @@
 require 'test_helper'
 
 class FlowControlTest < Minitest::Test
-  def test_aborted_rows
-    importer = AbortedRowsImporter.new('test/csv/aborted_rows.csv')
-    importer.result = {}
-    importer.import!
-
-    assert_equal 'Imported', importer.result[:imported]
-    assert_equal 2, importer.imported_rows.first
-    assert importer.result[:aborted].is_a? CSVParty::AbortedRowError
-    assert_equal 'This row was aborted.', importer.result[:aborted].message
-    assert_equal 3, importer.aborted_rows.first
-  end
-
   def test_aborted_import
     importer = AbortedImportImporter.new('test/csv/aborted_import.csv')
     importer.result = {}

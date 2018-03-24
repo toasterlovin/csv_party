@@ -35,13 +35,14 @@ module CSVParty
           imported_rows << row_number
         rescue SkippedRowError => error
           handle_skipped_row(error)
+        rescue AbortedRowError => error
+          handle_aborted_row(error)
         rescue AbortedImportError
           raise
         rescue CSV::MalformedCSVError
           raise
         rescue StandardError => error
           handle_error(error, row_number, row.to_csv)
-          aborted_rows << row_number
         end
       end
 
@@ -56,7 +57,7 @@ module CSVParty
       raise SkippedRowError, message
     end
 
-    def abort_row(message)
+    def abort_row!(message = nil)
       raise AbortedRowError, message
     end
 
@@ -128,7 +129,8 @@ module CSVParty
                  :unparsed,
                  :csv_string,
                  :row_number,
-                 :skip_message).new
+                 :skip_message,
+                 :abort_message).new
     end
 
     def create_unparsed_row_struct
@@ -158,6 +160,18 @@ module CSVParty
         skipped_rows << @current_parsed_row
       else
         instance_exec(@current_parsed_row, &@skipped_row_handler)
+      end
+    end
+
+    def handle_aborted_row(error)
+      return if @aborted_row_handler == :ignore
+
+      @current_parsed_row[:abort_message] = error.message
+
+      if @aborted_row_handler.nil?
+        aborted_rows << @current_parsed_row
+      else
+        instance_exec(@current_parsed_row, &@aborted_row_handler)
       end
     end
 

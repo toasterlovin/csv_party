@@ -48,6 +48,10 @@ module CSVParty
         @skipped_row_handler = setting || block
       end
 
+      def aborted_rows(setting = nil, &block)
+        @aborted_row_handler = setting || block
+      end
+
       def depends_on(*args)
         args.each do |arg|
           dependencies << arg
@@ -77,6 +81,10 @@ module CSVParty
 
       def skipped_row_handler
         @skipped_row_handler ||= nil
+      end
+
+      def aborted_row_handler
+        @aborted_row_handler ||= nil
       end
 
       private
