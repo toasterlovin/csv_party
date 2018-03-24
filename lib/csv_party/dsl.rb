@@ -41,7 +41,7 @@ module CSVParty
       end
 
       def errors(setting = nil, &block)
-        @error_processor = setting || block
+        @error_handler = setting || block
       end
 
       def skipped_rows(setting = nil, &block)
@@ -71,8 +71,8 @@ module CSVParty
         @importer ||= nil
       end
 
-      def error_processor
-        @error_processor ||= nil
+      def error_handler
+        @error_handler ||= nil
       end
 
       def skipped_row_handler
