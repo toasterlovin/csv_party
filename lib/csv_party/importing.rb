@@ -52,8 +52,8 @@ module CSVParty
       @aborted
     end
 
-    def skip_row
-      raise SkippedRowError
+    def skip_row!(message)
+      raise SkippedRowError, message
     end
 
     def abort_row(message)
@@ -66,35 +66,35 @@ module CSVParty
 
     private
 
-    def import_row!(row)
-      parsed_row = parse_row(row)
+    def import_row!(csv_row)
+      parsed_row = parse_row(csv_row)
       instance_exec(parsed_row, &row_importer)
     end
 
-    def parse_row(row)
-      parsed_row = extract_parsed_values(row)
-      parsed_row[:unparsed] = extract_unparsed_values(row)
-      parsed_row[:csv_string] = row.to_csv
+    def parse_row(csv_row)
+      parsed_row = extract_parsed_values(csv_row)
+      parsed_row[:unparsed] = extract_unparsed_values(csv_row)
+      parsed_row[:csv_string] = csv_row.to_csv
       parsed_row[:row_number] = row_number
 
       return parsed_row
     end
 
-    def extract_unparsed_values(row)
+    def extract_unparsed_values(csv_row)
       unparsed_row = blank_unparsed_row_struct
       columns.each do |column, options|
         header = options[:header]
-        unparsed_row[column] = row[header]
+        unparsed_row[column] = csv_row[header]
       end
 
       return unparsed_row
     end
 
-    def extract_parsed_values(row)
+    def extract_parsed_values(csv_row)
       parsed_row = blank_parsed_row_struct
       columns.each do |column, options|
         header = options[:header]
-        value = row[header]
+        value = csv_row[header]
         parsed_row[column] = parse_value(value, options)
       end
 
