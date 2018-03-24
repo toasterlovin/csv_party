@@ -32,7 +32,6 @@ module CSVParty
           break unless row
           @row_number += 1
           import_row!(row)
-          imported_rows << row_number
         rescue SkippedRowError => error
           handle_skipped_row(error)
         rescue AbortedRowError => error
