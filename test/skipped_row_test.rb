@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SkippedRowTest < Minitest::Test
   def test_default_skipped_row_behavior
-    importer = SkippedRowDefaultImporter.new('test/csv/skipped_row_default.csv')
+    importer = SkippedRowDefaultImporter.new('test/csv/skipped_row.csv')
     importer.import!
 
     assert_equal 'Imported', importer.result.action
@@ -17,7 +17,7 @@ class SkippedRowTest < Minitest::Test
   end
 
   def test_ignoring_skipped_rows
-    importer = IgnoreSkippedRowsImporter.new('test/csv/skipped_row_default.csv')
+    importer = IgnoreSkippedRowsImporter.new('test/csv/skipped_row.csv')
     importer.import!
 
     assert_equal 'Imported', importer.result.action
@@ -28,7 +28,7 @@ class SkippedRowTest < Minitest::Test
 
   def test_custom_skipped_row_handler
     importer = CustomSkippedRowHandlerImporter.new(
-      'test/csv/skipped_row_default.csv'
+      'test/csv/skipped_row.csv'
     )
     importer.result = {}
     importer.import!
