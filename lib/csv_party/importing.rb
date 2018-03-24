@@ -28,6 +28,8 @@ module CSVParty
           break unless row
           @_current_row_number += 1
           import_row!(row)
+        rescue NextRowError
+          next
         rescue SkippedRowError => error
           handle_skipped_row(error)
         rescue AbortedRowError => error
@@ -46,6 +48,10 @@ module CSVParty
 
     def aborted?
       @aborted
+    end
+
+    def next_row!
+      raise NextRowError
     end
 
     def skip_row!(message = nil)

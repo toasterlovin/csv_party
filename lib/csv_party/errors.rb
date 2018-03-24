@@ -20,6 +20,9 @@ module CSVParty
   class UnimportedRowsError < RuntimeError
   end
 
+  class NextRowError < RuntimeError
+  end
+
   class SkippedRowError < RuntimeError
   end
 
