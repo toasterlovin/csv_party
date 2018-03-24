@@ -104,9 +104,10 @@ A custom parser can be named for re-use across multiple columns. Just add a meth
     column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
 
 #### Reserved column names
-An error will be thrown if trying to name a column `unparsed`, `csv_string`, `skip_message`,
-or `abort_message`. This is because these will automatically be appended to the `row` object
-that is passed to `rows`, `skipped_rows`, and `aborted_rows` blocks.
+An error will be thrown if trying to name a column `unparsed`, `csv_string`,
+`row_number`, `skip_message`, or `abort_message`. This is because these will
+automatically be appended to the `row` object that is passed to `rows`,
+`skipped_rows`, and `aborted_rows` blocks.
 
     column :unparsed    # raises ReservedColumnName error
     column :csv_string  # raises ReservedColumnName error
