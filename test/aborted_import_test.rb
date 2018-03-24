@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FlowControlTest < Minitest::Test
+class AbortedImportTest < Minitest::Test
   def test_aborted_import
     importer = AbortedImportImporter.new('test/csv/aborted_import.csv')
     importer.result = {}
