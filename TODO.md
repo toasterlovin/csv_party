@@ -27,8 +27,8 @@
   - ~~All validations should happen at import time, not instantiation time~~
   - ~~Add row number as attribute on row struct~~
 - Flow Control
-  - Skip row (implement new behavior)
-  - Abort row (implement new behavior)
+  - ~~Skip row (implement new behavior)~~
+  - ~~Abort row (implement new behavior)~~
   - Next row (implement new behavior)
   - Abort import (rework API; return `false` on `importer.import!`)
 - CSV Improvements
