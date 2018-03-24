@@ -27,7 +27,7 @@ module CSVParty
     def initialize_import_settings
       @columns = self.class.columns
       @row_importer = self.class.row_importer
-      @importer = self.class.importer
+      @file_importer = self.class.file_importer
       @error_handler = self.class.error_handler
       @skipped_row_handler = self.class.skipped_row_handler
       @aborted_row_handler = self.class.aborted_row_handler

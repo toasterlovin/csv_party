@@ -36,7 +36,7 @@ module CSVParty
     end
 
     def import(&block)
-      @importer = block
+      @file_importer = block
     end
 
     def errors(setting = nil, &block)
@@ -70,8 +70,8 @@ module CSVParty
       @row_importer ||= nil
     end
 
-    def importer
-      @importer ||= nil
+    def file_importer
+      @file_importer ||= nil
     end
 
     def error_handler

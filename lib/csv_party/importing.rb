@@ -1,6 +1,6 @@
 module CSVParty
   module Importing
-    attr_accessor :columns, :row_importer, :importer,
+    attr_accessor :columns, :row_importer, :file_importer,
                   :dependencies
 
     attr_reader :row_number, :imported_rows, :skipped_rows, :aborted_rows,
@@ -12,8 +12,8 @@ module CSVParty
       find_regex_headers!
       raise_unless_csv_has_all_columns!
 
-      if importer
-        instance_exec(&importer)
+      if file_importer
+        instance_exec(&file_importer)
         raise_unless_rows_have_been_imported!
       else
         import_rows!
