@@ -15,9 +15,12 @@ module CSVParty
       else
         import_rows!
       end
+
+      return true
     rescue AbortedImportError => error
       @aborted = true
       @abort_message = error.message
+      return false
     end
 
     def import_rows!
@@ -60,7 +63,7 @@ module CSVParty
       raise AbortedRowError, message
     end
 
-    def abort_import(message)
+    def abort_import!(message)
       raise AbortedImportError, message
     end
 

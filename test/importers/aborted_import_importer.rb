@@ -1,11 +1,11 @@
 require 'csv_party'
 
 class AbortedImportImporter < CSVParty::Importer
-  column :first, header: 'First'
-  column :second, header: 'Second'
+  column :action
+  column :value
 
   rows do |row|
-    abort_import 'Import was aborted' if row.first == 'Abort'
+    abort_import! 'Import was aborted' if row.action == 'Abort'
   end
 
   import do

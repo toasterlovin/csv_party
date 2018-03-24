@@ -26,11 +26,11 @@
   - ~~Dependencies (MissingDependency error should happen on import, not instantiation)~~
   - ~~All validations should happen at import time, not instantiation time~~
   - ~~Add row number as attribute on row struct~~
-- Flow Control
+- ~~Flow Control~~
   - ~~Next row (implement new behavior)~~
   - ~~Skip row (implement new behavior)~~
   - ~~Abort row (implement new behavior)~~
-  - Abort import (rework API; return `false` on `importer.import!`)
+  - ~~Abort import (rework API; return `false` on `importer.import!`)~~
 - CSV Improvements
   - Accept applicable options that `CSV` accepts
   - Accept file path string
