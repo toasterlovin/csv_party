@@ -41,4 +41,10 @@ class SkippedRowTest < Minitest::Test
     assert_equal 'Value3', importer.result[:skipped].value
     assert_equal 'skipped row', importer.result[:skipped].skip_message
   end
+
+  def test_skip_message_is_reserved_column
+    assert_raises CSVParty::ReservedColumnNameError do
+      require 'importers/invalid/skip_message_reserved_column_name_importer'
+    end
+  end
 end

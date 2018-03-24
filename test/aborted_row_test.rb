@@ -41,4 +41,10 @@ class AbortedRowTest < Minitest::Test
     assert_equal 'Value3', importer.result[:aborted].value
     assert_equal 'aborted row', importer.result[:aborted].abort_message
   end
+
+  def test_abort_message_is_reserved_column
+    assert_raises CSVParty::ReservedColumnNameError do
+      require 'importers/invalid/abort_message_reserved_column_name_importer'
+    end
+  end
 end
