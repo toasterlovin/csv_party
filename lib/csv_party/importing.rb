@@ -3,8 +3,9 @@ module CSVParty
     attr_reader :skipped_rows, :aborted_rows, :error_rows, :abort_message
 
     def import!
-      raise_unless_all_dependencies_are_present!
+      raise_unless_row_processor_is_defined!
       raise_unless_all_named_parsers_exist!
+      raise_unless_all_dependencies_are_present!
       find_regex_headers!
       raise_unless_csv_has_all_columns!
 
@@ -20,13 +21,10 @@ module CSVParty
     end
 
     def import_rows!
-      raise_unless_row_processor_is_defined!
-
       loop do
         begin
           row = @_csv.shift
           break unless row
-          @_current_row_number += 1
           import_row!(row)
         rescue NextRowError
           next
@@ -69,6 +67,7 @@ module CSVParty
     private
 
     def import_row!(csv_row)
+      @_current_row_number += 1
       parse_row(csv_row)
       instance_exec(@_current_parsed_row, &@_row_importer)
     end
