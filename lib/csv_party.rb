@@ -8,8 +8,8 @@ require 'csv_party/importing'
 
 module CSVParty
   class Importer
+    extend CSVParty::DSL
     include CSVParty::Parsers
-    include CSVParty::DSL
     include CSVParty::Initialization
     include CSVParty::Importing
   end

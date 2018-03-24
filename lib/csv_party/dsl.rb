@@ -6,114 +6,108 @@ module CSVParty
                              :skip_message,
                              :abort_message].freeze
 
-    def self.included(base)
-      base.send :extend, ClassMethods
+    def column(column, options = {}, &block)
+      raise_if_duplicate_column(column)
+      raise_if_reserved_column_name(column)
+
+      options = {
+        header: column_regex(column),
+        as: :string,
+        format: nil,
+        intercept_blanks: (options[:as] == :raw ? false : true)
+      }.merge(options)
+
+      parser = if block_given?
+                 block
+               else
+                 "#{options[:as]}_parser".to_sym
+               end
+
+      columns[column] = {
+        header: options[:header],
+        parser: parser,
+        format: options[:format],
+        intercept_blanks: options[:intercept_blanks]
+      }
     end
 
-    module ClassMethods
-      def column(column, options = {}, &block)
-        raise_if_duplicate_column(column)
-        raise_if_reserved_column_name(column)
+    def rows(&block)
+      @row_importer = block
+    end
 
-        options = {
-          header: column_regex(column),
-          as: :string,
-          format: nil,
-          intercept_blanks: (options[:as] == :raw ? false : true)
-        }.merge(options)
+    def import(&block)
+      @importer = block
+    end
 
-        parser = if block_given?
-                   block
-                 else
-                   "#{options[:as]}_parser".to_sym
-                 end
+    def errors(setting = nil, &block)
+      @error_handler = setting || block
+    end
 
-        columns[column] = {
-          header: options[:header],
-          parser: parser,
-          format: options[:format],
-          intercept_blanks: options[:intercept_blanks]
-        }
+    def skipped_rows(setting = nil, &block)
+      @skipped_row_handler = setting || block
+    end
+
+    def aborted_rows(setting = nil, &block)
+      @aborted_row_handler = setting || block
+    end
+
+    def depends_on(*args)
+      args.each do |arg|
+        dependencies << arg
+        attr_accessor arg
       end
+    end
 
-      def rows(&block)
-        @row_importer = block
-      end
+    def dependencies
+      @dependencies ||= []
+    end
 
-      def import(&block)
-        @importer = block
-      end
+    def columns
+      @columns ||= {}
+    end
 
-      def errors(setting = nil, &block)
-        @error_handler = setting || block
-      end
+    def row_importer
+      @row_importer ||= nil
+    end
 
-      def skipped_rows(setting = nil, &block)
-        @skipped_row_handler = setting || block
-      end
+    def importer
+      @importer ||= nil
+    end
 
-      def aborted_rows(setting = nil, &block)
-        @aborted_row_handler = setting || block
-      end
+    def error_handler
+      @error_handler ||= nil
+    end
 
-      def depends_on(*args)
-        args.each do |arg|
-          dependencies << arg
-          attr_accessor arg
-        end
-      end
+    def skipped_row_handler
+      @skipped_row_handler ||= nil
+    end
 
-      def dependencies
-        @dependencies ||= []
-      end
+    def aborted_row_handler
+      @aborted_row_handler ||= nil
+    end
 
-      def columns
-        @columns ||= {}
-      end
+    private
 
-      def row_importer
-        @row_importer ||= nil
-      end
+    def column_regex(column)
+      column = Regexp.escape(column.to_s)
+      underscored_or_whitespaced = "#{column}|#{column.tr('_', ' ')}"
+      /\A\s*#{underscored_or_whitespaced}\s*\z/i
+    end
 
-      def importer
-        @importer ||= nil
-      end
+    def raise_if_duplicate_column(name)
+      return unless columns.has_key?(name)
 
-      def error_handler
-        @error_handler ||= nil
-      end
+      raise DuplicateColumnError, "A column named :#{name} has already been \
+              defined, choose a different name."
+    end
 
-      def skipped_row_handler
-        @skipped_row_handler ||= nil
-      end
+    def raise_if_reserved_column_name(column)
+      return unless RESERVED_COLUMN_NAMES.include? column
 
-      def aborted_row_handler
-        @aborted_row_handler ||= nil
-      end
-
-      private
-
-      def column_regex(column)
-        column = Regexp.escape(column.to_s)
-        underscored_or_whitespaced = "#{column}|#{column.tr('_', ' ')}"
-        /\A\s*#{underscored_or_whitespaced}\s*\z/i
-      end
-
-      def raise_if_duplicate_column(name)
-        return unless columns.has_key?(name)
-
-        raise DuplicateColumnError, "A column named :#{name} has already been \
-                defined, choose a different name."
-      end
-
-      def raise_if_reserved_column_name(column)
-        return unless RESERVED_COLUMN_NAMES.include? column
-
-        raise ReservedColumnNameError, <<-MSG
+      raise ReservedColumnNameError, <<-MSG
 The following column names are reserved for interal use, please use a different
 column name: #{RESERVED_COLUMN_NAMES.join(', ')}.
-        MSG
-      end
+      MSG
     end
   end
 end
