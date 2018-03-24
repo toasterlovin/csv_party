@@ -1,15 +1,6 @@
 require 'test_helper'
 
 class FlowControlTest < Minitest::Test
-  def test_skipped_rows
-    importer = SkippedRowsImporter.new('test/csv/skipped_rows.csv')
-    importer.import!
-
-    assert_equal 'Imported', importer.result
-    assert_equal 2, importer.imported_rows.first
-    assert_equal 3, importer.skipped_rows.first
-  end
-
   def test_aborted_rows
     importer = AbortedRowsImporter.new('test/csv/aborted_rows.csv')
     importer.result = {}

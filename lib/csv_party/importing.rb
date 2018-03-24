@@ -33,8 +33,8 @@ module CSVParty
           @row_number += 1
           import_row!(row)
           imported_rows << row_number
-        rescue SkippedRowError
-          skipped_rows << row_number
+        rescue SkippedRowError => error
+          handle_skipped_row(error)
         rescue AbortedImportError
           raise
         rescue CSV::MalformedCSVError
@@ -52,7 +52,7 @@ module CSVParty
       @aborted
     end
 
-    def skip_row!(message)
+    def skip_row!(message = nil)
       raise SkippedRowError, message
     end
 
@@ -67,21 +67,22 @@ module CSVParty
     private
 
     def import_row!(csv_row)
-      parsed_row = parse_row(csv_row)
-      instance_exec(parsed_row, &row_importer)
+      @parsed_row = create_parsed_row_struct
+      parse_row(csv_row, @parsed_row)
+      instance_exec(@parsed_row, &row_importer)
     end
 
-    def parse_row(csv_row)
-      parsed_row = extract_parsed_values(csv_row)
-      parsed_row[:unparsed] = extract_unparsed_values(csv_row)
-      parsed_row[:csv_string] = csv_row.to_csv
+    def parse_row(csv_row, parsed_row)
       parsed_row[:row_number] = row_number
+      parsed_row[:csv_string] = csv_row.to_csv
+      parsed_row[:unparsed] = extract_unparsed_values(csv_row)
+      extract_parsed_values(csv_row, parsed_row)
 
       return parsed_row
     end
 
     def extract_unparsed_values(csv_row)
-      unparsed_row = blank_unparsed_row_struct
+      unparsed_row = create_unparsed_row_struct
       columns.each do |column, options|
         header = options[:header]
         unparsed_row[column] = csv_row[header]
@@ -90,8 +91,7 @@ module CSVParty
       return unparsed_row
     end
 
-    def extract_parsed_values(csv_row)
-      parsed_row = blank_parsed_row_struct
+    def extract_parsed_values(csv_row, parsed_row)
       columns.each do |column, options|
         header = options[:header]
         value = csv_row[header]
@@ -130,11 +130,15 @@ module CSVParty
       instance_exec(value, &parser)
     end
 
-    def blank_parsed_row_struct
-      Struct.new(*columns.keys, :unparsed, :csv_string, :row_number).new
+    def create_parsed_row_struct
+      Struct.new(*columns.keys,
+                 :unparsed,
+                 :csv_string,
+                 :row_number,
+                 :skip_message).new
     end
 
-    def blank_unparsed_row_struct
+    def create_unparsed_row_struct
       Struct.new(*columns.keys).new
     end
 
@@ -149,6 +153,18 @@ module CSVParty
         error_rows << error_struct(error, line_number, csv_string)
       else
         instance_exec(error, line_number, csv_string, &error_processor)
+      end
+    end
+
+    def handle_skipped_row(error)
+      return if @skipped_row_handler == :ignore
+
+      @parsed_row[:skip_message] = error.message
+
+      if @skipped_row_handler.nil?
+        skipped_rows << @parsed_row
+      else
+        instance_exec(@parsed_row, &@skipped_row_handler)
       end
     end
 
