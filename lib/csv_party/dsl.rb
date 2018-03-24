@@ -23,7 +23,7 @@ module CSVParty
                  "#{options[:as]}_parser".to_sym
                end
 
-      columns[column] = {
+      @_columns[column] = {
         header: options[:header],
         parser: parser,
         format: options[:format],
@@ -32,23 +32,23 @@ module CSVParty
     end
 
     def rows(&block)
-      @row_importer = block
+      @_row_importer = block
     end
 
     def import(&block)
-      @file_importer = block
+      @_file_importer = block
     end
 
     def errors(setting = nil, &block)
-      @error_handler = setting || block
+      @_error_handler = setting || block
     end
 
     def skipped_rows(setting = nil, &block)
-      @skipped_row_handler = setting || block
+      @_skipped_row_handler = setting || block
     end
 
     def aborted_rows(setting = nil, &block)
-      @aborted_row_handler = setting || block
+      @_aborted_row_handler = setting || block
     end
 
     def depends_on(*args)
@@ -59,31 +59,31 @@ module CSVParty
     end
 
     def dependencies
-      @dependencies ||= []
+      @_dependencies ||= []
     end
 
     def columns
-      @columns ||= {}
+      @_columns ||= {}
     end
 
     def row_importer
-      @row_importer ||= nil
+      @_row_importer ||= nil
     end
 
     def file_importer
-      @file_importer ||= nil
+      @_file_importer ||= nil
     end
 
     def error_handler
-      @error_handler ||= nil
+      @_error_handler ||= nil
     end
 
     def skipped_row_handler
-      @skipped_row_handler ||= nil
+      @_skipped_row_handler ||= nil
     end
 
     def aborted_row_handler
-      @aborted_row_handler ||= nil
+      @_aborted_row_handler ||= nil
     end
 
     private

@@ -5,9 +5,9 @@ module CSVParty
       initialize_counters_and_statuses
       initialize_dependencies(options)
 
-      @headers = CSV.new(File.open(csv_path), options).shift
+      @_headers = CSV.new(File.open(csv_path), options).shift
       options[:headers] = true
-      @csv = CSV.new(File.open(csv_path), options)
+      @_csv = CSV.new(File.open(csv_path), options)
     end
 
     private
@@ -17,26 +17,26 @@ module CSVParty
     end
 
     def columns_with_named_parsers
-      columns.select { |_name, options| options[:parser].is_a? Symbol }
+      @_columns.select { |_name, options| options[:parser].is_a? Symbol }
     end
 
     def defined_headers
-      columns.map { |_name, options| options[:header] }
+      @_columns.map { |_name, options| options[:header] }
     end
 
     def initialize_import_settings
-      @columns = self.class.columns
-      @row_importer = self.class.row_importer
-      @file_importer = self.class.file_importer
-      @error_handler = self.class.error_handler
-      @skipped_row_handler = self.class.skipped_row_handler
-      @aborted_row_handler = self.class.aborted_row_handler
-      @dependencies = self.class.dependencies
+      @_columns = self.class.columns
+      @_row_importer = self.class.row_importer
+      @_file_importer = self.class.file_importer
+      @_error_handler = self.class.error_handler
+      @_skipped_row_handler = self.class.skipped_row_handler
+      @_aborted_row_handler = self.class.aborted_row_handler
+      @_dependencies = self.class.dependencies
     end
 
     def initialize_counters_and_statuses
-      @row_number = 1
-      @imported_rows = []
+      @_rows_have_been_imported = false
+      @_current_row_number = 1
       @skipped_rows = []
       @aborted_rows = []
       @error_rows = []
@@ -44,7 +44,7 @@ module CSVParty
     end
 
     def initialize_dependencies(options)
-      dependencies.each do |dependency|
+      @_dependencies.each do |dependency|
         if options.has_key? dependency
           send("#{dependency}=", options.delete(dependency))
         end

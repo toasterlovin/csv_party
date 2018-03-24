@@ -1,10 +1,6 @@
 module CSVParty
   module Importing
-    attr_accessor :columns, :row_importer, :file_importer,
-                  :dependencies
-
-    attr_reader :row_number, :imported_rows, :skipped_rows, :aborted_rows,
-                :error_rows, :abort_message, :rows_have_been_imported
+    attr_reader :skipped_rows, :aborted_rows, :error_rows, :abort_message
 
     def import!
       raise_unless_all_dependencies_are_present!
@@ -12,8 +8,8 @@ module CSVParty
       find_regex_headers!
       raise_unless_csv_has_all_columns!
 
-      if file_importer
-        instance_exec(&file_importer)
+      if @_file_importer
+        instance_exec(&@_file_importer)
         raise_unless_rows_have_been_imported!
       else
         import_rows!
@@ -28,9 +24,9 @@ module CSVParty
 
       loop do
         begin
-          row = @csv.shift
+          row = @_csv.shift
           break unless row
-          @row_number += 1
+          @_current_row_number += 1
           import_row!(row)
         rescue SkippedRowError => error
           handle_skipped_row(error)
@@ -41,11 +37,11 @@ module CSVParty
         rescue CSV::MalformedCSVError
           raise
         rescue StandardError => error
-          handle_error(error, row_number, row.to_csv)
+          handle_error(error, @_current_row_number, row.to_csv)
         end
       end
 
-      @rows_have_been_imported = true
+      @_rows_have_been_imported = true
     end
 
     def aborted?
@@ -68,25 +64,25 @@ module CSVParty
 
     def import_row!(csv_row)
       parse_row(csv_row)
-      instance_exec(@current_parsed_row, &row_importer)
+      instance_exec(@_current_parsed_row, &@_row_importer)
     end
 
     def parse_row(csv_row)
-      @current_parsed_row = create_parsed_row_struct
-      @current_parsed_row[:row_number] = row_number
-      @current_parsed_row[:csv_string] = csv_row.to_csv
-      @current_parsed_row[:unparsed] = extract_unparsed_values(csv_row)
+      @_current_parsed_row = create_parsed_row_struct
+      @_current_parsed_row[:row_number] = @_current_row_number
+      @_current_parsed_row[:csv_string] = csv_row.to_csv
+      @_current_parsed_row[:unparsed] = extract_unparsed_values(csv_row)
 
-      columns.each do |column, options|
+      @_columns.each do |column, options|
         header = options[:header]
         value = csv_row[header]
-        @current_parsed_row[column] = parse_value(value, options)
+        @_current_parsed_row[column] = parse_value(value, options)
       end
     end
 
     def extract_unparsed_values(csv_row)
       unparsed_row = create_unparsed_row_struct
-      columns.each do |column, options|
+      @_columns.each do |column, options|
         header = options[:header]
         unparsed_row[column] = csv_row[header]
       end
@@ -124,7 +120,7 @@ module CSVParty
     end
 
     def create_parsed_row_struct
-      Struct.new(*columns.keys,
+      Struct.new(*@_columns.keys,
                  :unparsed,
                  :csv_string,
                  :row_number,
@@ -133,7 +129,7 @@ module CSVParty
     end
 
     def create_unparsed_row_struct
-      Struct.new(*columns.keys).new
+      Struct.new(*@_columns.keys).new
     end
 
     def is_blank?(value)
@@ -141,36 +137,36 @@ module CSVParty
     end
 
     def handle_error(error, line_number, csv_string)
-      raise error unless @error_handler
+      raise error unless @_error_handler
 
-      if @error_handler == :ignore
+      if @_error_handler == :ignore
         error_rows << error_struct(error, line_number, csv_string)
       else
-        instance_exec(error, line_number, csv_string, &@error_handler)
+        instance_exec(error, line_number, csv_string, &@_error_handler)
       end
     end
 
     def handle_skipped_row(error)
-      return if @skipped_row_handler == :ignore
+      return if @_skipped_row_handler == :ignore
 
-      @current_parsed_row[:skip_message] = error.message
+      @_current_parsed_row[:skip_message] = error.message
 
-      if @skipped_row_handler.nil?
-        skipped_rows << @current_parsed_row
+      if @_skipped_row_handler.nil?
+        skipped_rows << @_current_parsed_row
       else
-        instance_exec(@current_parsed_row, &@skipped_row_handler)
+        instance_exec(@_current_parsed_row, &@_skipped_row_handler)
       end
     end
 
     def handle_aborted_row(error)
-      return if @aborted_row_handler == :ignore
+      return if @_aborted_row_handler == :ignore
 
-      @current_parsed_row[:abort_message] = error.message
+      @_current_parsed_row[:abort_message] = error.message
 
-      if @aborted_row_handler.nil?
-        aborted_rows << @current_parsed_row
+      if @_aborted_row_handler.nil?
+        aborted_rows << @_current_parsed_row
       else
-        instance_exec(@current_parsed_row, &@aborted_row_handler)
+        instance_exec(@_current_parsed_row, &@_aborted_row_handler)
       end
     end
 
@@ -180,7 +176,7 @@ module CSVParty
     end
 
     def raise_unless_row_processor_is_defined!
-      return if row_importer
+      return if @_row_importer
 
       raise CSVParty::UndefinedRowProcessorError, <<-MSG
 Your importer has to define a row processor which specifies what should be done
@@ -194,7 +190,7 @@ with each row. It should look something like this:
     end
 
     def raise_unless_rows_have_been_imported!
-      return if rows_have_been_imported
+      return if @_rows_have_been_imported
 
       raise CSVParty::UnimportedRowsError, <<-MSG
 The rows in your CSV file have not been imported. You should include a call to
@@ -210,7 +206,7 @@ imported. It should should look something like this:
     end
 
     def raise_unless_all_dependencies_are_present!
-      dependencies.each do |dependency|
+      @_dependencies.each do |dependency|
         next unless send(dependency).nil?
 
         raise MissingDependencyError, <<-MESSAGE
@@ -248,23 +244,25 @@ doesn't exist. Available parsers are: :#{parsers}."
     end
 
     def raise_unless_csv_has_all_columns!
-      missing_columns = defined_headers - @headers
+      missing_columns = defined_headers - @_headers
       return if missing_columns.empty?
 
       columns = missing_columns.join("', '")
       raise MissingColumnError, <<-MSG
 CSV file is missing column(s) with header(s) '#{columns}'. File has these
-headers: #{@headers.join(', ')}.
+headers: #{@_headers.join(', ')}.
       MSG
     end
 
     def columns_with_regex_headers
-      columns.select { |_name, options| options[:header].is_a? Regexp }
+      @_columns.select { |_name, options| options[:header].is_a? Regexp }
     end
 
     def find_regex_headers!
       columns_with_regex_headers.each do |name, options|
-        found_header = @headers.find { |header| options[:header].match(header) }
+        found_header = @_headers.find do |header|
+          options[:header].match(header)
+        end
         options[:header] = found_header || name.to_s
       end
     end
