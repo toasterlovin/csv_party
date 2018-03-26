@@ -249,3 +249,38 @@ This stops importing the entire file and returns false.
     else
       puts my_importer.abort_message
     end
+
+# Usage
+
+## Specifying a CSV file to import
+Since it just wraps the `CSV` class, there are three ways you can specify the
+CSV file that you wish to import:
+
+1. With a path to the file.
+
+    importer = MyImporter.new('path/to/csv')
+    # or
+    importer = MyImporter.new
+    importer.csv_path = 'path/to/csv'
+
+2. With an IO object:
+
+    importer = MyImporter.new(io_object)
+    # or
+    importer = MyImporter.new
+    importer.csv_file = file
+
+3. With a string:
+
+    importer = MyImporter.new(string)
+    # or
+    importer = MyImporter.new
+    importer.csv_string = string
+
+
+Additionally, you can specify any options that the `CSV` class understands, with
+the exception of `headers`, which will always be set to true. You can do that
+like so:
+
+    importer = MyImporter.new('path/to/csv', encoding: 'ISO-8859-1:UTF-8')
+    importer.csv_options = { row_sep: '\n', encoding: 'ISO-8859-1:UTF-8' }
