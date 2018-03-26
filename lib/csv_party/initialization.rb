@@ -12,18 +12,6 @@ module CSVParty
 
     private
 
-    def named_parsers
-      (private_methods + methods).grep(/_parser$/)
-    end
-
-    def columns_with_named_parsers
-      @_columns.select { |_name, options| options[:parser].is_a? Symbol }
-    end
-
-    def defined_headers
-      @_columns.map { |_name, options| options[:header] }
-    end
-
     def initialize_import_settings
       @_columns = self.class.columns
       @_row_importer = self.class.row_importer

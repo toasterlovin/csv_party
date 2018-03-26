@@ -251,6 +251,14 @@ doesn't exist. Available parsers are: :#{parsers}."
       end
     end
 
+    def columns_with_named_parsers
+      @_columns.select { |_name, options| options[:parser].is_a? Symbol }
+    end
+
+    def named_parsers
+      (private_methods + methods).grep(/_parser$/)
+    end
+
     def raise_unless_csv_has_all_columns!
       missing_columns = defined_headers - @_headers
       return if missing_columns.empty?
@@ -262,8 +270,8 @@ headers: #{@_headers.join(', ')}.
       MSG
     end
 
-    def columns_with_regex_headers
-      @_columns.select { |_name, options| options[:header].is_a? Regexp }
+    def defined_headers
+      @_columns.map { |_name, options| options[:header] }
     end
 
     def find_regex_headers!
@@ -273,6 +281,10 @@ headers: #{@_headers.join(', ')}.
         end
         options[:header] = found_header || name.to_s
       end
+    end
+
+    def columns_with_regex_headers
+      @_columns.select { |_name, options| options[:header].is_a? Regexp }
     end
   end
 end
