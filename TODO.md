@@ -85,6 +85,8 @@ Default behavior is to raise as normal.
 - Users should be able to accumulate a data structure somehow
 - Then a block should be executed every N rows and on the last row
 
+### Allow specifying columns by column number rather than header text
+
 ### Allow using multiple columns to generate one variable
 
     column :total, header: ['Price', 'Quantity'] do |price, quantity|
