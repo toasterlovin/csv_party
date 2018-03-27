@@ -1,13 +1,11 @@
 module CSVParty
   module Initialization
-    def initialize(csv_path, options = {})
+    def initialize(csv = nil, options = {})
       initialize_import_settings
       initialize_counters_and_statuses
       initialize_dependencies(options)
-
-      @_headers = CSV.new(File.open(csv_path), options).shift
-      options[:headers] = true
-      @_csv = CSV.new(File.open(csv_path), options)
+      self.csv = csv
+      self.csv_options = options
     end
 
     private

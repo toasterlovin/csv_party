@@ -5,6 +5,7 @@ require 'csv_party/parsers'
 require 'csv_party/dsl'
 require 'csv_party/initialization'
 require 'csv_party/importing'
+require 'csv_party/data'
 
 module CSVParty
   class Importer
@@ -12,5 +13,6 @@ module CSVParty
     include CSVParty::Parsers
     include CSVParty::Initialization
     include CSVParty::Importing
+    include CSVParty::Data
   end
 end

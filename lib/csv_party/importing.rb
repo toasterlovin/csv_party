@@ -6,7 +6,8 @@ module CSVParty
       raise_unless_row_processor_is_defined!
       raise_unless_all_named_parsers_exist!
       raise_unless_all_dependencies_are_present!
-      find_regex_headers!
+      initialize_csv_data!
+      initialize_regex_headers!
       raise_unless_csv_has_all_columns!
 
       if @_file_importer
@@ -274,7 +275,7 @@ headers: #{@_headers.join(', ')}.
       @_columns.map { |_name, options| options[:header] }
     end
 
-    def find_regex_headers!
+    def initialize_regex_headers!
       columns_with_regex_headers.each do |name, options|
         found_header = @_headers.find do |header|
           options[:header].match(header)

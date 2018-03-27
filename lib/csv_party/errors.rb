@@ -5,6 +5,9 @@ module CSVParty
   class DuplicateColumnError < ArgumentError
   end
 
+  class MissingCSVError < RuntimeError
+  end
+
   class ReservedColumnNameError < ArgumentError
   end
 
