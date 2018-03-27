@@ -29,21 +29,21 @@ module CSVParty
     def raise_unless_csv_data_is_present!
       return if @_csv_file
 
-      raise CSVParty::MissingCSVError, <<-MSG
+      raise CSVParty::MissingCSVError, <<-MESSAGE
 You must specify a filepath, IO object, or string to import:
 
-    # Filepath, IO object, or string
+    # File path, IO object, or string
     csv = 'path/to/csv'
     csv = File.open('path/to/csv')
     csv = 'Header1,Header2\\nvalue1,value2\\n'
 
 Then, you assign that to your importer one of two ways:
 
-    importer = MyImporter.new(csv)
+    importer = #{self.class.name}.new(csv)
     # or
-    importer = MyImporter.new
+    importer = #{self.class.name}.new
     importer.csv = csv
-      MSG
+      MESSAGE
     end
   end
 end

@@ -97,17 +97,18 @@ module CSVParty
     def raise_if_duplicate_column(name)
       return unless columns.has_key?(name)
 
-      raise DuplicateColumnError, "A column named :#{name} has already been \
-              defined, choose a different name."
+      raise DuplicateColumnError, <<-MESSAGE
+A column named :#{name} has already been defined, choose a different name."
+      MESSAGE
     end
 
     def raise_if_reserved_column_name(column)
       return unless RESERVED_COLUMN_NAMES.include? column
 
-      raise ReservedColumnNameError, <<-MSG
+      raise ReservedColumnNameError, <<-MESSAGE
 The following column names are reserved for interal use, please use a different
 column name: #{RESERVED_COLUMN_NAMES.join(', ')}.
-      MSG
+      MESSAGE
     end
   end
 end

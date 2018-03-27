@@ -187,7 +187,7 @@ module CSVParty
     def raise_unless_row_processor_is_defined!
       return if @_row_importer
 
-      raise CSVParty::UndefinedRowProcessorError, <<-MSG
+      raise CSVParty::UndefinedRowProcessorError, <<-MESSAGE
 Your importer has to define a row processor which specifies what should be done
 with each row. It should look something like this:
 
@@ -195,13 +195,13 @@ with each row. It should look something like this:
       row.column  # access parsed column values
       row.unparsed.column  # access unparsed column values
     end
-      MSG
+      MESSAGE
     end
 
     def raise_unless_rows_have_been_imported!
       return if @_rows_have_been_imported
 
-      raise CSVParty::UnimportedRowsError, <<-MSG
+      raise CSVParty::UnimportedRowsError, <<-MESSAGE
 The rows in your CSV file have not been imported. You should include a call to
 import_rows! at the point in your import block where you want them to be
 imported. It should should look something like this:
@@ -211,7 +211,7 @@ imported. It should should look something like this:
       import_rows!
       # do stuff after importing rows
     end
-      MSG
+      MESSAGE
     end
 
     def raise_unless_all_dependencies_are_present!
@@ -244,11 +244,10 @@ Or any time before you import:
         parser = parser.to_s.gsub('_parser', '')
         parsers = named_parsers
                   .map { |p| p.to_s.gsub('_parser', '') }
-                  .join(', :')
-        raise UnknownParserError, <<-MSG
+        raise UnknownParserError, <<-MESSAGE
 You're trying to use the :#{parser} parser for the :#{name} column, but it
-doesn't exist. Available parsers are: :#{parsers}."
-        MSG
+doesn't exist. Available parsers are: :#{parsers.join(', :')}."
+        MESSAGE
       end
     end
 
@@ -265,10 +264,10 @@ doesn't exist. Available parsers are: :#{parsers}."
       return if missing_columns.empty?
 
       columns = missing_columns.join("', '")
-      raise MissingColumnError, <<-MSG
+      raise MissingColumnError, <<-MESSAGE
 CSV file is missing column(s) with header(s) '#{columns}'. File has these
 headers: #{@_headers.join(', ')}.
-      MSG
+      MESSAGE
     end
 
     def defined_headers
