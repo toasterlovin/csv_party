@@ -29,7 +29,7 @@ module CSVParty
     def raise_unless_csv_data_is_present!
       return if @_csv_file
 
-      raise MissingCSVError.new
+      raise MissingCSVError.new(self)
     end
   end
 end

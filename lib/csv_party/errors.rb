@@ -15,7 +15,7 @@ doesn't exist. Available parsers are: :#{parsers.join(', :')}.
   end
 
   class MissingCSVError < Error
-    def initialize
+    def initialize(importer)
       super <<-MESSAGE
 You must specify a filepath, IO object, or string to import:
 
@@ -26,9 +26,9 @@ You must specify a filepath, IO object, or string to import:
 
 Then, you assign that to your importer one of two ways:
 
-    importer = #{self.class.name}.new(csv)
+    importer = #{importer.class.name}.new(csv)
     # or
-    importer = #{self.class.name}.new
+    importer = #{importer.class.name}.new
     importer.csv = csv
       MESSAGE
     end
@@ -76,16 +76,16 @@ with each row. It should look something like this:
   end
 
   class MissingDependencyError < Error
-    def initialize(instance, dependency)
+    def initialize(importer, dependency)
       super <<-MESSAGE
 This importer depends on #{dependency}, but you didn't assign it.
 You can do that when instantiating your importer:
 
-    #{instance.class.name}.new('path/to/csv', #{dependency}: #{dependency})
+    #{importer.class.name}.new('path/to/csv', #{dependency}: #{dependency})
 
 Or any time before you import:
 
-    importer = #{instance.class.name}.new('path/to/csv')
+    importer = #{importer.class.name}.new('path/to/csv')
     importer.#{dependency} = #{dependency}
     importer.import!
       MESSAGE
