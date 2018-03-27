@@ -187,49 +187,20 @@ module CSVParty
     def raise_unless_row_processor_is_defined!
       return if @_row_importer
 
-      raise CSVParty::UndefinedRowProcessorError, <<-MESSAGE
-Your importer has to define a row processor which specifies what should be done
-with each row. It should look something like this:
-
-    rows do |row|
-      row.column  # access parsed column values
-      row.unparsed.column  # access unparsed column values
-    end
-      MESSAGE
+      raise UndefinedRowProcessorError.new
     end
 
     def raise_unless_rows_have_been_imported!
       return if @_rows_have_been_imported
 
-      raise CSVParty::UnimportedRowsError, <<-MESSAGE
-The rows in your CSV file have not been imported. You should include a call to
-import_rows! at the point in your import block where you want them to be
-imported. It should should look something like this:
-
-    import do
-      # do stuff before importing rows
-      import_rows!
-      # do stuff after importing rows
-    end
-      MESSAGE
+      raise UnimportedRowsError.new
     end
 
     def raise_unless_all_dependencies_are_present!
       @_dependencies.each do |dependency|
         next unless send(dependency).nil?
 
-        raise MissingDependencyError, <<-MESSAGE
-This importer depends on #{dependency}, but you didn't include it.
-You can do that when instantiating your importer:
-
-    #{self.class.name}.new('path/to/csv', #{dependency}: #{dependency})
-
-Or any time before you import:
-
-    importer = #{self.class.name}.new('path/to/csv')
-    importer.#{dependency} = #{dependency}
-    importer.import!
-        MESSAGE
+        raise MissingDependencyError.new(self, dependency)
       end
     end
 
@@ -241,13 +212,7 @@ Or any time before you import:
         parser = options[:parser]
         next if named_parsers.include? parser
 
-        parser = parser.to_s.gsub('_parser', '')
-        parsers = named_parsers
-                  .map { |p| p.to_s.gsub('_parser', '') }
-        raise UnknownParserError, <<-MESSAGE
-You're trying to use the :#{parser} parser for the :#{name} column, but it
-doesn't exist. Available parsers are: :#{parsers.join(', :')}."
-        MESSAGE
+        raise UnknownParserError.new(name, parser, named_parsers)
       end
     end
 
@@ -263,11 +228,7 @@ doesn't exist. Available parsers are: :#{parsers.join(', :')}."
       missing_columns = defined_headers - @_headers
       return if missing_columns.empty?
 
-      columns = missing_columns.join("', '")
-      raise MissingColumnError, <<-MESSAGE
-CSV file is missing column(s) with header(s) '#{columns}'. File has these
-headers: #{@_headers.join(', ')}.
-      MESSAGE
+      raise MissingColumnError.new(@_headers, missing_columns)
     end
 
     def defined_headers
