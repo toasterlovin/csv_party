@@ -32,10 +32,11 @@
   - ~~Abort row (implement new behavior)~~
   - ~~Abort import (rework API; return `false` on `importer.import!`)~~
 - CSV Improvements
-  - Accept applicable options that `CSV` accepts
   - ~~Accept file path string~~
   - ~~Accept `IO` object~~
   - ~~Accept CSV string~~
+  - Accept applicable options that `CSV` accepts
+  - Test that different encodings work
 - Improve test organization
   - Move associated importer classes and CSV files into same file as test.
 - Documentation
