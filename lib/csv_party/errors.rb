@@ -1,37 +1,40 @@
 module CSVParty
-  class UnknownParserError < ArgumentError
+  class Error < StandardError
   end
 
-  class DuplicateColumnError < ArgumentError
+  class UnknownParserError < Error
   end
 
-  class MissingCSVError < RuntimeError
+  class DuplicateColumnError < Error
   end
 
-  class ReservedColumnNameError < ArgumentError
+  class MissingCSVError < Error
   end
 
-  class MissingColumnError < RuntimeError
+  class ReservedColumnNameError < Error
   end
 
-  class UndefinedRowProcessorError < RuntimeError
+  class MissingColumnError < Error
   end
 
-  class MissingDependencyError < ArgumentError
+  class UndefinedRowProcessorError < Error
   end
 
-  class UnimportedRowsError < RuntimeError
+  class MissingDependencyError < Error
   end
 
-  class NextRowError < RuntimeError
+  class UnimportedRowsError < Error
   end
 
-  class SkippedRowError < RuntimeError
+  class NextRowError < Error
   end
 
-  class AbortedRowError < RuntimeError
+  class SkippedRowError < Error
   end
 
-  class AbortedImportError < RuntimeError
+  class AbortedRowError < Error
+  end
+
+  class AbortedImportError < Error
   end
 end
