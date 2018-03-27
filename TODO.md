@@ -35,6 +35,7 @@
   - ~~Accept file path string~~
   - ~~Accept `IO` object~~
   - ~~Accept CSV string~~
+  - Provide access to `defined_headers` and `headers` so missing columns can be reported to users
   - Accept applicable options that `CSV` accepts
   - Test that different encodings work
 - Improve test organization
