@@ -33,3 +33,6 @@ Style/EmptyElse:
 
 Style/SymbolArray:
   Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
