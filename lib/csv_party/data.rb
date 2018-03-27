@@ -29,7 +29,7 @@ module CSVParty
     def raise_unless_csv_data_is_present!
       return if @_csv_file
 
-      raise CSVParty::MissingCSVError, <<-MESSAGE
+      raise MissingCSVError, <<-MESSAGE
 You must specify a filepath, IO object, or string to import:
 
     # File path, IO object, or string
