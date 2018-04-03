@@ -39,6 +39,7 @@
   - Provide access to `defined_headers` and `headers` so missing columns can be reported to users
   - Accept applicable options that `CSV` accepts
   - Test that different encodings work
+- Investigate using catch/throw where appropriate
 - Improve test organization
   - Move associated importer classes and CSV files into same file as test.
 - Documentation
