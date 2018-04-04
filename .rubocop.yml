@@ -1,3 +1,9 @@
+Layout/IndentHeredoc:
+  Enabled: false
+
+Lint/BooleanSymbol:
+  Enabled: false
+
 Metrics/ClassLength:
   Enabled: false
 
@@ -10,7 +16,7 @@ Metrics/AbcSize:
 Metrics/ModuleLength:
   Enabled: false
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 Style/PreferredHashMethods:
@@ -23,9 +29,6 @@ Style/TrivialAccessors:
   IgnoreClassMethods: true
 
 Style/Documentation:
-  Enabled: false
-
-Style/IndentHeredoc:
   Enabled: false
 
 Style/EmptyElse:
