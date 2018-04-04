@@ -39,6 +39,7 @@
   - Provide access to `defined_headers` and `headers` so missing columns can be reported to users
   - Accept applicable options that `CSV` accepts
   - Test that different encodings work
+- Implement batching
 - Investigate using catch/throw where appropriate
 - Improve test organization
   - Move associated importer classes and CSV files into same file as test.
@@ -84,10 +85,6 @@ Default behavior is to raise as normal.
     end
 
     my_import.aborted_rows # returns array of parse error rows
-
-### Add batch import feature
-- Users should be able to accumulate a data structure somehow
-- Then a block should be executed every N rows and on the last row
 
 ### Allow specifying columns by column number rather than header text
 
