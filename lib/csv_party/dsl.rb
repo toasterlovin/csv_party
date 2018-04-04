@@ -14,7 +14,7 @@ module CSVParty
         header: column_regex(column),
         as: :string,
         format: nil,
-        intercept_blanks: (options[:as] == :raw ? false : true)
+        intercept_blanks: (options[:as] != :raw)
       }.merge(options)
 
       parser = if block_given?
