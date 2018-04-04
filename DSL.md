@@ -151,6 +151,44 @@ actually importing the rows in the file. It is optional.
       # do some stuff after importing rows
     end
 
+## Batching
+This is for batching imports: accumulating data and then acting on it at set
+row intervals. Batching is optional.
+
+    rows do |row|
+      customers[row.customer_id] = { name: row.customer_name, phone: row.phone }
+      orders << { customer_id: row.customer_id, invoice_number: row.invoice_number }
+    end
+
+    batch 50, customers: {}, orders: [] do
+      # insert customers into database
+      # insert orders into database
+
+      # accumulators are automatically reset to their initial values after the
+      # batch block is done executing
+    end
+
+    # accumulators are optional, they are functionally identical to doing
+
+    class MyImporter < CSVParty::Importer
+      attr_accessor :customers, :orders
+
+      def customers
+        @customers ||= {}
+      end
+
+      def orders
+        @orders ||= []
+      end
+
+      batch 50 do
+        # insert customers into database
+        # insert orders into database
+        customers = {}
+        orders = []
+      end
+    end
+
 ## Errors
 This is for gracefully handling errors that may arise in `column`, `rows`,
 `import`, and `errors` blocks. It is optional. If no error handler is defined,
