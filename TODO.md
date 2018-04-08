@@ -41,7 +41,7 @@
   - Test that different encodings work
 - Implement batching
 - ~~Verify usage of Struct~~
-- Investigate using catch/throw where appropriate
+- ~~Investigate using catch/throw where appropriate~~
 - Improve test organization
   - Move associated importer classes and CSV files into same file as test.
 - Documentation
