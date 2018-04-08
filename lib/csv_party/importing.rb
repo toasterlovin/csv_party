@@ -9,6 +9,7 @@ module CSVParty
       initialize_csv_data!
       initialize_regex_headers!
       raise_unless_csv_has_all_columns!
+      initialize_row_structs!
 
       if @_file_importer
         instance_exec(&@_file_importer)
@@ -77,7 +78,7 @@ module CSVParty
     end
 
     def parse_row(csv_row)
-      @_current_parsed_row = create_parsed_row_struct
+      @_current_parsed_row = @_parsed_row_struct.new
       @_current_parsed_row[:row_number] = @_current_row_number
       @_current_parsed_row[:csv_string] = csv_row.to_csv
       @_current_parsed_row[:unparsed] = extract_unparsed_values(csv_row)
@@ -90,7 +91,7 @@ module CSVParty
     end
 
     def extract_unparsed_values(csv_row)
-      unparsed_row = create_unparsed_row_struct
+      unparsed_row = @_unparsed_row_struct.new
       @_columns.each do |column, options|
         header = options[:header]
         unparsed_row[column] = csv_row[header]
@@ -126,19 +127,6 @@ module CSVParty
       parser = options[:parser]
 
       instance_exec(value, &parser)
-    end
-
-    def create_parsed_row_struct
-      Struct.new(*@_columns.keys,
-                 :unparsed,
-                 :csv_string,
-                 :row_number,
-                 :skip_message,
-                 :abort_message).new
-    end
-
-    def create_unparsed_row_struct
-      Struct.new(*@_columns.keys).new
     end
 
     def is_blank?(value)
@@ -246,6 +234,17 @@ module CSVParty
 
     def columns_with_regex_headers
       @_columns.select { |_name, options| options[:header].is_a? Regexp }
+    end
+
+    def initialize_row_structs!
+      @_parsed_row_struct = Struct.new(*@_columns.keys,
+                                       :unparsed,
+                                       :csv_string,
+                                       :row_number,
+                                       :skip_message,
+                                       :abort_message)
+
+      @_unparsed_row_struct = Struct.new(*@_columns.keys)
     end
   end
 end
