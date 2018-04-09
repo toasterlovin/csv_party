@@ -1,8 +1,26 @@
 require 'test_helper'
 
 class AbortedRowTest < Minitest::Test
+  def setup
+    @csv = <<-CSV
+Action,Value
+Imported,Value1
+Aborted,Value2
+Aborted,Value3
+    CSV
+  end
+
   def test_default_aborted_row_behavior
-    importer = AbortedRowDefaultImporter.new('test/csv/aborted_row.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        abort_row! 'aborted row' if row.first == 'Aborted'
+        self.result = row
+      end
+    end.new(@csv)
+
     importer.import!
 
     assert_equal 'Imported', importer.result.action
@@ -17,7 +35,18 @@ class AbortedRowTest < Minitest::Test
   end
 
   def test_ignoring_aborted_rows
-    importer = IgnoreAbortedRowsImporter.new('test/csv/aborted_row.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        abort_row! if row.first == 'Aborted'
+        self.result = row
+      end
+
+      aborted_rows :ignore
+    end.new(@csv)
+
     importer.import!
 
     assert_equal 'Imported', importer.result.action
@@ -27,9 +56,20 @@ class AbortedRowTest < Minitest::Test
   end
 
   def test_custom_aborted_row_handler
-    importer = CustomAbortedRowHandlerImporter.new(
-      'test/csv/aborted_row.csv'
-    )
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        abort_row! 'aborted row' if row.first == 'Aborted'
+        result[:not_aborted] = row
+      end
+
+      aborted_rows do |row|
+        result[:aborted] = row
+      end
+    end.new(@csv)
+
     importer.result = {}
     importer.import!
 
@@ -44,7 +84,9 @@ class AbortedRowTest < Minitest::Test
 
   def test_abort_message_is_reserved_column
     assert_raises CSVParty::ReservedColumnNameError do
-      require 'importers/invalid/abort_message_reserved_column_name_importer'
+      Class.new(CSVParty::Importer) do
+        column :abort_message
+      end
     end
   end
 end

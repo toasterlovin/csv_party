@@ -1,8 +1,22 @@
 require 'test_helper'
 
 class ErrorsTest < Minitest::Test
+  def setup
+    @csv = <<-CSV
+Value
+raise
+import
+    CSV
+  end
+
   def test_raises_errors_by_default
-    importer = NoErrorHandlerImporter.new('test/csv/errors.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :value
+
+      rows do
+        raise TestCaseError
+      end
+    end.new(@csv)
 
     assert_raises TestCaseError do
       importer.import!
@@ -10,7 +24,17 @@ class ErrorsTest < Minitest::Test
   end
 
   def test_ignoring_errors
-    importer = IgnoreErrorsImporter.new('test/csv/errors.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :value
+
+      rows do |row|
+        raise TestCaseError if row.value == 'raise'
+        self.result = row
+      end
+
+      errors :ignore
+    end.new(@csv)
+
     importer.import!
 
     assert_equal 'import', importer.result.value
@@ -24,7 +48,22 @@ class ErrorsTest < Minitest::Test
   end
 
   def test_custom_error_handling
-    importer = CustomErrorHandlerImporter.new('test/csv/errors.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :value
+
+      rows do |row|
+        raise TestCaseError if row.value == 'raise'
+
+        result[:success] = row
+      end
+
+      errors do |error, line_number, csv_string|
+        result[:error] = error
+        result[:line_number] = line_number
+        result[:csv_string] = csv_string
+      end
+    end.new(@csv)
+
     importer.result = {}
     importer.import!
 
@@ -38,7 +77,20 @@ class ErrorsTest < Minitest::Test
   end
 
   def test_does_not_capture_malformed_csv_errors
-    importer = MalformedCSVErrorImporter.new('test/csv/malformed_csv_error.csv')
+    malformed_csv = <<-CSV
+First,Second
+"Improperly escaped \"quotes\"",3
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :first
+      column :second, as: :integer
+
+      rows do |row|
+      end
+
+      errors :ignore
+    end.new(malformed_csv)
 
     assert_raises CSV::MalformedCSVError do
       importer.import!

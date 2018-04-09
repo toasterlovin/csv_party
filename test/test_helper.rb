@@ -1,6 +1,6 @@
+require 'csv_party'
 require 'minitest/autorun'
 require 'securerandom'
-Dir[File.dirname(__FILE__) + '/importers/*.rb'].each { |file| require file }
 
 module CSVParty
   class Importer

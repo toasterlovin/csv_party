@@ -1,8 +1,35 @@
 require 'test_helper'
 
 class ColumnTest < Minitest::Test
+  class ColumnTestImporter < CSVParty::Importer
+    column :exact
+    column :multi_word_exact
+    column :whitespace
+    column :lower
+    column :multi_word_lower
+    column :title
+    column :multi_word_title
+    column :caps
+    column :multi_word_caps
+    column :mixed
+    column :multi_word_mixed
+    column :string_header, header: 'String'
+    column :regex_header, header: /regex[\d]/
+
+    rows do |row|
+      self.result = row
+    end
+  end
+
+  def setup
+    @csv = <<-CSV
+exact,multi_word_exact, whitespace ,lower,multi word lower,Title,Multi Word Title,CAPS,MULTI WORD CAPS,mIxEd,MuLtI wOrD mIxEd,String,regex7
+exact,multi_word_exact,whitespace,lower,multi word lower,Title,Multi Word Title,CAPS,MULTI WORD CAPS,mIxEd,MuLtI wOrD mIxEd,String,regex7
+    CSV
+  end
+
   def test_automatic_header_matching
-    importer = ColumnTestImporter.new('test/csv/column_test.csv')
+    importer = ColumnTestImporter.new(@csv)
     importer.import!
     assert_equal 'exact', importer.result.exact
     assert_equal 'multi_word_exact', importer.result.multi_word_exact
@@ -18,25 +45,39 @@ class ColumnTest < Minitest::Test
   end
 
   def test_specifying_column_header_with_string
-    importer = ColumnTestImporter.new('test/csv/column_test.csv')
+    importer = ColumnTestImporter.new(@csv)
     importer.import!
     assert_equal 'String', importer.result.string_header
   end
 
   def test_specifying_column_header_with_regex
-    importer = ColumnTestImporter.new('test/csv/column_test.csv')
+    importer = ColumnTestImporter.new(@csv)
     importer.import!
     assert_equal 'regex7', importer.result.regex_header
   end
 
   def test_duplicate_columns
     assert_raises CSVParty::DuplicateColumnError do
-      require 'importers/invalid/duplicate_column_importer'
+      Class.new(CSVParty::Importer) do
+        column :product
+        column :product
+      end
     end
   end
 
   def test_missing_column_in_csv
-    importer = MissingColumnImporter.new('test/csv/missing_column.csv')
+    csv = <<-CSV
+Present,Other
+value,value
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :present
+      column :missing
+
+      rows do
+      end
+    end.new(csv)
 
     assert_raises CSVParty::MissingColumnError do
       importer.import!
@@ -45,15 +86,21 @@ class ColumnTest < Minitest::Test
 
   def test_reserved_column_names
     assert_raises CSVParty::ReservedColumnNameError do
-      require 'importers/invalid/unparsed_reserved_column_name_importer'
+      Class.new(CSVParty::Importer) do
+        column :unparsed
+      end
     end
 
     assert_raises CSVParty::ReservedColumnNameError do
-      require 'importers/invalid/csv_string_reserved_column_name_importer'
+      Class.new(CSVParty::Importer) do
+        column :csv_string
+      end
     end
 
     assert_raises CSVParty::ReservedColumnNameError do
-      require 'importers/invalid/row_number_reserved_column_name_importer'
+      Class.new(CSVParty::Importer) do
+        column :row_number
+      end
     end
   end
 end

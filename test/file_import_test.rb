@@ -1,8 +1,29 @@
 require 'test_helper'
 
 class FileImportTest < Minitest::Test
+  def setup
+    @csv = <<-CSV
+Value
+Value 1
+Value 2
+    CSV
+  end
+
   def test_import_block
-    importer = ImportBlockImporter.new('test/csv/import_block.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :value
+
+      rows do |row|
+        result[:rows] << row
+      end
+
+      import do
+        result[:before] = 'Before'
+        import_rows!
+        result[:after] = 'After'
+      end
+    end.new(@csv)
+
     importer.result = {}
     importer.result[:rows] = []
     importer.import!
@@ -14,7 +35,16 @@ class FileImportTest < Minitest::Test
   end
 
   def test_raises_error_when_rows_are_not_imported
-    importer = UnimportedRowsImporter.new('test/csv/unimported_rows.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :value
+
+      rows do |row|
+        self.result = row
+      end
+
+      import do
+      end
+    end.new(@csv)
 
     assert_raises CSVParty::UnimportedRowsError do
       importer.import!

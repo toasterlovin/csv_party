@@ -1,24 +1,32 @@
 require 'test_helper'
 
 class CsvDataTest < Minitest::Test
+  class CsvImporter < CSVParty::Importer
+    column :value
+
+    rows do |row|
+      self.result = row
+    end
+  end
+
   def test_csv_path
-    importer = CsvImporter.new('test/csv/csv_data.csv')
+    importer = CsvImporter.new('test/fixtures/csv_data.csv')
     importer.import!
     assert_equal 'value', importer.result.value
 
     importer = CsvImporter.new
-    importer.csv = 'test/csv/csv_data.csv'
+    importer.csv = 'test/fixtures/csv_data.csv'
     importer.import!
     assert_equal 'value', importer.result.value
   end
 
   def test_csv_file
-    csv_file = File.open('test/csv/csv_data.csv')
+    csv_file = File.open('test/fixtures/csv_data.csv')
     importer = CsvImporter.new(csv_file)
     importer.import!
     assert_equal 'value', importer.result.value
 
-    csv_file = File.open('test/csv/csv_data.csv')
+    csv_file = File.open('test/fixtures/csv_data.csv')
     importer = CsvImporter.new
     importer.csv = csv_file
     importer.import!

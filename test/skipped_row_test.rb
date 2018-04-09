@@ -1,8 +1,26 @@
 require 'test_helper'
 
 class SkippedRowTest < Minitest::Test
+  def setup
+    @csv = <<-CSV
+Action,Value
+Imported,Value1
+Skipped,Value2
+Skipped,Value3
+    CSV
+  end
+
   def test_default_skipped_row_behavior
-    importer = SkippedRowDefaultImporter.new('test/csv/skipped_row.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        skip_row! 'skipped row' if row.first == 'Skipped'
+        self.result = row
+      end
+    end.new(@csv)
+
     importer.import!
 
     assert_equal 'Imported', importer.result.action
@@ -17,7 +35,18 @@ class SkippedRowTest < Minitest::Test
   end
 
   def test_ignoring_skipped_rows
-    importer = IgnoreSkippedRowsImporter.new('test/csv/skipped_row.csv')
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        skip_row! if row.first == 'Skipped'
+        self.result = row
+      end
+
+      skipped_rows :ignore
+    end.new(@csv)
+
     importer.import!
 
     assert_equal 'Imported', importer.result.action
@@ -27,9 +56,20 @@ class SkippedRowTest < Minitest::Test
   end
 
   def test_custom_skipped_row_handler
-    importer = CustomSkippedRowHandlerImporter.new(
-      'test/csv/skipped_row.csv'
-    )
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        skip_row! 'skipped row' if row.first == 'Skipped'
+        result[:not_skipped] = row
+      end
+
+      skipped_rows do |row|
+        result[:skipped] = row
+      end
+    end.new(@csv)
+
     importer.result = {}
     importer.import!
 
@@ -44,7 +84,9 @@ class SkippedRowTest < Minitest::Test
 
   def test_skip_message_is_reserved_column
     assert_raises CSVParty::ReservedColumnNameError do
-      require 'importers/invalid/skip_message_reserved_column_name_importer'
+      Class.new(CSVParty::Importer) do
+        column :skip_message
+      end
     end
   end
 end

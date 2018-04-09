@@ -2,7 +2,19 @@ require 'test_helper'
 
 class RowImportTest < Minitest::Test
   def test_provides_access_to_raw_row_values_in_import_block
-    importer = UnparsedRowValuesImporter.new('test/csv/unparsed_row_values.csv')
+    csv = <<-CSV
+String,Integer
+ Has whitespace ,1
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :whitespace, header: 'String', as: :string
+
+      rows do |row|
+        self.result = row
+      end
+    end.new(csv)
+
     importer.import!
 
     assert_equal 'Has whitespace', importer.result.whitespace
@@ -10,24 +22,55 @@ class RowImportTest < Minitest::Test
   end
 
   def test_provides_access_to_csv_row_as_string
-    csv_file_path = 'test/csv/csv_row_as_string.csv'
-    importer = CsvRowAsStringImporter.new(csv_file_path)
+    csv = <<-CSV
+Column 1,Column 2
+Some text,2
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :column_1, header: 'Column 1', as: :string
+      column :column_2, header: 'Column 2', as: :integer
+
+      rows do |row|
+        self.result = row
+      end
+    end.new(csv)
+
     importer.import!
 
     assert_equal 'Some text', importer.result.column_1
-    assert_equal IO.readlines(csv_file_path)[1], importer.result.csv_string
+    assert_equal csv.lines.last, importer.result.csv_string
   end
 
   def test_provides_access_to_csv_row_number
-    importer = RowNumberImporter.new('test/csv/row_number.csv')
+    csv = <<-CSV
+Product
+tshirt
+belt
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :product
+
+      rows do |row|
+        self.result = row
+      end
+    end.new(csv)
+
     importer.import!
 
     assert_equal 3, importer.result.row_number
   end
 
   def test_raises_error_if_row_processor_is_undefined
-    importer = UndefinedRowProcessorImporter
-               .new('test/csv/undefined_row_processor.csv')
+    csv = <<-CSV
+Product
+tshirt
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :product
+    end.new(csv)
 
     assert_raises CSVParty::UndefinedRowProcessorError do
       importer.import!
@@ -35,7 +78,20 @@ class RowImportTest < Minitest::Test
   end
 
   def test_raises_error_when_accessing_undefined_column
-    importer = UndefinedColumnImporter.new('test/csv/undefined_column.csv')
+    csv = <<-CSV
+Product,Price
+tshirt,10.99
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :product
+      column :price, as: :decimal
+
+      rows do |row|
+        self.result = row
+        row.undefined
+      end
+    end.new(csv)
 
     assert_raises NoMethodError do
       importer.import!

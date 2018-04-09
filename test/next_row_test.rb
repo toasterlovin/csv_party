@@ -2,7 +2,25 @@ require 'test_helper'
 
 class NextRowTest < Minitest::Test
   def test_next_row_works
-    importer = NextRowImporter.new('test/csv/next_row.csv')
+    csv = <<-CSV
+Action,Value
+Next,Value1
+Import,Value2
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        if row.action == 'Next'
+          next_row!
+        else
+          result << row
+        end
+      end
+    end.new(csv)
+
     importer.result = []
     importer.import!
 

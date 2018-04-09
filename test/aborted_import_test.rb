@@ -1,14 +1,29 @@
 require 'test_helper'
 
 class AbortedImportTest < Minitest::Test
-  def test_happy_path_returns_true
-    importer = HappyPathImporter.new('test/csv/happy_path.csv')
-    importer.result = []
-    assert importer.import!
-  end
-
   def test_aborted_import
-    importer = AbortedImportImporter.new('test/csv/aborted_import.csv')
+    csv = <<-CSV
+Action,Value
+Import,Value2
+Abort,Value2
+Import,Value2
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :action
+      column :value
+
+      rows do |row|
+        abort_import! 'Import was aborted' if row.action == 'Abort'
+      end
+
+      import do
+        result[:before] = 'Before importing rows'
+        import_rows!
+        result[:after] = 'After importing rows'
+      end
+    end.new(csv)
+
     importer.result = {}
 
     refute importer.import!
