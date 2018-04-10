@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/toasterlovin/csv_party.svg?branch=master)](https://travis-ci.org/toasterlovin/csv_party)
-[![Code Climate](https://api.codeclimate.com/v1/badges/946d0dec172fda05d631/maintainability)](https://codeclimate.com/github/toasterlovin/csv_party/maintainability)
+[![Code Climate Maintainability](https://api.codeclimate.com/v1/badges/946d0dec172fda05d631/maintainability)](https://codeclimate.com/github/toasterlovin/csv_party/maintainability)
+[![Code Climate Test Coverage](https://api.codeclimate.com/v1/badges/946d0dec172fda05d631/test_coverage)](https://codeclimate.com/github/toasterlovin/csv_party/test_coverage)
 
 # Make importing CSV files a party
 
