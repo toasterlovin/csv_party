@@ -49,6 +49,26 @@ value
     assert_equal 'value', importer.result.value
   end
 
+  def test_accepts_options_for_csv_object
+    csv = <<-CSV
+Column1;Column2
+Value 1;Value 2
+    CSV
+
+    importer = Class.new(CSVParty::Importer) do
+      column :column1
+      column :column2
+
+      rows do |row|
+        self.result = row.column2
+      end
+    end.new(csv, col_sep: ';')
+
+    importer.import!
+
+    assert_equal 'Value 2', importer.result
+  end
+
   def test_raises_error_on_missing_csv
     importer = CsvImporter.new
 
