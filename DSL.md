@@ -181,6 +181,11 @@ row intervals. Batching is optional.
         @orders ||= []
       end
 
+      rows do |row|
+        customers << row.customer
+        orders << row.order
+      end
+
       batch 50 do
         # insert customers into database
         # insert orders into database
