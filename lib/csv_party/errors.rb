@@ -17,7 +17,7 @@ doesn't exist. Available parsers are: :#{parsers.join(', :')}.
   class MissingCSVError < Error
     def initialize(importer)
       super <<-MESSAGE
-You must specify a filepath, IO object, or string to import:
+You must specify a file path, IO object, or string to import:
 
     # File path, IO object, or string
     csv = 'path/to/csv'
