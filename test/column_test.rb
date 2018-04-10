@@ -74,6 +74,7 @@ value,value
     importer = Class.new(CSVParty::Importer) do
       column :present
       column :missing
+      column :missing_with_header, header: 'Defined1234'
 
       rows do
       end
@@ -82,6 +83,9 @@ value,value
     assert_raises CSVParty::MissingColumnError do
       importer.import!
     end
+
+    assert_equal %w[Present Other], importer.present_columns
+    assert_equal %w[missing Defined1234], importer.missing_columns
   end
 
   def test_reserved_column_names

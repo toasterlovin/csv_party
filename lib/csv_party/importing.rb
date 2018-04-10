@@ -69,6 +69,14 @@ module CSVParty
       raise AbortedImportError, message
     end
 
+    def present_columns
+      @_headers
+    end
+
+    def missing_columns
+      required_columns - present_columns
+    end
+
     private
 
     def import_row!(csv_row)
@@ -213,13 +221,12 @@ module CSVParty
     end
 
     def raise_unless_csv_has_all_columns!
-      missing_columns = defined_headers - @_headers
       return if missing_columns.empty?
 
-      raise MissingColumnError.new(@_headers, missing_columns)
+      raise MissingColumnError.new(present_columns, missing_columns)
     end
 
-    def defined_headers
+    def required_columns
       @_columns.map { |_name, options| options[:header] }
     end
 
