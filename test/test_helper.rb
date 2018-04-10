@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'csv_party'
 require 'minitest/autorun'
 require 'securerandom'
