@@ -42,11 +42,12 @@
   - ~~Raise error on unexpected CSV options~~
   - ~~Raise error on unexpected options~~
   - Test that different encodings work
-- Implement batching
 - ~~Verify usage of Struct~~
 - ~~Investigate using catch/throw where appropriate~~
 - ~~Improve test organization~~
   - ~~Move associated importer classes and CSV files into same file as test.~~
+- Implement batching
+- Get to 100% test coverage
 - Documentation
   - Re-enable class documentation cop
   - Document classes
