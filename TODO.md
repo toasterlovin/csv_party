@@ -52,6 +52,7 @@
   - Flesh out advanced usage in Wiki
     - Testing
     - User specified column names
+    - Reporting missing columns to user
     - Automatically determining file encoding
     - Low memory usage
     - Downloads of skipped/aborted/errored rows
