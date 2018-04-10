@@ -4,7 +4,7 @@ module CSVParty
       @_csv_file = if csv.is_a?(IO)
                      csv
                    elsif csv.is_a?(String) && csv.lines.count == 1
-                     File.open(csv)
+                     open_csv_from_path(csv)
                    elsif csv.is_a?(String)
                      csv
                    end
@@ -30,6 +30,12 @@ module CSVParty
       return if @_csv_file
 
       raise MissingCSVError.new(self)
+    end
+
+    def open_csv_from_path(csv)
+      raise NonexistentCSVFileError.new(csv) unless File.file?(csv)
+
+      File.open(csv)
     end
   end
 end

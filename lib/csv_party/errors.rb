@@ -34,6 +34,20 @@ Then, you assign that to your importer one of two ways:
     end
   end
 
+  class NonexistentCSVFileError < Error
+    def initialize(file_path)
+      super <<-MESSAGE
+The CSV file you are trying to import was not found:
+
+    #{file_path}
+
+NOTE: If you are trying to import a single line CSV string, please ensure that
+your CSV string has a header row and at least one row of values. Single line
+strings are assumed to be a path to a CSV file.
+      MESSAGE
+    end
+  end
+
   class DuplicateColumnError < Error
     def initialize(name)
       super <<-MESSAGE
