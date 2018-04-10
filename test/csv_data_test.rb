@@ -69,6 +69,23 @@ Value 1;Value 2
     assert_equal 'Value 2', importer.result
   end
 
+  def test_raises_error_on_unrecognized_options
+    csv = <<-CSV
+Value
+value
+    CSV
+
+    assert_raises CSVParty::UnrecognizedOptionsError do
+      Class.new(CSVParty::Importer) do
+        depends_on :dependency1, :dependency2
+
+        column :column
+
+        rows {}
+      end.new(csv, unrecognized_option: 42)
+    end
+  end
+
   def test_raises_error_on_missing_csv
     importer = CsvImporter.new
 

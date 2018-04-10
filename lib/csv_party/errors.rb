@@ -60,6 +60,36 @@ strings are assumed to be a path to a CSV file.
     end
   end
 
+  class UnrecognizedOptionsError < Error
+    def initialize(unrecognized_options, importer)
+      @unrecognized_options = unrecognized_options
+      @importer = importer
+
+      super csv_options_message + dependency_options_message
+    end
+
+    def csv_options_message
+      <<-MESSAGE
+The following options are not recognized: :#{@unrecognized_options.join(', :')}.
+You can pass any option that the CSV library understands:
+
+    :#{CSV::DEFAULT_OPTIONS.keys.join("\n    :")}
+      MESSAGE
+    end
+
+    def dependency_options_message
+      dependencies = @importer.instance_variable_get('@_dependencies')
+      return '' unless dependencies.any?
+
+      <<-MESSAGE
+
+Or assignments for dependencies:
+
+    :#{dependencies.join("\n    :")}
+      MESSAGE
+    end
+  end
+
   class DuplicateColumnError < Error
     def initialize(name)
       super <<-MESSAGE

@@ -40,7 +40,7 @@
   - ~~Provide access to `defined_columns`, `present_columns`, and `missing_columns` so missing columns can be reported to users~~
   - ~~Accept options for underlying `CSV` object~~
   - Raise error on unexpected CSV options
-  - Raise error on unexpected options
+  - ~~Raise error on unexpected options~~
   - Test that different encodings work
 - Implement batching
 - ~~Verify usage of Struct~~
