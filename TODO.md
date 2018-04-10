@@ -46,7 +46,6 @@
 - ~~Investigate using catch/throw where appropriate~~
 - ~~Improve test organization~~
   - ~~Move associated importer classes and CSV files into same file as test.~~
-- Implement batching
 - Get to 100% test coverage
 - Documentation
   - Re-enable class documentation cop
@@ -62,6 +61,8 @@
   - Blog post + video showing best practices in a Rails app
 
 ## Future
+
+### Implement batching
 
 ### Think through what happens when rows that have not been fully parsed are skipped, aborted, have errors, etc.
 
