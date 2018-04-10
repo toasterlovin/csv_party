@@ -9,6 +9,8 @@ module CSVParty
     end
 
     def csv_options=(options)
+      raise_unless_all_csv_options_are_recognized!(options)
+
       @_csv_options = options
     end
 
@@ -50,6 +52,20 @@ module CSVParty
       raise NonexistentCSVFileError.new(file_path) unless File.file?(file_path)
 
       File.open(file_path)
+    end
+
+    def raise_unless_all_csv_options_are_recognized!(options)
+      unrecognized_options = options.keys.reject do |option|
+        valid_csv_options.include? option
+      end
+      return if unrecognized_options.empty?
+
+      raise UnrecognizedCSVOptionsError.new(unrecognized_options,
+                                            valid_csv_options)
+    end
+
+    def valid_csv_options
+      CSV::DEFAULT_OPTIONS.keys
     end
   end
 end

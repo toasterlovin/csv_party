@@ -40,15 +40,17 @@ module CSVParty
 
     def raise_unless_all_options_are_recognized!(options)
       unrecognized_options = options.keys.reject do |option|
-        recognized_options.include? option
+        valid_options.include? option
       end
       return if unrecognized_options.empty?
 
-      raise UnrecognizedOptionsError.new(unrecognized_options, self)
+      raise UnrecognizedOptionsError.new(unrecognized_options,
+                                         valid_csv_options,
+                                         @_dependencies)
     end
 
-    def recognized_options
-      CSV::DEFAULT_OPTIONS.keys + @_dependencies
+    def valid_options
+      valid_csv_options + @_dependencies
     end
   end
 end
