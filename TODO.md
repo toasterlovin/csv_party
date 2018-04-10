@@ -1,30 +1,74 @@
 # TODO
 
 ## 1.0
-- Finish documenting DSL spec in DSL.md
-- Implement and test DSL.md in entirety
-- Re-enable class documentation cop
-- Document classes
+- ~~Finish documenting DSL spec in DSL.md~~
+- ~~Split tests out into separate files~~
+- ~~Columns~~
+  - ~~Names & headers (revised header name behavior)~~
+  - ~~Raw parser (verify behavior)~~
+  - ~~String parser (verify behavior)~~
+  - ~~Integer parser (handle negative values)~~
+  - ~~Decimal parser (handle negative values)~~
+  - ~~Allow accounting negative notation for integer & decimal~~
+  - ~~Boolean parser (whitelist negative values; return nil for everythign else)~~
+  - ~~Date parser (implement)~~
+  - ~~Time parser (implement)~~
+  - ~~Think about what to do with invalid date/time values~~
+  - ~~Update error messages to reflect additional parsers~~
+  - ~~Custom parser blocks (verify behavior)~~
+  - ~~Custom named parsers (verify behavior)~~
+  - ~~Reserved column names (verify behavior)~~
+  - ~~Parsing `nil` and `blank` values (verify behavior)~~
+- ~~Importing~~
+  - ~~Rows (verify that error is thrown on missing processor)~~
+  - ~~Files (verify behavior + raise error if `import_rows!` is not called)~~
+  - ~~Errors (`:ignore` option, raise if unspecified, don't capture parsing errors from CSV library)~~
+  - ~~Dependencies (MissingDependency error should happen on import, not instantiation)~~
+  - ~~All validations should happen at import time, not instantiation time~~
+  - ~~Add row number as attribute on row struct~~
+- ~~Flow Control~~
+  - ~~Next row (implement new behavior)~~
+  - ~~Skip row (implement new behavior)~~
+  - ~~Abort row (implement new behavior)~~
+  - ~~Abort import (rework API; return `false` on `importer.import!`)~~
+- CSV Improvements
+  - ~~Accept file path string~~
+  - ~~Accept `IO` object~~
+  - ~~Accept CSV string~~
+  - ~~Raise error if invalid CSV file path is assigned~~
+  - ~~Raise error if invalid CSV object is assigned~~
+  - ~~Provide access to `defined_columns`, `present_columns`, and `missing_columns` so missing columns can be reported to users~~
+  - ~~Accept options for underlying `CSV` object~~
+  - ~~Raise error on unexpected CSV options~~
+  - ~~Raise error on unexpected options~~
+  - Test that different encodings work
+- Implement batching
+- ~~Verify usage of Struct~~
+- ~~Investigate using catch/throw where appropriate~~
+- ~~Improve test organization~~
+  - ~~Move associated importer classes and CSV files into same file as test.~~
+- Documentation
+  - Re-enable class documentation cop
+  - Document classes
+  - Revamp README.md
+  - Flesh out advanced usage in Wiki
+    - Testing
+    - User specified column names
+    - Reporting missing columns to user
+    - Automatically determining file encoding
+    - Low memory usage
+    - Downloads of skipped/aborted/errored rows
+  - Blog post + video showing best practices in a Rails app
 
 ## Future
 
-### Improve `column` DSL method
-
-- Column header doesn't need to be specified
-
-```
-column :price # matches 'price', 'Price', 'PRICE', etc.
-```
-
-- Column header can be specified with Regex (examples should include case insensitive Regex):
-
-```
-column price: /price/
-```
+### Think through what happens when rows that have not been fully parsed are skipped, aborted, have errors, etc.
 
 ### Investigate CSV parsing issues
 - Make sure parsing issues are well covered by tests
 - Resolve line_number off-by-one error when `MalformedCSVError` is encountered
+
+### Add mechanism for exporting skipped/aborted rows as CSV files
 
 ### Runtime configuration of DSL methods
 
@@ -47,10 +91,10 @@ Default behavior is to raise as normal.
 
     my_import.aborted_rows # returns array of parse error rows
 
+### Allow specifying columns by column number rather than header text
+
 ### Allow using multiple columns to generate one variable
 
-    column total: ['Price', 'Quantity'] do |price, quantity|
+    column :total, header: ['Price', 'Quantity'] do |price, quantity|
       BigDecimal.new(price) * BigDecimal.new(quantity)
     end
-
-### Add mechanism for exporting skipped/aborted rows as CSV files

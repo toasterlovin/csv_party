@@ -4,7 +4,16 @@
 
 #### Column name & header
 
-    column price: 'Price'
+    # Default behavior is to do a case insensitive comparison of column name,
+    # ignoring whitespace. The following matches `'price'`, `' price '`,
+    # `'Price'`, `'PRICE'`, `'PrIcE'`, etc.
+    column :price
+
+    # A header name can also be specified as a string
+    column :price, header: 'Some random string' # uses
+
+    # Or as a regex
+    column :price, header: /price-\d{1,2}/
 
 #### `:raw` parser
 Returns the value from the CSV file as a string, unmodified
@@ -60,6 +69,8 @@ Strips all whitespace, parses with `Date.strptime`.
     column :date, as: :date, format: '%m/%d/%y'
     '12/31/17' #=> Date.strptime('12/31/2017', '%m/%d/%y')
 
+Returns `nil` for unparseable values.
+
 #### `:time` parser
 Strips all whitespace, parses with `Time.strptime`.
 
@@ -68,6 +79,8 @@ Strips all whitespace, parses with `Time.strptime`.
 
     column :time, as: :time, format: '%m/%d/%y %I:%M:%S %p'
     '1/1/17 01:01:01 AM' #=> DateTime.parse('1/1/17 01:01:01 AM', '%m/%d/%y %I:%M:%S %p')
+
+Returns `nil` for unparseable values.
 
 #### Custom parser blocks
 A block containing custom parsing logic can be used as well.
@@ -91,9 +104,10 @@ A custom parser can be named for re-use across multiple columns. Just add a meth
     column :cost_in_cents, header: 'Cost in $', as: :dollars_to_cents
 
 #### Reserved column names
-An error will be thrown if trying to name a column `unparsed`, `csv_string`, `skip_message`,
-or `abort_message`. This is because these will automatically be appended to the `row` object
-that is passed to `rows`, `skipped_rows`, and `aborted_rows` blocks.
+An error will be thrown if trying to name a column `unparsed`, `csv_string`,
+`row_number`, `skip_message`, or `abort_message`. This is because these will
+automatically be appended to the `row` object that is passed to `rows`,
+`skipped_rows`, and `aborted_rows` blocks.
 
     column :unparsed    # raises ReservedColumnName error
     column :csv_string  # raises ReservedColumnName error
@@ -135,6 +149,49 @@ actually importing the rows in the file. It is optional.
       # do some stuff before importing rows
       import_rows!
       # do some stuff after importing rows
+    end
+
+## Batching
+This is for batching imports: accumulating data and then acting on it at set
+row intervals. Batching is optional.
+
+    rows do |row|
+      customers[row.customer_id] = { name: row.customer_name, phone: row.phone }
+      orders << { customer_id: row.customer_id, invoice_number: row.invoice_number }
+    end
+
+    batch 50, customers: {}, orders: [] do
+      # insert customers into database
+      # insert orders into database
+
+      # accumulators are automatically reset to their initial values after the
+      # batch block is done executing
+    end
+
+    # accumulators are optional, they are functionally identical to doing
+
+    class MyImporter < CSVParty::Importer
+      attr_accessor :customers, :orders
+
+      def customers
+        @customers ||= {}
+      end
+
+      def orders
+        @orders ||= []
+      end
+
+      rows do |row|
+        customers << row.customer
+        orders << row.order
+      end
+
+      batch 50 do
+        # insert customers into database
+        # insert orders into database
+        customers = {}
+        orders = []
+      end
     end
 
 ## Errors
@@ -235,3 +292,38 @@ This stops importing the entire file and returns false.
     else
       puts my_importer.abort_message
     end
+
+# Usage
+
+## Specifying a CSV file to import
+Since it just wraps the `CSV` class, there are three ways you can specify the
+CSV file that you wish to import:
+
+1. With a path to the file.
+
+    importer = MyImporter.new('path/to/csv')
+    # or
+    importer = MyImporter.new
+    importer.csv_path = 'path/to/csv'
+
+2. With an IO object:
+
+    importer = MyImporter.new(io_object)
+    # or
+    importer = MyImporter.new
+    importer.csv_file = file
+
+3. With a string:
+
+    importer = MyImporter.new(string)
+    # or
+    importer = MyImporter.new
+    importer.csv_string = string
+
+
+Additionally, you can specify any options that the `CSV` class understands, with
+the exception of `headers`, which will always be set to true. You can do that
+like so:
+
+    importer = MyImporter.new('path/to/csv', encoding: 'ISO-8859-1:UTF-8')
+    importer.csv_options = { row_sep: '\n', encoding: 'ISO-8859-1:UTF-8' }

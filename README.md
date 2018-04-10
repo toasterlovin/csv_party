@@ -61,10 +61,10 @@ column_. This applies to all parsers, including custom parsers which you
 define, with one exception: the :raw parser. This is done as a convenience to
 avoid pesky `NoMethodError`s that arise when a parser tries to do its thing
 to a `nil` value that it wasn't expecting. You can turn this behavior off on a
-given column by setting `blanks_as_nil` to `false` in the options hash:
+given column by setting `intercept_blanks` to `false` in the options hash:
 
     class MyImporter < CSVParty
-      column :price, header: 'Price', blanks_as_nil: false do |value|
+      column :price, header: 'Price', intercept_blanks: false do |value|
         if value.nil?
           'n/a'
         else
