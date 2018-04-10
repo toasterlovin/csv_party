@@ -62,6 +62,10 @@
 
 ## Future
 
+### Add methods to turn row object into Rails attribute hash
+
+    row.attributes # return hash like: { name: 'Name', birthday: '2001-01-01' }
+
 ### Implement batching
 
 ### Think through what happens when rows that have not been fully parsed are skipped, aborted, have errors, etc.
