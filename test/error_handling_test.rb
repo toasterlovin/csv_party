@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ErrorsTest < Minitest::Test
+class ErrorHandlingTest < Minitest::Test
   def setup
     @csv = <<-CSV
 Value
