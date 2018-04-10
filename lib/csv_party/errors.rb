@@ -34,6 +34,18 @@ Then, you assign that to your importer one of two ways:
     end
   end
 
+  class InvalidCSVError < Error
+    def initialize(invalid_csv)
+      super <<-MESSAGE
+Cannot import #{invalid_csv.class.name} objects, please specify a file path, IO object, or CSV string instead:
+
+    file_path  = 'path/to/csv'
+    io_object  = File.open('path/to/csv')
+    csv_string = 'Header1,Header2\\nvalue1,value2\\n'
+      MESSAGE
+    end
+  end
+
   class NonexistentCSVFileError < Error
     def initialize(file_path)
       super <<-MESSAGE

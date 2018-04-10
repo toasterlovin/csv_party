@@ -1,12 +1,10 @@
 module CSVParty
   module Data
     def csv=(csv)
-      @_csv_file = if csv.is_a?(IO)
-                     csv
-                   elsif csv.is_a?(String) && csv.lines.count == 1
-                     open_csv_from_path(csv)
-                   elsif csv.is_a?(String)
-                     csv
+      @_csv_file = if csv.nil?
+                     nil
+                   else
+                     prepare_csv(csv)
                    end
     end
 
@@ -32,10 +30,26 @@ module CSVParty
       raise MissingCSVError.new(self)
     end
 
-    def open_csv_from_path(csv)
-      raise NonexistentCSVFileError.new(csv) unless File.file?(csv)
+    def prepare_csv(csv)
+      if csv.is_a?(IO)
+        csv
+      elsif csv.is_a?(String)
+        prepare_csv_from_string(csv)
+      else
+        raise InvalidCSVError.new(csv)
+      end
+    end
 
-      File.open(csv)
+    def prepare_csv_from_string(csv_string)
+      return csv_string if csv_string.lines.count > 1
+
+      open_csv_from_path(csv_string)
+    end
+
+    def open_csv_from_path(file_path)
+      raise NonexistentCSVFileError.new(file_path) unless File.file?(file_path)
+
+      File.open(file_path)
     end
   end
 end

@@ -36,7 +36,7 @@
   - ~~Accept `IO` object~~
   - ~~Accept CSV string~~
   - ~~Raise error if invalid CSV file path is assigned~~
-  - Raise error if invalid CSV object is assigned
+  - ~~Raise error if invalid CSV object is assigned~~
   - Provide access to `defined_headers`, `present_headers`, and `missing_headers` so missing columns can be reported to users
   - Accept applicable options that `CSV` accepts
   - Test that different encodings work

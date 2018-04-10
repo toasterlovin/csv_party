@@ -57,6 +57,18 @@ value
     end
   end
 
+  def test_raises_error_on_invalid_csv
+    assert_raises CSVParty::InvalidCSVError do
+      CsvImporter.new(1)
+    end
+
+    assert_raises CSVParty::InvalidCSVError do
+      importer = CsvImporter.new
+      importer.csv = 1
+      importer.import!
+    end
+  end
+
   def test_raises_error_on_invalid_csv_file
     invalid_path = 'invalid/path/to/file'
 
