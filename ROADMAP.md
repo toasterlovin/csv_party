@@ -1,7 +1,7 @@
 Roadmap
 -
 
-## 1.1 Stop execution before a row is fully parsed
+#### 1.1 Stop execution before a row is fully parsed
 
 Currently, CSVParty is pretty well thought out about what should happen when
 either 1) one of the built in flow control methods (`next_row`, `skip_row`,
@@ -12,7 +12,7 @@ flow control and error handling kind of assumes that the row has been fully
 parsed. So some design work should go into deciding what should happen in these
 cases. And then tests should be written for all of the various scenarios.
 
-## 1.2 Convert row object into hash
+#### 1.2 Convert row object into hash
 
 One of the primary use cases for importing CSV files is to insert their contents
 into a database. Apparently this is common enough that the [csv-importer][] gem,
@@ -41,7 +41,7 @@ all of the parsed values as values. So, with an importer like the one above,
 
     { product_id: 42, quantity: 3, price: 9.99 }
 
-## 1.3 Export skipped/aborted rows as CSV files
+#### 1.3 Export skipped/aborted rows as CSV files
 
 Most user inputs to an application are relatively constrained. CSV files, on the
 other hand, are not. Users can, and will, put all kinds of erroneous data into
@@ -72,27 +72,35 @@ and errored rows. Then, the file would be generated with a method, like so:
     importer.aborted_rows_as_csv
     importer.error_rows_as_csv
 
-## 1.4 Batch API
+#### 1.4 Batch API
 
 It can be way more performant to batch imports so that expensive operations,
 like persisting data, are only done every so often. This would add an API to
 accumulate data, execute some logic every X number of rows, reset the
-accumulators, then repeat.
+accumulators, then repeat. Here's a rough sketch of what that API might look
+like:
 
     rows do |row|
       customers[row.customer_id] = { name: row.customer_name, phone: row.phone }
-      orders << { customer_id: row.customer_id, invoice_number: row.invoice_number }
+      orders[row.order_id] = { customer_id: row.customer_id, invoice_number: row.invoice_number }
     end
 
-    batch 50, customers: {}, orders: [] do
+    batch 50, customers: {}, orders: {} do
       # insert customers into database
       # insert orders into database
-
-      # accumulators are automatically reset to their initial values after the
-      # batch block is done executing
     end
 
-    # accumulators are optional, they are functionally identical to doing
+The first argument is how often the batch logic should be executed. In this
+case, every 50 rows. Then there is a hash of accumulators, where the keys are
+the names of the accumulators and the values are the initial values. Declaring
+the accumulators accomplished two things:
+
+1. It provides accessor methods so that the accumulators can be accessed from
+   within the row import block.
+2. It automatically resets the accumulators to their initial values each time
+   the batch block is executed.
+
+So, it is essentially functionally identical to doing the following:
 
     class MyImporter < CSVParty::Importer
       attr_accessor :customers, :orders
@@ -102,48 +110,119 @@ accumulators, then repeat.
       end
 
       def orders
-        @orders ||= []
+        @orders ||= {}
       end
 
       rows do |row|
-        customers << row.customer
-        orders << row.order
+        # add customer to customers accumulator
+        # add order to orders accumulator
       end
 
       batch 50 do
         # insert customers into database
         # insert orders into database
         customers = {}
-        orders = []
+        orders = {}
       end
     end
 
-## 1.5 Runtime configuration
+_Note:_ The following is a rough sketch of an API that would handle a use case
+that has come up. However, some research should be done first to figure out if
+the use case it addresses is common.
+
+One use case that has been mentioned is when rows are grouped by their
+relationship to a parent record and those rows need to be acted on as a group.
+So, imagine a CSV file like so:
+
+    Customer,Address,Product,Quantity,Price
+    Joe Smith,123 Main St.,Birkenstocks,1,74.99
+    Joe Smith,123 Main St.,Air Jordans,1,129.99
+    Joe Smith,123 Main St.,Tevas,3,59.99
+    Jane Doe,713 Broadway,Converse All-Star,1,39.99
+    Jane Doe,713 Broadway,Toms,1,59.99
+
+It might be useful to be able to specify the batch interval in terms of one of
+the columns in the CSV file, rather than as a number of rows. So, you would be
+able to do:
+
+    class MyImporter < CSVParty::Importer
+      column :customer
+      column :address
+      column :product
+      column :quantity, as: :integer
+      column :price, as: :decimal
+
+      rows do |row|
+        line_items << { product: row.product, quantity: row.quantity, price: row.price }
+      end
+
+      batch :customer, line_items: [] do |current_row|
+        Customer.create(name: current_row.customer, address: current_row.address)
+        line_items.each do |li|
+          LineItem.create(li)
+        end
+      end
+    end
+
+In this case, the batch logic gets executed everytime there is a change in the
+`:customer` column from one row to the next, rather than every X number of rows.
+The accumulator works the same way: accessors are made available for adding
+records to the accumulator and then the accumulator is automatically reset to
+its initial value each time the batch logic is executed.
+
+#### 1.5 Runtime configuration
+
+Sometimes it useful to be able to configure an importer at runtime, rather than
+at code writing time. An obvious example of when this would be useful is in the
+case of user defined column header names. So, imagine a UI in which the user
+uploads their CSV file, then specifies which column is, for example, the product
+column, which is the quantity column, and which is the price column. In a case
+like this, there is no way to specify the column definitions ahead of time; we
+have to wait for the header names from the user.
+
+Here is a sketch of what the API for runtime configuration would look like:
+
+    class MyImporter < CSVParty::Importer
+      rows do |row|
+        # persist data
+      end
+    end
+
+    # then:
 
     my_importer = MyImporter.new
     my_importer.configure do
-      column :price, as: :decimal
-      rows do |row|
-        # import row
-      end
+      column :product, header: user_product_header
+      column :quantity, header: user_quantity_header, as: :integer
+      column :price, header: user_price_header, as: :decimal
     end
 
-## 1.6 CSV parse error handling
-Default behavior is to raise as normal.
+An open question is whether all DSL methods should be configurable at runtime.
 
-    parse_errors :ignore # to do nothing
+#### 1.6 CSV parse error handling
+
+Sometimes it is useful to be able to completely ignore parsing and encoding
+errors raised by the `CSV` class. To be clear, doing so is dangerous, since the
+parsing logic in the `CSV` class is not designed to continue operating after it
+encounters an error and raises. But sometimes you don't want to let a single
+improperly encoded character prevent you from importing an entire CSV file. So,
+this feature would be an optional way to either ignore those errors or respond
+to them, and then continue importing. The API would probably be similar to the
+error handling API for non-parse errors. So:
+
+    parse_errors :ignore # silently continue importing the next row
 
     parse_errors do |line_number|
       # handle parse error
     end
 
-    my_import.aborted_rows # returns array of parse error rows
+    my_import.parse_error_rows # returns array of parse error rows
 
-# Someday
+## Someday Features
 
-## Allow specifying columns by column number rather than header text
+#### Allow specifying columns by column number rather than header text
 
-## Allow using multiple columns to generate one variable
+#### Allow using multiple columns to generate one variable
 
     column :total, header: ['Price', 'Quantity'] do |price, quantity|
       BigDecimal.new(price) * BigDecimal.new(quantity)
