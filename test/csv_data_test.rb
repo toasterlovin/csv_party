@@ -88,7 +88,8 @@ value
 
         column :column
 
-        rows {}
+        rows do
+        end
       end.new(csv, unrecognized_option: 42)
     end
   end
@@ -109,7 +110,6 @@ value
     assert_raises CSVParty::InvalidCSVError do
       importer = CsvImporter.new
       importer.csv = 1
-      importer.import!
     end
   end
 

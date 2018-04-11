@@ -38,8 +38,7 @@ Value 2
     importer = Class.new(CSVParty::Importer) do
       column :value
 
-      rows do |row|
-        self.result = row
+      rows do
       end
 
       import do

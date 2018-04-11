@@ -171,10 +171,6 @@ date,date with format,invalid date,invalid format
       rows do |row|
         self.result = row
       end
-
-      errors do |error|
-        raise error
-      end
     end.new(csv)
 
     importer.import!
@@ -200,10 +196,6 @@ time,time with timezone,time with format,invalid time,invalid format
 
       rows do |row|
         self.result = row
-      end
-
-      errors do |error|
-        raise error
       end
     end.new(csv)
 
@@ -309,10 +301,6 @@ Empty,Blank,Integer,Decimal,Boolean,Date,Time,Raw Blank,Custom,Opt Out
       rows do |row|
         self.result = row
       end
-
-      errors do |error|
-        raise error
-      end
     end.new(csv)
 
     importer.import!
@@ -339,10 +327,6 @@ value1,value2
       column :custom, as: :mispelled
 
       rows do
-      end
-
-      def custom_parser(value)
-        "#{value} plus some text"
       end
     end.new(csv)
 
