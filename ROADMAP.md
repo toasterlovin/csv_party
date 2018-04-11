@@ -1,16 +1,16 @@
 Roadmap
 -
 
-- [1.1 [Early Return While Parsing](/11-early-return-while-parsing)
-- [1.2 Rows to Hash](/12-rows-to-hash)
-- [1.3 Generate Unimported Rows CSV](13-generate-unimported-rows-csv)
-- [1.4 Batch API](14-batch-api)
-- [1.5 Runtime Configuration](15-runtime-configuration)
-- [1.6 CSV Parse Error Handling](16-csv-parse-error-handling)
-- [Someday Features](someday-features)
-    - [Column Numbers](column-numbers)
-    - [Multi-column Parsing](multi-column-parsing)
-    - [Parse Dependencies](parse-dependencies)
+- [1.1 Early Return While Parsing](#11-early-return-while-parsing)
+- [1.2 Rows to Hash](#12-rows-to-hash)
+- [1.3 Generate Unimported Rows CSV](#13-generate-unimported-rows-csv)
+- [1.4 Batch API](#14-batch-api)
+- [1.5 Runtime Configuration](#15-runtime-configuration)
+- [1.6 CSV Parse Error Handling](#16-csv-parse-error-handling)
+- [Someday Features](#someday-features)
+    - [Column Numbers](#column-numbers)
+    - [Multi-column Parsing](#multi-column-parsing)
+    - [Parse Dependencies](#parse-dependencies)
 
 #### 1.1 Early Return While Parsing
 
