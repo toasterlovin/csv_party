@@ -1,7 +1,18 @@
 Roadmap
 -
 
-#### 1.1 Stop execution before a row is fully parsed
+- [1.1 [Early Return While Parsing](/11-early-return-while-parsing)
+- [1.2 Rows to Hash](/12-rows-to-hash)
+- [1.3 Generate Unimported Rows CSV](13-generate-unimported-rows-csv)
+- [1.4 Batch API](14-batch-api)
+- [1.5 Runtime Configuration](15-runtime-configuration)
+- [1.6 CSV Parse Error Handling](16-csv-parse-error-handling)
+- [Someday Features](someday-features)
+    - [Column Numbers](column-numbers)
+    - [Multi-column Parsing](multi-column-parsing)
+    - [Parse Dependencies](parse-dependencies)
+
+#### 1.1 Early Return While Parsing
 
 Currently, CSVParty is pretty well thought out about what should happen when
 either 1) one of the built in flow control methods (`next_row`, `skip_row`,
@@ -12,7 +23,7 @@ flow control and error handling kind of assumes that the row has been fully
 parsed. So some design work should go into deciding what should happen in these
 cases. And then tests should be written for all of the various scenarios.
 
-#### 1.2 Convert row object into hash
+#### 1.2 Rows to Hash
 
 One of the primary use cases for importing CSV files is to insert their contents
 into a database. Apparently this is common enough that the [csv-importer][] gem,
@@ -41,7 +52,7 @@ all of the parsed values as values. So, with an importer like the one above,
 
     { product_id: 42, quantity: 3, price: 9.99 }
 
-#### 1.3 Export skipped/aborted rows as CSV files
+#### 1.3 Generate Unimported Rows CSV
 
 Most user inputs to an application are relatively constrained. CSV files, on the
 other hand, are not. Users can, and will, put all kinds of erroneous data into
@@ -170,7 +181,7 @@ The accumulator works the same way: accessors are made available for adding
 records to the accumulator and then the accumulator is automatically reset to
 its initial value each time the batch logic is executed.
 
-#### 1.5 Runtime configuration
+#### 1.5 Runtime Configuration
 
 Sometimes it useful to be able to configure an importer at runtime, rather than
 at code writing time. An obvious example of when this would be useful is in the
@@ -199,7 +210,7 @@ Here is a sketch of what the API for runtime configuration would look like:
 
 An open question is whether all DSL methods should be configurable at runtime.
 
-#### 1.6 CSV parse error handling
+#### 1.6 CSV Parse Error Handling
 
 Sometimes it is useful to be able to completely ignore parsing and encoding
 errors raised by the `CSV` class. To be clear, doing so is dangerous, since the
@@ -220,10 +231,42 @@ error handling API for non-parse errors. So:
 
 ## Someday Features
 
-#### Allow specifying columns by column number rather than header text
+#### Column Numbers
 
-#### Allow using multiple columns to generate one variable
+CSVParty is entirely oriented around a CSV file having a header. This is not
+always the case, though. This would add the ability to specify columns using a
+column number, rather than a header. A rough sketch of the API might look like:
+
+    class MyImporter < CSVParty::Importer
+      column :product, number: 7
+      column :quantity, number: 8, as: :integer
+      column :price, number: 9, as: :decimal
+    end
+
+#### Multi-column Parsing
+
+The whole idea behind custom parsers is that it makes for much cleaner code to
+get all the logic related to parsing a raw value into a useful intermediate
+object in one place, away from the larger logic of what needs to happen to each
+row. Sometimes, though, you need access to multiple column values to create a
+useful parsed value. Here is what an API for that might look like:
 
     column :total, header: ['Price', 'Quantity'] do |price, quantity|
       BigDecimal.new(price) * BigDecimal.new(quantity)
+    end
+
+#### Parse Dependencies
+
+Sometimes, while parsing a column, it would be useful to have access to the
+parsed value from another column. This would make that possible. Here is what
+that might look like:
+
+    class MyImporter < CSVParty::Importer
+      column :customer do |customer_id|
+        Customer.find(customer_id)
+      end
+
+      column :order, depends_on: :customer do |order_id, customer|
+        customer.orders.find(order_id)
+      end
     end
