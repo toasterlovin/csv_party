@@ -41,8 +41,8 @@
   - ~~Accept options for underlying `CSV` object~~
   - ~~Raise error on unexpected CSV options~~
   - ~~Raise error on unexpected options~~
+  - Improve API for assigning CSV files/path/content
   - Test that different encodings work
-- Improve API for assigning CSV files/path/content
 - ~~Verify usage of Struct~~
 - ~~Investigate using catch/throw where appropriate~~
 - ~~Improve test organization~~
