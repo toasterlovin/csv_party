@@ -79,6 +79,7 @@ import
   def test_does_not_capture_malformed_csv_errors
     malformed_csv = <<-CSV
 First,Second
+value1,value2
 "Improperly escaped \"quotes\"",3
     CSV
 
@@ -86,7 +87,7 @@ First,Second
       column :first
       column :second, as: :integer
 
-      rows do |row|
+      rows do
       end
 
       errors :ignore
