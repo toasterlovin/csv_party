@@ -26,7 +26,7 @@ cases. And then tests should be written for all of the various scenarios.
 #### 1.2 Rows to Hash
 
 One of the primary use cases for importing CSV files is to insert their contents
-into a database. Apparently this is common enough that the [csv-importer][] gem,
+into a database. Apparently this is common enough that the [csv-importer] gem,
 which almost completely automates this process without much room for
 customization, is very popular. So, in the case where there is a pretty simple
 correspondence between the contents of a CSV file and ActiveRecord models, it
