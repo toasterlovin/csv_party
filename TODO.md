@@ -49,10 +49,12 @@
   - ~~Move associated importer classes and CSV files into same file as test.~~
 - ~~Get to 100% test coverage~~
 - Check argument types on all public methods
+- Add license
 - Documentation
   - Re-enable class documentation cop
   - Document classes
   - Revamp README.md
+  - Add CHANGELOG.md
   - Flesh out advanced usage in Wiki
     - Testing
     - User specified column names
