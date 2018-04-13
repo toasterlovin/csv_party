@@ -2,7 +2,8 @@ require 'test_helper'
 
 class CsvDataTest < Minitest::Test
   class CsvImporter < CSVParty::Importer
-    column :value
+    column :column_1
+    column :column_2
 
     rows do |row|
       self.result = row
@@ -12,61 +13,59 @@ class CsvDataTest < Minitest::Test
   def test_csv_path
     importer = CsvImporter.new(path: 'test/fixtures/csv_data.csv')
     importer.import!
-    assert_equal 'value', importer.result.value
+    assert_equal 'value 1', importer.result.column_1
 
     importer = CsvImporter.new
     importer.csv_path = 'test/fixtures/csv_data.csv'
     importer.import!
-    assert_equal 'value', importer.result.value
+    assert_equal 'value 1', importer.result.column_1
   end
 
   def test_csv_file
     csv_file = File.open('test/fixtures/csv_data.csv')
     importer = CsvImporter.new(file: csv_file)
     importer.import!
-    assert_equal 'value', importer.result.value
+    assert_equal 'value 1', importer.result.column_1
 
     csv_file = File.open('test/fixtures/csv_data.csv')
     importer = CsvImporter.new
     importer.csv_file = csv_file
     importer.import!
-    assert_equal 'value', importer.result.value
+    assert_equal 'value 1', importer.result.column_1
   end
 
   def test_csv_string
     csv_string = <<-CSV
-Value
-value
+Column 1,Column 2
+value 1,value 2
     CSV
 
     importer = CsvImporter.new(content: csv_string)
     importer.import!
-    assert_equal 'value', importer.result.value
+    assert_equal 'value 1', importer.result.column_1
 
     importer = CsvImporter.new
     importer.csv_content = csv_string
     importer.import!
-    assert_equal 'value', importer.result.value
+    assert_equal 'value 1', importer.result.column_1
   end
 
   def test_accepts_options_for_csv_object
     csv = <<-CSV
-Column1;Column2
+Column 1;Column 2
 Value 1;Value 2
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
-      column :column1
-      column :column2
-
-      rows do |row|
-        self.result = row.column2
-      end
-    end.new(content: csv, col_sep: ';')
-
+    importer = CsvImporter.new(content: csv, col_sep: ';')
     importer.import!
 
-    assert_equal 'Value 2', importer.result
+    assert_equal 'Value 2', importer.result.column_2
+
+    importer = CsvImporter.new(content: csv)
+    importer.csv_options = { col_sep: ';' }
+    importer.import!
+
+    assert_equal 'Value 2', importer.result.column_2
   end
 
   def test_raises_error_on_unrecognized_csv_options

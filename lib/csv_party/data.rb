@@ -48,7 +48,7 @@ module CSVParty
     end
 
     def assign_csv_options_if_present(options)
-      @_csv_options = options.select do |option, _value|
+      self.csv_options = options.select do |option, _value|
         valid_csv_options.include?(option)
       end
     end
