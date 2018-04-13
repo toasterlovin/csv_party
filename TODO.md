@@ -48,6 +48,7 @@
 - ~~Improve test organization~~
   - ~~Move associated importer classes and CSV files into same file as test.~~
 - ~~Get to 100% test coverage~~
+- Check argument types on all public methods
 - Documentation
   - Re-enable class documentation cop
   - Document classes
