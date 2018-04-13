@@ -6,7 +6,7 @@ module CSVParty
       raise_unless_row_processor_is_defined!
       raise_unless_all_named_parsers_exist!
       raise_unless_all_dependencies_are_present!
-      initialize_csv_data!
+      initialize_csv!
       initialize_regex_headers!
       raise_unless_csv_has_all_columns!
       initialize_row_structs!

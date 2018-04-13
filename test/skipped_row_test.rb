@@ -19,7 +19,7 @@ Skipped,Value3
         skip_row! 'skipped row' if row.first == 'Skipped'
         self.result = row
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.import!
 
@@ -45,7 +45,7 @@ Skipped,Value3
       end
 
       skipped_rows :ignore
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.import!
 
@@ -68,7 +68,7 @@ Skipped,Value3
       skipped_rows do |row|
         result[:skipped] = row
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.result = {}
     importer.import!

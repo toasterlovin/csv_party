@@ -16,7 +16,7 @@ import
       rows do
         raise TestCaseError
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     assert_raises TestCaseError do
       importer.import!
@@ -33,7 +33,7 @@ import
       end
 
       errors :ignore
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.import!
 
@@ -62,7 +62,7 @@ import
         result[:line_number] = line_number
         result[:csv_string] = csv_string
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.result = {}
     importer.import!
@@ -91,7 +91,7 @@ value1,value2
       end
 
       errors :ignore
-    end.new(malformed_csv)
+    end.new(content: malformed_csv)
 
     assert_raises CSV::MalformedCSVError do
       importer.import!

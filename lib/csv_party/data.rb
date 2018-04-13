@@ -1,11 +1,22 @@
 module CSVParty
   module Data
-    def csv=(csv)
-      @_csv_file = if csv.nil?
-                     nil
-                   else
-                     prepare_csv(csv)
-                   end
+    def csv_path=(path)
+      raise_unless_argument_is_a('CSV path', path, String)
+      raise NonexistentCSVFileError.new(path) unless File.file?(path)
+
+      @_csv_data = File.open(path)
+    end
+
+    def csv_file=(file)
+      raise_unless_argument_is_a('CSV file', file, IO)
+
+      @_csv_data = file
+    end
+
+    def csv_content=(content)
+      raise_unless_argument_is_a('CSV content', content, String)
+
+      @_csv_data = content
     end
 
     def csv_options=(options)
@@ -16,42 +27,44 @@ module CSVParty
 
     private
 
-    def initialize_csv_data!
+    def initialize_csv!
       raise_unless_csv_data_is_present!
 
       @_csv_options[:headers] = true
-      @_csv = CSV.new(@_csv_file, @_csv_options)
+      @_csv = CSV.new(@_csv_data, @_csv_options)
       @_csv.shift
       @_headers = @_csv.headers
       @_csv.rewind
     end
 
-    def raise_unless_csv_data_is_present!
-      return if @_csv_file
-
-      raise MissingCSVError.new(self)
-    end
-
-    def prepare_csv(csv)
-      if csv.is_a?(IO)
-        csv
-      elsif csv.is_a?(String)
-        prepare_csv_from_string(csv)
-      else
-        raise InvalidCSVError.new(csv)
+    def assign_csv_data_if_present(options)
+      if options.has_key?(:path)
+        self.csv_path = options.delete(:path)
+      elsif options.has_key?(:file)
+        self.csv_file = options.delete(:file)
+      elsif options.has_key?(:content)
+        self.csv_content = options.delete(:content)
       end
     end
 
-    def prepare_csv_from_string(csv_string)
-      return csv_string if csv_string.lines.count > 1
-
-      open_csv_from_path(csv_string)
+    def assign_csv_options_if_present(options)
+      @_csv_options = options.select do |option, _value|
+        valid_csv_options.include?(option)
+      end
     end
 
-    def open_csv_from_path(file_path)
-      raise NonexistentCSVFileError.new(file_path) unless File.file?(file_path)
+    def raise_unless_argument_is_a(name, argument, klass)
+      return if argument.is_a?(klass)
 
-      File.open(file_path)
+      raise ArgumentError, <<-MESSAGE
+#{name} should be a #{klass.name}, you passed an instance of #{argument.class.name}
+      MESSAGE
+    end
+
+    def raise_unless_csv_data_is_present!
+      return if defined?(@_csv_data)
+
+      raise MissingCSVError.new(self)
     end
 
     def raise_unless_all_csv_options_are_recognized!(options)
@@ -62,6 +75,10 @@ module CSVParty
 
       raise UnrecognizedCSVOptionsError.new(unrecognized_options,
                                             valid_csv_options)
+    end
+
+    def valid_data_options
+      [:path, :file, :content]
     end
 
     def valid_csv_options

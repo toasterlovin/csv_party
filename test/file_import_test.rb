@@ -22,7 +22,7 @@ Value 2
         import_rows!
         result[:after] = 'After'
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.result = {}
     importer.result[:rows] = []
@@ -43,7 +43,7 @@ Value 2
 
       import do
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     assert_raises CSVParty::UnimportedRowsError do
       importer.import!

@@ -16,7 +16,7 @@ some text, surrounding whitespace , ,
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -41,7 +41,7 @@ some text, surrounding whitespace , ,
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -77,7 +77,7 @@ t,T,true,TRUE,1, true ,f,F,false,FALSE,0, false ,asdf, ,
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -121,7 +121,7 @@ Integer,Negative Integer,Negative Accounting Integer,Surrounding Whitespace,Deci
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -159,7 +159,7 @@ Decimal,Negative Decimal,Negative Accounting Decimal,Surrounding Whitespace,Doll
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -191,7 +191,7 @@ Date,Date With Format,Invalid Date,Invalid Format,Whitespace Only,Blank
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -221,7 +221,7 @@ Time,Time With Timezone,Time With Format,Invalid Time,Invalid Format,Whitespace 
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -258,7 +258,7 @@ value, ,
       rows do |row|
         result << row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.result = []
     importer.import!
@@ -289,7 +289,7 @@ value 1,value 2, ,
       def custom_parser(value)
         "#{value} plus added text"
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -316,7 +316,7 @@ Intercept,No Intercept,Third Column
       def static_parser(_value)
         return 'Not nil'
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -335,7 +335,7 @@ value1,value2
 
       rows do
       end
-    end.new(csv)
+    end.new(content: csv)
 
     assert_raises CSVParty::UnknownParserError do
       importer.import!

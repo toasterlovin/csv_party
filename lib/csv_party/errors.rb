@@ -34,18 +34,6 @@ Then, you assign that to your importer one of two ways:
     end
   end
 
-  class InvalidCSVError < Error
-    def initialize(invalid_csv)
-      super <<-MESSAGE
-Cannot import #{invalid_csv.class.name} objects, please specify a file path, IO object, or CSV string instead:
-
-    file_path  = 'path/to/csv'
-    io_object  = File.open('path/to/csv')
-    csv_string = 'Header1,Header2\\nvalue1,value2\\n'
-      MESSAGE
-    end
-  end
-
   class NonexistentCSVFileError < Error
     def initialize(file_path)
       super <<-MESSAGE
@@ -72,18 +60,20 @@ You can pass any option that the CSV library understands:
   end
 
   class UnrecognizedOptionsError < Error
-    def initialize(unrecognized_options, valid_csv_options, dependencies)
+    def initialize(unrecognized_options, valid_data_options, valid_csv_options, dependencies)
       @unrecognized_options = unrecognized_options
+      @valid_data_options = valid_data_options
       @valid_csv_options = valid_csv_options
       @dependencies = dependencies
 
-      super csv_options_message + dependency_options_message
+      super csv_and_data_options_message + dependency_options_message
     end
 
-    def csv_options_message
+    def csv_and_data_options_message
       <<-MESSAGE
 The following options are not recognized: :#{@unrecognized_options.join(', :')}.
-You can pass any option that the CSV library understands:
+You can specify your CSV data via the :path, :file, or :content options, as well
+as any options that the CSV library understands:
 
     :#{@valid_csv_options.join("\n    :")}
       MESSAGE

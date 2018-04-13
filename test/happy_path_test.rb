@@ -15,7 +15,7 @@ Gadget,12.99
       rows do |row|
         result << row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.result = []
     assert importer.import!

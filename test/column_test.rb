@@ -29,7 +29,7 @@ exact,multi_word_exact,whitespace,lower,multi word lower,Title,Multi Word Title,
   end
 
   def test_automatic_header_matching
-    importer = ColumnTestImporter.new(@csv)
+    importer = ColumnTestImporter.new(content: @csv)
     importer.import!
     assert_equal 'exact', importer.result.exact
     assert_equal 'multi_word_exact', importer.result.multi_word_exact
@@ -45,13 +45,13 @@ exact,multi_word_exact,whitespace,lower,multi word lower,Title,Multi Word Title,
   end
 
   def test_specifying_column_header_with_string
-    importer = ColumnTestImporter.new(@csv)
+    importer = ColumnTestImporter.new(content: @csv)
     importer.import!
     assert_equal 'String', importer.result.string_header
   end
 
   def test_specifying_column_header_with_regex
-    importer = ColumnTestImporter.new(@csv)
+    importer = ColumnTestImporter.new(content: @csv)
     importer.import!
     assert_equal 'regex7', importer.result.regex_header
   end
@@ -78,7 +78,7 @@ value,value
 
       rows do
       end
-    end.new(csv)
+    end.new(content: csv)
 
     assert_raises CSVParty::MissingColumnError do
       importer.import!

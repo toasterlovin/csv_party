@@ -13,7 +13,7 @@ String,Integer
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -34,7 +34,7 @@ Some text,2
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -55,7 +55,7 @@ belt
       rows do |row|
         self.result = row
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.import!
 
@@ -70,7 +70,7 @@ tshirt
 
     importer = Class.new(CSVParty::Importer) do
       column :product
-    end.new(csv)
+    end.new(content: csv)
 
     assert_raises CSVParty::UndefinedRowProcessorError do
       importer.import!
@@ -91,7 +91,7 @@ tshirt,10.99
         self.result = row
         row.undefined
       end
-    end.new(csv)
+    end.new(content: csv)
 
     assert_raises NoMethodError do
       importer.import!

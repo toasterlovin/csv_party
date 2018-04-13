@@ -1,12 +1,12 @@
 module CSVParty
   module Initialization
-    def initialize(csv = nil, options = {})
+    def initialize(options = {})
       initialize_import_settings
       initialize_counters_and_statuses
       raise_unless_all_options_are_recognized!(options)
-      initialize_dependencies(options)
-      self.csv = csv
-      self.csv_options = options
+      assign_csv_data_if_present(options)
+      assign_csv_options_if_present(options)
+      assign_dependencies_if_present(options)
     end
 
     private
@@ -30,7 +30,9 @@ module CSVParty
       @aborted = false
     end
 
-    def initialize_dependencies(options)
+    def assign_dependencies_if_present(options)
+      return unless @_dependencies.any?
+
       @_dependencies.each do |dependency|
         if options.has_key? dependency
           send("#{dependency}=", options.delete(dependency))
@@ -45,12 +47,13 @@ module CSVParty
       return if unrecognized_options.empty?
 
       raise UnrecognizedOptionsError.new(unrecognized_options,
+                                         valid_data_options,
                                          valid_csv_options,
                                          @_dependencies)
     end
 
     def valid_options
-      valid_csv_options + @_dependencies
+      valid_data_options + valid_csv_options + @_dependencies
     end
   end
 end

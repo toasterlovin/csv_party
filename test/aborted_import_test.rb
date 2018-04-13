@@ -22,7 +22,7 @@ Import,Value2
         import_rows!
         result[:after] = 'After importing rows'
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.result = {}
 

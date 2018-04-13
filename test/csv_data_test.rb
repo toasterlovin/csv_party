@@ -10,25 +10,25 @@ class CsvDataTest < Minitest::Test
   end
 
   def test_csv_path
-    importer = CsvImporter.new('test/fixtures/csv_data.csv')
+    importer = CsvImporter.new(path: 'test/fixtures/csv_data.csv')
     importer.import!
     assert_equal 'value', importer.result.value
 
     importer = CsvImporter.new
-    importer.csv = 'test/fixtures/csv_data.csv'
+    importer.csv_path = 'test/fixtures/csv_data.csv'
     importer.import!
     assert_equal 'value', importer.result.value
   end
 
   def test_csv_file
     csv_file = File.open('test/fixtures/csv_data.csv')
-    importer = CsvImporter.new(csv_file)
+    importer = CsvImporter.new(file: csv_file)
     importer.import!
     assert_equal 'value', importer.result.value
 
     csv_file = File.open('test/fixtures/csv_data.csv')
     importer = CsvImporter.new
-    importer.csv = csv_file
+    importer.csv_file = csv_file
     importer.import!
     assert_equal 'value', importer.result.value
   end
@@ -39,12 +39,12 @@ Value
 value
     CSV
 
-    importer = CsvImporter.new(csv_string)
+    importer = CsvImporter.new(content: csv_string)
     importer.import!
     assert_equal 'value', importer.result.value
 
     importer = CsvImporter.new
-    importer.csv = csv_string
+    importer.csv_content = csv_string
     importer.import!
     assert_equal 'value', importer.result.value
   end
@@ -62,7 +62,7 @@ Value 1;Value 2
       rows do |row|
         self.result = row.column2
       end
-    end.new(csv, col_sep: ';')
+    end.new(content: csv, col_sep: ';')
 
     importer.import!
 
@@ -90,7 +90,7 @@ value
 
         rows do
         end
-      end.new(csv, unrecognized_option: 42)
+      end.new(content: csv, unrecognized_option: 42)
     end
   end
 
@@ -102,27 +102,49 @@ value
     end
   end
 
-  def test_raises_error_on_invalid_csv
-    assert_raises CSVParty::InvalidCSVError do
-      CsvImporter.new(1)
+  def test_raises_error_on_non_string_csv_path
+    assert_raises ArgumentError do
+      CsvImporter.new(path: 1)
     end
 
-    assert_raises CSVParty::InvalidCSVError do
+    assert_raises ArgumentError do
       importer = CsvImporter.new
-      importer.csv = 1
+      importer.csv_path = 1
     end
   end
 
-  def test_raises_error_on_invalid_csv_file
+  def test_raises_error_on_invalid_csv_path
     invalid_path = 'invalid/path/to/file'
 
     assert_raises CSVParty::NonexistentCSVFileError do
-      CsvImporter.new(invalid_path)
+      CsvImporter.new(path: invalid_path)
     end
 
     assert_raises CSVParty::NonexistentCSVFileError do
       importer = CsvImporter.new
-      importer.csv = invalid_path
+      importer.csv_path = invalid_path
+    end
+  end
+
+  def test_raises_error_on_non_io_csv_file
+    assert_raises ArgumentError do
+      CsvImporter.new(file: 1)
+    end
+
+    assert_raises ArgumentError do
+      importer = CsvImporter.new
+      importer.csv_file = 1
+    end
+  end
+
+  def test_raises_error_on_non_string_csv_content
+    assert_raises ArgumentError do
+      CsvImporter.new(content: 1)
+    end
+
+    assert_raises ArgumentError do
+      importer = CsvImporter.new
+      importer.csv_content = 1
     end
   end
 end

@@ -38,7 +38,7 @@ First,Second
   def test_provides_access_to_external_dependencies
     dependency = SecureRandom.random_number
     importer = ExternalDependencyImporter.new(
-      @csv,
+      content: @csv,
       dependency: dependency
     )
     importer.result = {}
@@ -51,7 +51,7 @@ First,Second
   end
 
   def test_missing_dependency
-    importer = ExternalDependencyImporter.new(@csv)
+    importer = ExternalDependencyImporter.new(content: @csv)
     importer.result = {}
 
     assert_raises CSVParty::MissingDependencyError do

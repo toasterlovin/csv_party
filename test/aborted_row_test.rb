@@ -19,7 +19,7 @@ Aborted,Value3
         abort_row! 'aborted row' if row.first == 'Aborted'
         self.result = row
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.import!
 
@@ -45,7 +45,7 @@ Aborted,Value3
       end
 
       aborted_rows :ignore
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.import!
 
@@ -68,7 +68,7 @@ Aborted,Value3
       aborted_rows do |row|
         result[:aborted] = row
       end
-    end.new(@csv)
+    end.new(content: @csv)
 
     importer.result = {}
     importer.import!

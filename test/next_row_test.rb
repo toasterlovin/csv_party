@@ -19,7 +19,7 @@ Import,Value2
           result << row
         end
       end
-    end.new(csv)
+    end.new(content: csv)
 
     importer.result = []
     importer.import!
