@@ -50,7 +50,7 @@
 - ~~Get to 100% test coverage~~
 - ~~Add test helper file~~
 - Check argument types on all public methods
-- Add license
+- ~~Add license~~
 - Documentation
   - Re-enable class documentation cop
   - Document classes

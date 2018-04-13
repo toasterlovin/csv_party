@@ -212,3 +212,7 @@ MRI
 - 2.2
 - 2.1
 - 2.0
+
+# License
+
+This project uses the MIT License. See LICENSE.md for details.
