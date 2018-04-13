@@ -2,15 +2,9 @@ require 'simplecov'
 SimpleCov.start
 
 require 'csv_party'
+require 'csv_party/testing'
 require 'minitest/autorun'
 require 'securerandom'
-
-module CSVParty
-  class Importer
-    # Add an instance level attribute for passing results back to tests
-    attr_accessor :result
-  end
-end
 
 # This class exists only to have a unique error class for the purpose of
 # testing error handling. In certain cases, we want to throw an error,

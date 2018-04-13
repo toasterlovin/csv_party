@@ -48,8 +48,8 @@
 - ~~Improve test organization~~
   - ~~Move associated importer classes and CSV files into same file as test.~~
 - ~~Get to 100% test coverage~~
+- ~~Add test helper file~~
 - Check argument types on all public methods
-- Add test helper file
 - Add license
 - Documentation
   - Re-enable class documentation cop
