@@ -25,6 +25,20 @@ module CSVParty
       return false
     end
 
+    def aborted?
+      @aborted
+    end
+
+    def present_columns
+      @_headers
+    end
+
+    def missing_columns
+      required_columns - present_columns
+    end
+
+    private
+
     def import_rows!
       loop do
         begin
@@ -49,10 +63,6 @@ module CSVParty
       @_rows_have_been_imported = true
     end
 
-    def aborted?
-      @aborted
-    end
-
     def next_row!
       raise NextRowError
     end
@@ -68,16 +78,6 @@ module CSVParty
     def abort_import!(message)
       raise AbortedImportError, message
     end
-
-    def present_columns
-      @_headers
-    end
-
-    def missing_columns
-      required_columns - present_columns
-    end
-
-    private
 
     def import_row!(csv_row)
       @_current_row_number += 1
