@@ -48,17 +48,6 @@ strings are assumed to be a path to a CSV file.
     end
   end
 
-  class UnrecognizedCSVOptionsError < Error
-    def initialize(unrecognized_options, valid_csv_options)
-      super <<-MESSAGE
-The following CSV options are not recognized: :#{unrecognized_options.join(', :')}.
-You can pass any option that the CSV library understands:
-
-    :#{valid_csv_options.join("\n    :")}
-      MESSAGE
-    end
-  end
-
   class UnrecognizedOptionsError < Error
     def initialize(unrecognized_options, valid_data_options, valid_csv_options, dependencies)
       @unrecognized_options = unrecognized_options
