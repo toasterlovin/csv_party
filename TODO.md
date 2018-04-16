@@ -49,6 +49,8 @@
   - ~~Move associated importer classes and CSV files into same file as test.~~
 - ~~Get to 100% test coverage~~
 - ~~Add test helper file~~
+- Refactor
+  - ~~Extract Configuration class~~
 - Check argument types on all public methods
 - ~~Add license~~
 - Documentation

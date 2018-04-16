@@ -11,14 +11,10 @@ module CSVParty
 
     private
 
+    attr_accessor :config
+
     def initialize_import_settings
-      @_columns = self.class.columns
-      @_row_importer = self.class.row_importer
-      @_file_importer = self.class.file_importer
-      @_error_handler = self.class.error_handler
-      @_skipped_row_handler = self.class.skipped_row_handler
-      @_aborted_row_handler = self.class.aborted_row_handler
-      @_dependencies = self.class.dependencies
+      self.config = self.class.config
     end
 
     def initialize_counters_and_statuses
@@ -31,9 +27,9 @@ module CSVParty
     end
 
     def assign_dependencies_if_present(options)
-      return unless @_dependencies.any?
+      return unless config.dependencies.any?
 
-      @_dependencies.each do |dependency|
+      config.dependencies.each do |dependency|
         if options.has_key? dependency
           send("#{dependency}=", options.delete(dependency))
         end
@@ -49,11 +45,11 @@ module CSVParty
       raise UnrecognizedOptionsError.new(unrecognized_options,
                                          valid_data_options,
                                          valid_csv_options,
-                                         @_dependencies)
+                                         config.dependencies)
     end
 
     def valid_options
-      valid_data_options + valid_csv_options + @_dependencies
+      valid_data_options + valid_csv_options + config.dependencies
     end
   end
 end
