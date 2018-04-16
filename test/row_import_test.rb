@@ -7,7 +7,9 @@ String,Integer
  Has whitespace ,1
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :whitespace, header: 'String', as: :string
 
       rows do |row|
@@ -27,7 +29,9 @@ Column 1,Column 2
 Some text,2
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :column_1, header: 'Column 1', as: :string
       column :column_2, header: 'Column 2', as: :integer
 
@@ -49,7 +53,9 @@ tshirt
 belt
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :product
 
       rows do |row|
@@ -68,7 +74,9 @@ Product
 tshirt
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :product
     end.new(content: csv)
 
@@ -83,7 +91,9 @@ Product,Price
 tshirt,10.99
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :product
       column :price, as: :decimal
 

@@ -11,7 +11,9 @@ Skipped,Value3
   end
 
   def test_default_skipped_row_behavior
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :action
       column :value
 
@@ -35,7 +37,9 @@ Skipped,Value3
   end
 
   def test_ignoring_skipped_rows
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :action
       column :value
 
@@ -56,7 +60,9 @@ Skipped,Value3
   end
 
   def test_custom_skipped_row_handler
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :action
       column :value
 
@@ -84,7 +90,9 @@ Skipped,Value3
 
   def test_skip_message_is_reserved_column
     assert_raises CSVParty::ReservedColumnNameError do
-      Class.new(CSVParty::Importer) do
+      Class.new do
+        include CSVParty
+
         column :skip_message
       end
     end

@@ -10,7 +10,9 @@ import
   end
 
   def test_raises_errors_by_default
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :value
 
       rows do
@@ -24,7 +26,9 @@ import
   end
 
   def test_ignoring_errors
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :value
 
       rows do |row|
@@ -48,7 +52,9 @@ import
   end
 
   def test_custom_error_handling
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :value
 
       rows do |row|
@@ -83,7 +89,9 @@ value1,value2
 "Improperly escaped \"quotes\"",3
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :first
       column :second, as: :integer
 

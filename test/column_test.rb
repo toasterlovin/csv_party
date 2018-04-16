@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class ColumnTest < Minitest::Test
-  class ColumnTestImporter < CSVParty::Importer
+  class ColumnTestImporter
+    include CSVParty
+
     column :exact
     column :multi_word_exact
     column :whitespace
@@ -58,7 +60,9 @@ exact,multi_word_exact,whitespace,lower,multi word lower,Title,Multi Word Title,
 
   def test_duplicate_columns
     assert_raises CSVParty::DuplicateColumnError do
-      Class.new(CSVParty::Importer) do
+      Class.new do
+        include CSVParty
+
         column :product
         column :product
       end
@@ -71,7 +75,9 @@ Present,Other
 value,value
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :present
       column :missing
       column :missing_with_header, header: 'Defined1234'
@@ -90,19 +96,25 @@ value,value
 
   def test_reserved_column_names
     assert_raises CSVParty::ReservedColumnNameError do
-      Class.new(CSVParty::Importer) do
+      Class.new do
+        include CSVParty
+
         column :unparsed
       end
     end
 
     assert_raises CSVParty::ReservedColumnNameError do
-      Class.new(CSVParty::Importer) do
+      Class.new do
+        include CSVParty
+
         column :csv_string
       end
     end
 
     assert_raises CSVParty::ReservedColumnNameError do
-      Class.new(CSVParty::Importer) do
+      Class.new do
+        include CSVParty
+
         column :row_number
       end
     end

@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class CsvDataTest < Minitest::Test
-  class CsvImporter < CSVParty::Importer
+  class CsvImporter
+    include CSVParty
+
     column :column_1
     column :column_2
 
@@ -53,7 +55,9 @@ value
     CSV
 
     assert_raises CSVParty::UnrecognizedOptionsError do
-      Class.new(CSVParty::Importer) do
+      Class.new do
+        include CSVParty
+
         depends_on :dependency1, :dependency2
 
         column :column

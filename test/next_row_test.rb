@@ -8,7 +8,9 @@ Next,Value1
 Import,Value2
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :action
       column :value
 

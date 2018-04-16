@@ -8,7 +8,9 @@ Widget,9.99
 Gadget,12.99
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :product, as: :string
       column :price, as: :decimal
 

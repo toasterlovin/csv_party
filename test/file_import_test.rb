@@ -10,7 +10,9 @@ Value 2
   end
 
   def test_import_block
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :value
 
       rows do |row|
@@ -35,7 +37,9 @@ Value 2
   end
 
   def test_raises_error_when_rows_are_not_imported
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :value
 
       rows do

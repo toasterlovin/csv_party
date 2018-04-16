@@ -1,7 +1,4 @@
 module CSVParty
-  DATA_OPTIONS = [:path, :file, :content].freeze
-  CSV_OPTIONS = CSV::DEFAULT_OPTIONS.keys.freeze
-
   class DataPreparer
     def initialize(options)
       @options = options

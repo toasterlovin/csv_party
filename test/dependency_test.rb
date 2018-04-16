@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class DependencyTest < Minitest::Test
-  class ExternalDependencyImporter < CSVParty::Importer
+  class ExternalDependencyImporter
+    include CSVParty
+
     depends_on :dependency
 
     column :first, header: 'First'

@@ -7,7 +7,9 @@ Raw,Surrounding Whitespace,Only Whitespace,Blank
 some text, surrounding whitespace , ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :raw, as: :raw
       column :surrounding_whitespace, as: :raw
       column :only_whitespace, as: :raw
@@ -32,7 +34,9 @@ String,Surrounding Whitespace,Only Whitespace,Blank
 some text, surrounding whitespace , ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :string
       column :surrounding_whitespace
       column :only_whitespace
@@ -57,7 +61,9 @@ T Lower,T Upper,True Lower,True Upper,One,True Surrounding Whitespace,F Lower,F 
 t,T,true,TRUE,1, true ,f,F,false,FALSE,0, false ,asdf, ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :t_lower, as: :boolean
       column :t_upper, as: :boolean
       column :true_lower, as: :boolean
@@ -104,7 +110,9 @@ Integer,Negative Integer,Negative Accounting Integer,Surrounding Whitespace,Deci
 42,-42,(42), 42 ,42.42,-42.42,(42.42),$42,-$42,($42), ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :integer, as: :integer
       column :negative_integer, as: :integer
       column :negative_accounting_integer, as: :integer
@@ -145,7 +153,9 @@ Decimal,Negative Decimal,Negative Accounting Decimal,Surrounding Whitespace,Doll
 42.42,-42.42,(42.42), 42.42 ,$42.42,-$42.42,($42.42), ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :decimal, as: :decimal
       column :negative_decimal, as: :decimal
       column :negative_accounting_decimal, as: :decimal
@@ -180,7 +190,9 @@ Date,Date With Format,Invalid Date,Invalid Format,Whitespace Only,Blank
 2017-12-31,12/31/17,adsf,12/31/17, ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :date, as: :date
       column :date_with_format, as: :date, format: '%m/%d/%y'
       column :invalid_date, as: :date
@@ -209,7 +221,9 @@ Time,Time With Timezone,Time With Format,Invalid Time,Invalid Format,Whitespace 
 2018-03-17T17:31:59,2018-03-17T17:31:59+04:00,3/17/18 @ 5:31 AM,asdf,2018-03-17T17:31:59+04:00, ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :time, as: :time
       column :time_with_timezone, as: :time
       column :time_with_format, as: :time, format: '%m/%d/%y @ %l:%M %p'
@@ -244,7 +258,9 @@ value,whitespace,blank
 value, ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :custom do |value|
         "#{value} plus added text"
       end
@@ -276,7 +292,9 @@ Custom 1,Custom 2,Whitespace Only,Blank
 value 1,value 2, ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :custom_1, as: :custom
       column :custom_2, as: :custom
       column :whitespace_only, as: :custom
@@ -305,7 +323,9 @@ Intercept,No Intercept,Third Column
  , ,
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :intercept, as: :static
       column :no_intercept, intercept_blanks: false, as: :static
 
@@ -330,7 +350,9 @@ Custom,Header2
 value1,value2
     CSV
 
-    importer = Class.new(CSVParty::Importer) do
+    importer = Class.new do
+      include CSVParty
+
       column :custom, as: :mispelled
 
       rows do

@@ -54,7 +54,7 @@
   - ~~Extract Importer class~~
   - ~~Disable post-instantiation CSV assignment~~
   - ~~Extract DataPreparer class~~
-  - Switch to composition instead of inheritance
+  - ~~Switch to composition instead of inheritance~~
   - Use classes instead of structs
 - Check argument types on all public methods
 - Verify that all public API methods are tested
