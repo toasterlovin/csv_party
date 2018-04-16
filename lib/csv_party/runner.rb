@@ -1,5 +1,9 @@
+require 'csv_party/parsers'
+
 module CSVParty
   class Runner
+    include Parsers
+
     attr_accessor :csv, :config, :importer
 
     def initialize(csv, config, importer)
@@ -223,7 +227,10 @@ module CSVParty
     end
 
     def named_parsers
-      (importer.private_methods + importer.methods).grep(/^parse_/)
+      (methods +
+       private_methods +
+       importer.methods +
+       importer.private_methods).grep(/^parse_/)
     end
 
     def raise_unless_csv_has_all_columns!
