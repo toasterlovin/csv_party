@@ -1,8 +1,7 @@
 module CSVParty
   module Initialization
     def initialize(options = {})
-      initialize_import_settings
-      initialize_counters_and_statuses
+      self.config = self.class.config
       raise_unless_all_options_are_recognized!(options)
       assign_csv_data_if_present(options)
       assign_csv_options_if_present(options)
@@ -12,19 +11,6 @@ module CSVParty
     private
 
     attr_accessor :config
-
-    def initialize_import_settings
-      self.config = self.class.config
-    end
-
-    def initialize_counters_and_statuses
-      @_rows_have_been_imported = false
-      @_current_row_number = 1
-      @skipped_rows = []
-      @aborted_rows = []
-      @error_rows = []
-      @aborted = false
-    end
 
     def assign_dependencies_if_present(options)
       return unless config.dependencies.any?

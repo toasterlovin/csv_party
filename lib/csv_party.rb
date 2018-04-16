@@ -7,6 +7,7 @@ require 'csv_party/initialization'
 require 'csv_party/importing'
 require 'csv_party/data'
 require 'csv_party/configuration'
+require 'csv_party/runner'
 
 module CSVParty
   class Importer

@@ -27,14 +27,11 @@ module CSVParty
 
     private
 
-    def initialize_csv!
+    def csv_object
       raise_unless_csv_data_is_present!
 
       @_csv_options[:headers] = true
       @_csv = CSV.new(@_csv_data, @_csv_options)
-      @_csv.shift
-      @_headers = @_csv.headers
-      @_csv.rewind
     end
 
     def assign_csv_data_if_present(options)
