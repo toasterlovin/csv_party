@@ -55,6 +55,7 @@
   - Extract Importer class
   - Use classes instead of structs
 - Check argument types on all public methods
+- Verify that all public API methods are tested
 - ~~Add license~~
 - Documentation
   - Re-enable class documentation cop
