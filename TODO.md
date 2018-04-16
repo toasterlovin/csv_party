@@ -51,8 +51,9 @@
 - ~~Add test helper file~~
 - Refactor
   - ~~Extract Configuration class~~
+  - ~~Extract Importer class~~
+  - ~~Disable post-instantiation CSV assignment~~
   - Switch to composition instead of inheritance
-  - Extract Importer class
   - Use classes instead of structs
 - Check argument types on all public methods
 - Verify that all public API methods are tested
