@@ -3,13 +3,13 @@ module CSVParty
     def initialize(options = {})
       self.config = self.class.config
       raise_unless_all_options_are_recognized!(options)
-      initialize_csv(options)
+      self.csv = DataPreparer.new(options).prepare
       assign_dependencies_if_present(options)
     end
 
     private
 
-    attr_accessor :config
+    attr_accessor :config, :csv
 
     def raise_unless_all_options_are_recognized!(options)
       unrecognized_options = options.keys.reject do |option|
@@ -18,8 +18,8 @@ module CSVParty
       return if unrecognized_options.empty?
 
       raise UnrecognizedOptionsError.new(unrecognized_options,
-                                         valid_data_options,
-                                         valid_csv_options,
+                                         DATA_OPTIONS,
+                                         CSV_OPTIONS,
                                          config.dependencies)
     end
 
@@ -34,7 +34,7 @@ module CSVParty
     end
 
     def valid_options
-      valid_data_options + valid_csv_options + config.dependencies
+      DATA_OPTIONS + CSV_OPTIONS + config.dependencies
     end
   end
 end

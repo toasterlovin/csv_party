@@ -53,6 +53,7 @@
   - ~~Extract Configuration class~~
   - ~~Extract Importer class~~
   - ~~Disable post-instantiation CSV assignment~~
+  - ~~Extract DataPreparer class~~
   - Switch to composition instead of inheritance
   - Use classes instead of structs
 - Check argument types on all public methods
