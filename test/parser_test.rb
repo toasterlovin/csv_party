@@ -286,7 +286,7 @@ value 1,value 2, ,
         self.result = row
       end
 
-      def custom_parser(value)
+      def parse_custom(value)
         "#{value} plus added text"
       end
     end.new(content: csv)
@@ -313,7 +313,7 @@ Intercept,No Intercept,Third Column
         self.result = row
       end
 
-      def static_parser(_value)
+      def parse_static(_value)
         return 'Not nil'
       end
     end.new(content: csv)

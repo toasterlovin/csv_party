@@ -223,7 +223,7 @@ module CSVParty
     end
 
     def named_parsers
-      (importer.private_methods + importer.methods).grep(/_parser$/)
+      (importer.private_methods + importer.methods).grep(/^parse_/)
     end
 
     def raise_unless_csv_has_all_columns!

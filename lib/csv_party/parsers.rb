@@ -1,14 +1,14 @@
 module CSVParty
   module Parsers
-    def raw_parser(value)
+    def parse_raw(value)
       value
     end
 
-    def string_parser(value)
+    def parse_string(value)
       value.to_s.strip
     end
 
-    def boolean_parser(value)
+    def parse_boolean(value)
       value = value.to_s.strip.downcase
 
       if %w[1 t true].include? value
@@ -20,15 +20,15 @@ module CSVParty
       end
     end
 
-    def integer_parser(value)
+    def parse_integer(value)
       prepare_numeric_value(value).to_i
     end
 
-    def decimal_parser(value)
+    def parse_decimal(value)
       BigDecimal.new(prepare_numeric_value(value))
     end
 
-    def date_parser(value, format = nil)
+    def parse_date(value, format = nil)
       if format.nil?
         Date.parse(value)
       else
@@ -38,7 +38,7 @@ module CSVParty
       nil
     end
 
-    def time_parser(value, format = nil)
+    def parse_time(value, format = nil)
       if format.nil?
         DateTime.parse(value).to_time
       else

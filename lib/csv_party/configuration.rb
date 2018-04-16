@@ -24,7 +24,7 @@ module CSVParty
       parser = if block_given?
                  block
                else
-                 "#{options[:as]}_parser".to_sym
+                 "parse_#{options[:as]}".to_sym
                end
 
       columns[column] = {

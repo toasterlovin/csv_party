@@ -4,8 +4,8 @@ module CSVParty
 
   class UnknownParserError < Error
     def initialize(column, parser, named_parsers)
-      parser  = parser.to_s.gsub('_parser', '')
-      parsers = named_parsers.map { |p| p.to_s.gsub('_parser', '') }
+      parser  = parser.to_s.gsub('parse_', '')
+      parsers = named_parsers.map { |p| p.to_s.gsub('parse_', '') }
 
       super <<-MESSAGE
 You're trying to use the :#{parser} parser for the :#{column} column, but it
