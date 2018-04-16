@@ -8,7 +8,7 @@ module CSVParty
       @aborted_rows = []
       @error_rows = []
       @aborted = false
-      self.runner = Runner.new(csv_object, config, self)
+      self.runner = Runner.new(csv, config, self)
       runner.import!
     end
 
