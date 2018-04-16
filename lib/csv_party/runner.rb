@@ -270,5 +270,17 @@ module CSVParty
         super
       end
     end
+
+    class NextRowError < Error
+    end
+
+    class SkippedRowError < Error
+    end
+
+    class AbortedRowError < Error
+    end
+
+    class AbortedImportError < Error
+    end
   end
 end

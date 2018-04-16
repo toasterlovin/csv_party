@@ -154,16 +154,4 @@ where you want them to be imported. It should should look something like this:
       MESSAGE
     end
   end
-
-  class NextRowError < Error
-  end
-
-  class SkippedRowError < Error
-  end
-
-  class AbortedRowError < Error
-  end
-
-  class AbortedImportError < Error
-  end
 end
