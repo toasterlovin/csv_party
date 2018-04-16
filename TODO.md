@@ -51,6 +51,9 @@
 - ~~Add test helper file~~
 - Refactor
   - ~~Extract Configuration class~~
+  - Switch to composition instead of inheritance
+  - Extract Importer class
+  - Use classes instead of structs
 - Check argument types on all public methods
 - ~~Add license~~
 - Documentation
