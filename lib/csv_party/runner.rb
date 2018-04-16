@@ -21,7 +21,6 @@ module CSVParty
       initialize_csv!
       initialize_regex_headers!
       raise_unless_csv_has_all_columns!
-      initialize_row_structs!
 
       if config.file_importer
         instance_exec(&config.file_importer)
@@ -79,64 +78,9 @@ module CSVParty
 
     def import_row!(csv_row)
       @_current_row_number += 1
-      parse_row(csv_row)
+      @_current_parsed_row = Row.new(csv_row, config, self)
+      @_current_parsed_row.row_number = @_current_row_number
       instance_exec(@_current_parsed_row, &config.row_importer)
-    end
-
-    def parse_row(csv_row)
-      @_current_parsed_row = @_parsed_row_struct.new
-      @_current_parsed_row[:row_number] = @_current_row_number
-      @_current_parsed_row[:csv_string] = csv_row.to_csv
-      @_current_parsed_row[:unparsed] = extract_unparsed_values(csv_row)
-
-      config.columns.each do |column, options|
-        header = options[:header]
-        value = csv_row[header]
-        @_current_parsed_row[column] = parse_value(value, options)
-      end
-    end
-
-    def extract_unparsed_values(csv_row)
-      unparsed_row = @_unparsed_row_struct.new
-      config.columns.each do |column, options|
-        header = options[:header]
-        unparsed_row[column] = csv_row[header]
-      end
-
-      return unparsed_row
-    end
-
-    def parse_value(value, options)
-      return nil if options[:intercept_blanks] && is_blank?(value)
-
-      parser = options[:parser]
-
-      if parser.is_a?(Symbol)
-        parse_with_method(value, options)
-      else
-        parse_with_block(value, options)
-      end
-    end
-
-    def parse_with_method(value, options)
-      format = options[:format]
-      parser = options[:parser]
-
-      if format.nil?
-        send(parser, value)
-      else
-        send(parser, value, format)
-      end
-    end
-
-    def parse_with_block(value, options)
-      parser = options[:parser]
-
-      instance_exec(value, &parser)
-    end
-
-    def is_blank?(value)
-      value.nil? || value.strip.empty?
     end
 
     def next_row!
@@ -246,17 +190,6 @@ module CSVParty
         end
         options[:header] = found_header || name.to_s
       end
-    end
-
-    def initialize_row_structs!
-      @_parsed_row_struct = Struct.new(*config.columns.keys,
-                                       :unparsed,
-                                       :csv_string,
-                                       :row_number,
-                                       :skip_message,
-                                       :abort_message)
-
-      @_unparsed_row_struct = Struct.new(*config.columns.keys)
     end
 
     def respond_to_missing?(method, _include_private)

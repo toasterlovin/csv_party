@@ -18,7 +18,7 @@ Skipped,Value3
       column :value
 
       rows do |row|
-        skip_row! 'skipped row' if row.first == 'Skipped'
+        skip_row! 'skipped row' if row.action == 'Skipped'
         self.result = row
       end
     end.new(content: @csv)
@@ -44,7 +44,7 @@ Skipped,Value3
       column :value
 
       rows do |row|
-        skip_row! if row.first == 'Skipped'
+        skip_row! if row.action == 'Skipped'
         self.result = row
       end
 
@@ -67,7 +67,7 @@ Skipped,Value3
       column :value
 
       rows do |row|
-        skip_row! 'skipped row' if row.first == 'Skipped'
+        skip_row! 'skipped row' if row.action == 'Skipped'
         result[:not_skipped] = row
       end
 

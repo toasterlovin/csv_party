@@ -18,7 +18,7 @@ Aborted,Value3
       column :value
 
       rows do |row|
-        abort_row! 'aborted row' if row.first == 'Aborted'
+        abort_row! 'aborted row' if row.action == 'Aborted'
         self.result = row
       end
     end.new(content: @csv)
@@ -44,7 +44,7 @@ Aborted,Value3
       column :value
 
       rows do |row|
-        abort_row! if row.first == 'Aborted'
+        abort_row! if row.action == 'Aborted'
         self.result = row
       end
 
@@ -67,7 +67,7 @@ Aborted,Value3
       column :value
 
       rows do |row|
-        abort_row! 'aborted row' if row.first == 'Aborted'
+        abort_row! 'aborted row' if row.action == 'Aborted'
         result[:not_aborted] = row
       end
 
