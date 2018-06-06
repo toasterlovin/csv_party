@@ -48,6 +48,19 @@ Value 1;Value 2
     assert_equal 'Value 2', importer.result.column_2
   end
 
+  def test_accepts_encoding_option
+    path = 'test/fixtures/iso_8859_1.csv'
+
+    assert_raises ArgumentError do
+      CsvImporter.new(path: path).import!
+    end
+
+    importer = CsvImporter.new(path: path, encoding: 'ISO-8859-1:UTF-8')
+    importer.import!
+
+    assert_equal 'è', importer.result.column_2
+  end
+
   def test_raises_error_on_unrecognized_options
     csv = <<-CSV
 Value

@@ -23,7 +23,11 @@ module CSVParty
     def open_csv_path(path)
       raise NonexistentCSVFileError.new(path) unless File.file?(path)
 
-      File.open(path)
+      if @options.has_key?(:encoding)
+        File.open(path, "r:#{@options[:encoding]}")
+      else
+        File.open(path)
+      end
     end
 
     def extract_csv_options

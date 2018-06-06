@@ -10,7 +10,7 @@ require 'csv_party/runner'
 
 module CSVParty
   DATA_OPTIONS = [:path, :file, :content].freeze
-  CSV_OPTIONS = CSV::DEFAULT_OPTIONS.keys.freeze
+  CSV_OPTIONS = CSV::DEFAULT_OPTIONS.keys.push(:encoding).freeze
 
   def self.included(base)
     base.extend DSL
