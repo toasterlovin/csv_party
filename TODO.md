@@ -56,6 +56,7 @@
   - ~~Extract DataPreparer class~~
   - ~~Switch to composition instead of inheritance~~
   - Use classes instead of structs
+  - Add test for files with no header on first row
 - Check argument types on all public methods
 - Verify that all public API methods are tested
 - ~~Add license~~
