@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'A gem for making CSV imports a little more fun.'
   s.authors     = ['Rico Jones']
   s.email       = 'rico@toasterlovin.com'
-  s.files       = Dir.glob('lib/**/*') + %w(LICENSE.md README.md ROADMAP.md)
+  s.files       = Dir.glob('lib/**/*') + %w[LICENSE.md README.md ROADMAP.md]
   s.homepage    = 'https://github.com/toasterlovin/csv_party'
   s.license     = 'MIT'
   s.required_ruby_version = '>= 2.0'
