@@ -9,6 +9,7 @@ Roadmap
 - [1.6 CSV Parse Error Handling](#16-csv-parse-error-handling)
 - [Someday Features](#someday-features)
     - [Deferred Parsing](#deferred-parsing)
+    - [Columns Macro](#columns-macro)
     - [Column Numbers](#column-numbers)
     - [Multi-column Parsing](#multi-column-parsing)
     - [Parse Dependencies](#parse-dependencies)
@@ -247,6 +248,30 @@ and some of those values require database queries.
 In a situation like this, you would want to defer all of the database queries
 that need to run when creating a new record so that they aren't done in cases
 where you are updating an existing record.
+
+#### Columns Macro
+
+This feature would allow you to declare multiple columns in a single line. So,
+rather than:
+
+    column :product
+    column :price
+    column :color
+
+You could do:
+
+    columns :product, :price, :color
+
+This is probably most useful when there are a bunch of columns that should all
+be parsed as text. Though it might make sense to allow specifying parsers and
+other options:
+
+    columns product: { as: :raw }, price: { as: :decimal }
+
+It should probably also be possible to combine `columns` and `column` macros:
+
+    columns :product, :price, :color
+    column :size
 
 #### Column Numbers
 
