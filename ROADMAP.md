@@ -8,6 +8,7 @@ Roadmap
 - [1.5 Runtime Configuration](#15-runtime-configuration)
 - [1.6 CSV Parse Error Handling](#16-csv-parse-error-handling)
 - [Someday Features](#someday-features)
+    - [Deferred Parsing](#deferred-parsing)
     - [Column Numbers](#column-numbers)
     - [Multi-column Parsing](#multi-column-parsing)
     - [Parse Dependencies](#parse-dependencies)
@@ -229,6 +230,23 @@ error handling API for non-parse errors. So:
     my_import.parse_error_rows # returns array of parse error rows
 
 ## Someday Features
+
+#### Deferred Parsing
+
+Currently, CSVParty parses all columns before the row import logic is executed.
+There are situations where parsing columns is expensive and you may want to
+defer parsing columns until and unless you actually need them for that a given
+row. For example, say you have an import where you are either:
+
+1. Updating a value on existing records, or
+2. Setting a value on and creating new records
+
+And when you create new records, you have to also set a bunch of other values
+and some of those values require database queries.
+
+In a situation like this, you would want to defer all of the database queries
+that need to run when creating a new record so that they aren't done in cases
+where you are updating an existing record.
 
 #### Column Numbers
 
