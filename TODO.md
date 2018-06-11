@@ -42,7 +42,7 @@
   - ~~Raise error on unexpected CSV options~~
   - ~~Raise error on unexpected options~~
   - ~~Improve API for assigning CSV files/path/content~~
-  - Test that different encodings work
+  - ~~Test that different encodings work~~
 - ~~Verify usage of Struct~~
 - ~~Investigate using catch/throw where appropriate~~
 - ~~Improve test organization~~
