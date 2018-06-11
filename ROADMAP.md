@@ -8,6 +8,7 @@ Roadmap
 - [1.5 Runtime Configuration](#15-runtime-configuration)
 - [1.6 CSV Parse Error Handling](#16-csv-parse-error-handling)
 - [Someday Features](#someday-features)
+    - [Parse Row Access](#parse-row-access)
     - [Deferred Parsing](#deferred-parsing)
     - [Columns Macro](#columns-macro)
     - [Column Numbers](#column-numbers)
@@ -231,6 +232,27 @@ error handling API for non-parse errors. So:
     my_import.parse_error_rows # returns array of parse error rows
 
 ## Someday Features
+
+#### Parse Row Access
+
+This feature would allow access to the `CSV::Row` object when parsing a column.
+It could work something like this:
+
+    column product do |value, row|
+      Product.find_by(name: row['Product'])
+    end
+
+In theory, the CSVParty API would cover all use cases where somebody would need
+to access the raw row data, but perhaps not. Sometimes it's nice to be able to
+cut through the stuff in your way and just get at the raw internals.
+
+Additionally, perhaps deferred parsing would allow access to parsed row values,
+which would possibly enable some of the features below, Multi Column Parsing and
+Parse Dependencies, without requiring additional code. That might look like:
+
+    column product do |value, row|
+      Product.find_by(name: row.unparsed.row)
+    end
 
 #### Deferred Parsing
 
