@@ -58,6 +58,7 @@
   - Use classes instead of structs
   - Add test for files with no header on first row
 - Check argument types on all public methods
+- Investigate improving error messages on NoMethodErrors inside of import/rows/errors/etc. blocks
 - Verify that all public API methods are tested
 - ~~Add license~~
 - Documentation
