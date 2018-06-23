@@ -14,6 +14,7 @@ Roadmap
     - [Column Numbers](#column-numbers)
     - [Multi-column Parsing](#multi-column-parsing)
     - [Parse Dependencies](#parse-dependencies)
+    - [Rails Generator](#rails-generator0
 
 #### 1.1 Early Return While Parsing
 
@@ -334,3 +335,21 @@ that might look like:
         customer.orders.find(order_id)
       end
     end
+
+#### Rails Generator
+
+This feature would add a generator for Rails which creates an importer file. So
+doing:
+
+    rails generate importer Product
+
+Would generate the following file at `app/importers/product_importer.rb`:
+
+    class ProductImporter
+      include CSVParty
+
+      import do |row|
+        # import logic goes here
+      end
+    end
+
