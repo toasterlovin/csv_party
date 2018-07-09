@@ -57,6 +57,7 @@
   - ~~Switch to composition instead of inheritance~~
   - Use classes instead of structs
   - Add test for files with no header on first row
+- Include alternate column headings for missing column header error message
 - Check argument types on all public methods
 - Investigate improving error messages on NoMethodErrors inside of import/rows/errors/etc. blocks
 - Verify that all public API methods are tested
