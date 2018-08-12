@@ -109,4 +109,26 @@ tshirt,10.99
       importer.result.undefined
     end
   end
+
+  def test_raises_error_when_calling_undefined_method_or_variable
+    csv = <<-CSV
+Product,Price
+tshirt,10.99
+    CSV
+
+    importer = Class.new do
+      include CSVParty
+
+      column :product
+      column :price, as: :decimal
+
+      rows do
+        undefined_method_or_variable
+      end
+    end.new(content: csv)
+
+    assert_raises NameError do
+      importer.import!
+    end
+  end
 end
