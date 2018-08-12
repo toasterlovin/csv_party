@@ -73,6 +73,8 @@ module CSVParty
       end
 
       @_rows_have_been_imported = true
+    rescue CSV::MalformedCSVError
+      raise
     end
 
     def import_row!(csv_row)
@@ -88,8 +90,6 @@ module CSVParty
     rescue AbortedRowError => error
       handle_aborted_row(error)
     rescue AbortedImportError
-      raise
-    rescue CSV::MalformedCSVError
       raise
     rescue StandardError => error
       handle_error(error, @_current_row_number, csv_row.to_csv)
