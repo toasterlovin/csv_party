@@ -99,12 +99,14 @@ tshirt,10.99
 
       rows do |row|
         self.result = row
-        row.undefined
       end
     end.new(content: csv)
 
+    importer.import!
+
+    refute importer.result.respond_to?(:undefined)
     assert_raises NoMethodError do
-      importer.import!
+      importer.result.undefined
     end
   end
 end
