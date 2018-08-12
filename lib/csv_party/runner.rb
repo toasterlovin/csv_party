@@ -67,14 +67,16 @@ module CSVParty
 
     def import_rows!
       loop do
-        csv_row = csv.shift
-        break unless csv_row
-        import_row!(csv_row)
+        begin
+          csv_row = csv.shift
+          break unless csv_row
+          import_row!(csv_row)
+        rescue CSV::MalformedCSVError
+          raise
+        end
       end
 
       @_rows_have_been_imported = true
-    rescue CSV::MalformedCSVError
-      raise
     end
 
     def import_row!(csv_row)
