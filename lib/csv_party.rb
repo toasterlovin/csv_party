@@ -1,11 +1,5 @@
-require 'bigdecimal'
-require 'csv'
-require 'ostruct'
-require 'csv_party/configuration'
 require 'csv_party/dsl'
 require 'csv_party/data_preparer'
-require 'csv_party/errors'
-require 'csv_party/row'
 require 'csv_party/runner'
 
 module CSVParty

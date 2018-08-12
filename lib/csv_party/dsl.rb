@@ -1,3 +1,5 @@
+require 'csv_party/configuration'
+
 module CSVParty
   module DSL
     def column(column, options = {}, &block)

@@ -1,3 +1,5 @@
+require 'bigdecimal'
+
 module CSVParty
   module Parsers
     def parse_raw(value)

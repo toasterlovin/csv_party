@@ -1,5 +1,7 @@
 require 'csv_party/parsers'
 require 'csv_party/validations'
+require 'csv_party/errors'
+require 'csv_party/row'
 
 module CSVParty
   class Runner

@@ -1,3 +1,6 @@
+require 'csv'
+require 'csv_party/errors'
+
 module CSVParty
   class DataPreparer
     def initialize(options)

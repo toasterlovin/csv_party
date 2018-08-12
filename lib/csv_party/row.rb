@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module CSVParty
   class Row
     attr_accessor :row_number, :csv_string, :unparsed
