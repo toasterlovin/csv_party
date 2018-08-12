@@ -4,9 +4,8 @@ module CSVParty
   class Row
     attr_accessor :row_number, :csv_string, :unparsed
 
-    def initialize(csv_row, config, runner)
+    def initialize(csv_row, runner)
       @csv_row = csv_row
-      @config = config
       @runner = runner
       @attributes = OpenStruct.new
       parse_row!(csv_row)
@@ -18,7 +17,7 @@ module CSVParty
       self.csv_string = csv_row.to_csv
       self.unparsed = extract_unparsed_values(csv_row)
 
-      @config.columns.each do |column, options|
+      @runner.config.columns.each do |column, options|
         header = options[:header]
         value = csv_row[header]
         @attributes[column] = parse_value(value, options)
@@ -27,7 +26,7 @@ module CSVParty
 
     def extract_unparsed_values(csv_row)
       unparsed_row = OpenStruct.new
-      config.columns.each do |column, options|
+      @runner.config.columns.each do |column, options|
         header = options[:header]
         unparsed_row[column] = csv_row[header]
       end

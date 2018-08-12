@@ -79,7 +79,7 @@ module CSVParty
 
     def import_row!(csv_row)
       @_current_row_number += 1
-      @_current_parsed_row = Row.new(csv_row, config, self)
+      @_current_parsed_row = Row.new(csv_row, self)
       @_current_parsed_row.row_number = @_current_row_number
 
       instance_exec(@_current_parsed_row, &config.row_importer)
