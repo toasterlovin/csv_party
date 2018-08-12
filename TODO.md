@@ -31,7 +31,7 @@
   - ~~Skip row (implement new behavior)~~
   - ~~Abort row (implement new behavior)~~
   - ~~Abort import (rework API; return `false` on `importer.import!`)~~
-- CSV Improvements
+- ~~CSV Improvements~~
   - ~~Accept file path string~~
   - ~~Accept `IO` object~~
   - ~~Accept CSV string~~
