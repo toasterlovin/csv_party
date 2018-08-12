@@ -67,23 +67,9 @@ module CSVParty
 
     def import_rows!
       loop do
-        begin
-          row = csv.shift
-          break unless row
-          import_row!(row)
-        rescue NextRowError
-          next
-        rescue SkippedRowError => error
-          handle_skipped_row(error)
-        rescue AbortedRowError => error
-          handle_aborted_row(error)
-        rescue AbortedImportError
-          raise
-        rescue CSV::MalformedCSVError
-          raise
-        rescue StandardError => error
-          handle_error(error, @_current_row_number, row.to_csv)
-        end
+        csv_row = csv.shift
+        break unless csv_row
+        import_row!(csv_row)
       end
 
       @_rows_have_been_imported = true
@@ -93,7 +79,20 @@ module CSVParty
       @_current_row_number += 1
       @_current_parsed_row = Row.new(csv_row, config, self)
       @_current_parsed_row.row_number = @_current_row_number
+
       instance_exec(@_current_parsed_row, &config.row_importer)
+    rescue NextRowError
+      return
+    rescue SkippedRowError => error
+      handle_skipped_row(error)
+    rescue AbortedRowError => error
+      handle_aborted_row(error)
+    rescue AbortedImportError
+      raise
+    rescue CSV::MalformedCSVError
+      raise
+    rescue StandardError => error
+      handle_error(error, @_current_row_number, csv_row.to_csv)
     end
 
     def next_row!
