@@ -1,8 +1,10 @@
 require 'csv_party/parsers'
+require 'csv_party/validations'
 
 module CSVParty
   class Runner
     include Parsers
+    include Validations
 
     attr_accessor :csv, :config, :importer
 
@@ -50,6 +52,15 @@ module CSVParty
       csv.shift
       @_headers = csv.headers
       csv.rewind
+    end
+
+    def initialize_regex_headers!
+      config.columns_with_regex_headers.each do |name, options|
+        found_header = @_headers.find do |header|
+          options[:header].match(header)
+        end
+        options[:header] = found_header || name.to_s
+      end
     end
 
     def import_rows!
@@ -138,58 +149,11 @@ module CSVParty
             .new(error, line_number, csv_string)
     end
 
-    def raise_unless_row_processor_is_defined!
-      return if config.row_importer
-
-      raise UndefinedRowProcessorError.new
-    end
-
-    def raise_unless_rows_have_been_imported!
-      return if @_rows_have_been_imported
-
-      raise UnimportedRowsError.new
-    end
-
-    def raise_unless_all_dependencies_are_present!
-      config.dependencies.each do |dependency|
-        next unless importer.send(dependency).nil?
-
-        raise MissingDependencyError.new(self, dependency)
-      end
-    end
-
-    # This error has to be raised at runtime because, when the class body
-    # is being executed, the parser methods won't be available unless
-    # they are defined above the column definitions in the class body
-    def raise_unless_all_named_parsers_exist!
-      config.columns_with_named_parsers.each do |name, options|
-        parser = options[:parser]
-        next if named_parsers.include? parser
-
-        raise UnknownParserError.new(name, parser, named_parsers)
-      end
-    end
-
     def named_parsers
       (methods +
        private_methods +
        importer.methods +
        importer.private_methods).grep(/^parse_/)
-    end
-
-    def raise_unless_csv_has_all_columns!
-      return if missing_columns.empty?
-
-      raise MissingColumnError.new(present_columns, missing_columns)
-    end
-
-    def initialize_regex_headers!
-      config.columns_with_regex_headers.each do |name, options|
-        found_header = @_headers.find do |header|
-          options[:header].match(header)
-        end
-        options[:header] = found_header || name.to_s
-      end
     end
 
     def respond_to_missing?(method, _include_private)
