@@ -62,6 +62,7 @@
 - Check argument types on all public methods
 - Investigate improving error messages on NoMethodErrors inside of import/rows/errors/etc. blocks
 - Verify that all public API methods are tested
+- Add DSL method for skipping importing rows (for conditions where that is not desired)
 - ~~Add license~~
 - Documentation
   - Re-enable class documentation cop
