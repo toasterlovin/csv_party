@@ -18,7 +18,7 @@ module CSVParty
                @options[:content]
              end
       options = extract_csv_options.merge(headers: true)
-      CSV.new(data, options)
+      CSV.new(data, **options)
     end
 
     private
