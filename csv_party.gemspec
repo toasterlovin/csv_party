@@ -9,5 +9,5 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob('lib/**/*') + %w[LICENSE.md README.md ROADMAP.md]
   s.homepage    = 'https://github.com/toasterlovin/csv_party'
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 2.0'
+  s.required_ruby_version = '>= 2.6'
 end
