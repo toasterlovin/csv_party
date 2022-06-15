@@ -27,7 +27,7 @@ module CSVParty
     end
 
     def parse_decimal(value)
-      BigDecimal.new(prepare_numeric_value(value))
+      BigDecimal(prepare_numeric_value(value))
     end
 
     def parse_date(value, format = nil)

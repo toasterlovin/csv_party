@@ -51,7 +51,7 @@ Value 1;Value 2
   def test_accepts_encoding_option
     path = 'test/fixtures/iso_8859_1.csv'
 
-    assert_raises ArgumentError do
+    assert_raises CSV::MalformedCSVError do
       CsvImporter.new(path: path).import!
     end
 
